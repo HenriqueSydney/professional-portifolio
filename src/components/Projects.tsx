@@ -2,63 +2,71 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github, Code2, Database, Cloud, Settings } from "lucide-react";
+import { githubRepositories } from "@/services/githubRepositories";
 
-export function Projects() {
-  const projects = [
-    {
-      title: "Plataforma de Desenvolvimento Interno (IDP)",
-      description: "Plataforma completa para simplificar a disponibilização de recursos para deploy de aplicações e banco de dados em clusters Kubernetes.",
-      icon: Cloud,
-      technologies: ["Next.js", "Node.js", "Kubernetes", "Microsoft EntraID", "GitLab", "MinIO", "Kafka"],
-      features: [
-        "Integração com Microsoft EntraID",
-        "Arquitetura de microsserviços",
-        "Deploy automatizado em Kubernetes",
-        "Gestão de recursos cloud"
-      ],
-      category: "DevOps Platform"
-    },
-    {
-      title: "Sistema de Processamento DOU/BS",
-      description: "Sistema automatizado para processamento de atos do Diário Oficial da União e Boletim de Serviço com integração ao InLabs e Microsoft SharePoint.",
-      icon: Settings,
-      technologies: ["Next.js", "Node.js", "Microsoft SharePoint", "InLabs API"],
-      features: [
-        "Processamento automatizado de documentos",
-        "Integração com SharePoint",
-        "Interface responsiva",
-        "Monitoramento em tempo real"
-      ],
-      category: "Automation System"
-    },
-    {
-      title: "Módulos de Gestão de Pessoas",
-      description: "Suite completa de módulos para gestão de pessoas com automatização de cálculos, gestão de documentos e assinatura digital.",
-      icon: Code2,
-      technologies: ["PHP", "MySQL", "Assinador Serpro", "Sigepe API"],
-      features: [
-        "Programa de Gestão e Desenvolvimento",
-        "Automatização de cálculos de pagamento",
-        "Gestão de afastamentos no Sigepe",
-        "Assinatura digital integrada"
-      ],
-      category: "HR Management"
-    },
-    {
-      title: "Sistema de Monitoramento DevOps",
-      description: "Solução completa de monitoramento com métricas, logs e alertas para infraestrutura Kubernetes usando stack moderna de observabilidade.",
-      icon: Database,
-      technologies: ["Grafana", "Prometheus", "Grafana Loki", "Promtail", "Kubernetes"],
-      features: [
-        "Monitoramento de métricas",
-        "Centralização de logs",
-        "Alertas inteligentes",
-        "Dashboards customizados"
-      ],
-      category: "Monitoring"
-    }
-  ];
+export async function Projects() {
+  const projetcs = await githubRepositories();
 
+  if(projetcs === null) return null
+  
+
+  //  const projects = [
+  //   {
+  //     title: "Plataforma de Desenvolvimento Interno (IDP)",
+  //     description: "Plataforma completa para simplificar a disponibilização de recursos para deploy de aplicações e banco de dados em clusters Kubernetes.",
+  //     icon: Cloud,
+  //     technologies: ["Next.js", "Node.js", "Kubernetes", "Microsoft EntraID", "GitLab", "MinIO", "Kafka"],
+  //     features: [
+  //       "Integração com Microsoft EntraID",
+  //       "Arquitetura de microsserviços",
+  //       "Deploy automatizado em Kubernetes",
+  //       "Gestão de recursos cloud"
+  //     ],
+  //     category: "DevOps Platform"
+  //   },
+  //   {
+  //     title: "Sistema de Processamento DOU/BS",
+  //     description: "Sistema automatizado para processamento de atos do Diário Oficial da União e Boletim de Serviço com integração ao InLabs e Microsoft SharePoint.",
+  //     icon: Settings,
+  //     technologies: ["Next.js", "Node.js", "Microsoft SharePoint", "InLabs API"],
+  //     features: [
+  //       "Processamento automatizado de documentos",
+  //       "Integração com SharePoint",
+  //       "Interface responsiva",
+  //       "Monitoramento em tempo real"
+  //     ],
+  //     category: "Automation System"
+  //   },
+  //   {
+  //     title: "Módulos de Gestão de Pessoas",
+  //     description: "Suite completa de módulos para gestão de pessoas com automatização de cálculos, gestão de documentos e assinatura digital.",
+  //     icon: Code2,
+  //     technologies: ["PHP", "MySQL", "Assinador Serpro", "Sigepe API"],
+  //     features: [
+  //       "Programa de Gestão e Desenvolvimento",
+  //       "Automatização de cálculos de pagamento",
+  //       "Gestão de afastamentos no Sigepe",
+  //       "Assinatura digital integrada"
+  //     ],
+  //     category: "HR Management"
+  //   },
+  //   {
+  //     title: "Sistema de Monitoramento DevOps",
+  //     description: "Solução completa de monitoramento com métricas, logs e alertas para infraestrutura Kubernetes usando stack moderna de observabilidade.",
+  //     icon: Database,
+  //     technologies: ["Grafana", "Prometheus", "Grafana Loki", "Promtail", "Kubernetes"],
+  //     features: [
+  //       "Monitoramento de métricas",
+  //       "Centralização de logs",
+  //       "Alertas inteligentes",
+  //       "Dashboards customizados"
+  //     ],
+  //     category: "Monitoring"
+  //   }
+  // ];
+
+  
+  
   const getIcon = (IconComponent: any) => IconComponent;
 
   return (
@@ -74,7 +82,7 @@ export function Projects() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {projects.map((project, index) => {
+          {projetcs.map((project, index) => {
             const IconComponent = getIcon(project.icon);
             return (
               <Card 
