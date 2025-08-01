@@ -2,5 +2,6 @@
   "long_description": "Este é um portfólio profissional desenvolvido com Next.js, TailwindCSS e TypeScript. Ele apresenta uma coleção de projetos, incluindo um blog pessoal, um portfólio e uma página de contato. O design é responsivo e inclui recursos como dark mode e integração com a API do GitHub.",
   "features": ["Dark mode", "Integração com API do GitHub", "Integração com o Notion (CMS)", "Responsivo"],
   "technologies": ["Next.js", "TailwindCSS", "TypeScript"],
-  "category": "Landing Page"
+  "category": "Landing Page",
+  "iconName": "folder-code"
 }

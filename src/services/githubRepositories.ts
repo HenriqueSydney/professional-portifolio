@@ -1,21 +1,23 @@
 import { httpClient } from "@/lib/httpClient";
-import { Cloud, LucideProps } from "lucide-react";
-import { ForwardRefExoticComponent, RefAttributes } from "react";
+import { IconName } from "lucide-react/dynamic";
+
 
 type ProjectMetadata = {
   long_description: string;
   features: string[];
   technologies: string[];
   category: string
+  iconName: IconName
 };
 
 type GithubRepository =  {
     title: string,
     description: string,
-    icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>,
+    icon: IconName,
     technologies: string[],
     features: string[],
     category: string
+    link: string
 }
 
 export async function githubRepositories(): Promise<GithubRepository[] | null> {
@@ -44,34 +46,38 @@ export async function githubRepositories(): Promise<GithubRepository[] | null> {
             projectWithDetails.push({ 
                 title: project.description || project.name,
                 description: project.description || "Sem descrição",
-                icon: Cloud, // Default icon, can be customized later
+                icon: 'search', // Default icon, can be customized later
                 technologies: [],
                 features: [],
-                category: '' // Default category, can be customized later
+                category: '', // Default category, can be customized later
+                link: project.html_url
             });
             continue;
         }
 
         try {
-            const decoded = atob(metadataFile.content)
+            const binary = Uint8Array.from(atob(metadataFile.content), c => c.charCodeAt(0));
+            const decoded = new TextDecoder('utf-8').decode(binary);
             const parsed: ProjectMetadata = JSON.parse(decoded);
             projectWithDetails.push({ 
                 title: project.description || project.name,
                 description: parsed.long_description || project.description || "Sem descrição",
-                icon: Cloud, // Default icon, can be customized later
+                icon: parsed.iconName, // Default icon, can be customized later
                 technologies: parsed.technologies || [],
                 features: parsed.features || [],
-                category: parsed.category || ''
+                category: parsed.category || '',
+                link: project.html_url
             });
         } catch (err) {
             console.error(`Erro ao processar metadata de ${project.name}:`, err);
             projectWithDetails.push({ 
                 title: project.description || project.name,
                 description: project.description || "Sem descrição",
-                icon: Cloud, // Default icon, can be customized later
+                icon: 'search', // Default icon, can be customized later
                 technologies: [],
                 features: [],
-                category: '' // Default category, can be customized later
+                category: '', // Default category, can be customized later
+                link: project.html_url
             });
         }
     

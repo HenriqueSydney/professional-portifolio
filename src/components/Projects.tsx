@@ -3,6 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github, Code2, Database, Cloud, Settings } from "lucide-react";
 import { githubRepositories } from "@/services/githubRepositories";
+import Link from "next/link";
+
+
+import { DynamicIcon, IconName } from 'lucide-react/dynamic';
 
 export async function Projects() {
   const projetcs = await githubRepositories();
@@ -67,7 +71,7 @@ export async function Projects() {
 
   
   
-  const getIcon = (IconComponent: any) => IconComponent;
+  const getIcon = (iconName: IconName) =>  <DynamicIcon name={iconName} />
 
   return (
     <section id="projects" className="py-20">
@@ -126,7 +130,7 @@ export async function Projects() {
                         <Badge 
                           key={tech} 
                           variant="outline" 
-                          className="text-xs py-1 px-3 hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+                          className="cursor-default text-xs py-1 px-3 hover:bg-primary hover:text-primary-foreground transition-all duration-300"
                         >
                           {tech}
                         </Badge>
@@ -134,22 +138,18 @@ export async function Projects() {
                     </div>
                   </div>
 
-                  <div className="flex gap-3 pt-4">
-                    <Button 
-                      variant="default" 
-                      size="sm" 
-                      className="flex-1 hover:shadow-glow transition-all duration-300"
-                    >
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Ver Detalhes
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-                    >
-                      <Github className="w-4 h-4" />
-                    </Button>
+                  <div className="flex justify-end gap-3 pt-4">
+                    <Link href={project.link} target="_blank">                      
+                      <Button 
+                        variant="default" 
+                        size="sm" 
+                        className="hover:shadow-glow transition-all duration-300"
+                      >
+                        <Github className="w-4 h-4" />
+                        Ver no GitHub
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                      </Button>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
