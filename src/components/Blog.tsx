@@ -2,58 +2,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowRight, BookOpen } from "lucide-react";
+import { fetchBlogPosts } from "@/services/notion/fetchBlogPosts";
+import Link from "next/link";
 
-export function Blog() {
-  const blogPosts = [
-    {
-      title: "Implementando CI/CD com GitHub Actions e Kubernetes",
-      excerpt: "Guia completo para configurar pipelines de CI/CD eficientes usando GitHub Actions para deploy automatizado em clusters Kubernetes.",
-      category: "DevOps",
-      readTime: "8 min",
-      date: "15 Jan 2025",
-      featured: true
-    },
-    {
-      title: "Monitoramento de Aplicações com Grafana e Prometheus",
-      excerpt: "Como configurar uma stack completa de observabilidade para suas aplicações Node.js usando ferramentas open-source.",
-      category: "Monitoring",
-      readTime: "12 min",
-      date: "10 Jan 2025",
-      featured: true
-    },
-    {
-      title: "Arquitetura de Microsserviços com Node.js e Docker",
-      excerpt: "Boas práticas para design e implementação de microsserviços escaláveis usando Node.js, Docker e orquestração Kubernetes.",
-      category: "Architecture",
-      readTime: "15 min",
-      date: "05 Jan 2025",
-      featured: false
-    },
-    {
-      title: "Segurança em DevOps: DevSecOps na Prática",
-      excerpt: "Integrando segurança em todas as etapas do pipeline de desenvolvimento e deployment, com foco em automação e boas práticas.",
-      category: "Security",
-      readTime: "10 min",
-      date: "01 Jan 2025",
-      featured: false
-    },
-    {
-      title: "Terraform e Infrastructure as Code",
-      excerpt: "Gerenciando infraestrutura cloud de forma declarativa e versionada usando Terraform para múltiplos provedores de nuvem.",
-      category: "Infrastructure",
-      readTime: "14 min",
-      date: "28 Dez 2024",
-      featured: false
-    },
-    {
-      title: "Next.js 15: Novidades e Performance",
-      excerpt: "Explorando as novas funcionalidades do Next.js 15 e como elas podem melhorar a performance e experiência do desenvolvedor.",
-      category: "Frontend",
-      readTime: "6 min",
-      date: "25 Dez 2024",
-      featured: false
-    }
-  ];
+export async function Blog() {
+
+
+  const blogPosts = await fetchBlogPosts({ numberOfPostsPerPage: 6, firstPageOnly: true })  
 
   const categories = ["Todos", "DevOps", "Monitoring", "Architecture", "Security", "Infrastructure", "Frontend"];
 
@@ -98,7 +53,13 @@ export function Blog() {
               >
                 <CardHeader>
                   <div className="flex items-center justify-between mb-3">
-                    <Badge variant="default">{post.category}</Badge>
+                    <div className="flex items-center gap-1">
+                        {post.categories.map(category => (
+                          <Badge key={category} variant="outline" className="text-xs">
+                              {category}
+                          </Badge>
+                        ))}
+                    </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
@@ -120,13 +81,15 @@ export function Blog() {
                     {post.excerpt}
                   </p>
                   
-                  <Button 
-                    variant="outline" 
-                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300"
-                  >
-                    Ler Artigo
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
+                  <Link href={`/blog/post/${post.slug}`} >
+                    <Button 
+                      variant="outline" 
+                      className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300"
+                    >
+                      Ler Artigo
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
@@ -145,9 +108,15 @@ export function Blog() {
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between mb-2">
-                    <Badge variant="outline" className="text-xs">
-                      {post.category}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                        {post.categories.map(category => (
+                          <Badge key={category} variant="outline" className="text-xs">
+                              {category}
+                          </Badge>
+                        ))}
+                    </div>
+                    
+                   
                     {post.featured && (
                       <Badge variant="default" className="text-xs">
                         Destaque

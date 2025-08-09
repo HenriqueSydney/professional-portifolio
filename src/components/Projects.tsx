@@ -71,7 +71,7 @@ export async function Projects() {
 
   
   
-  const getIcon = (iconName: IconName) =>  <DynamicIcon name={iconName} />
+  const getIcon = (iconName: IconName) =>  <DynamicIcon name={iconName} className="h-8 w-8 text-primary"/>
 
   return (
     <section id="projects" className="py-20">
@@ -97,7 +97,7 @@ export async function Projects() {
                 <CardHeader>
                   <div className="flex items-start justify-between mb-4">
                     <div className="p-3 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors duration-300">
-                      <IconComponent className="h-8 w-8 text-primary" />
+                      {IconComponent}
                     </div>
                     <Badge variant="secondary">{project.category}</Badge>
                   </div>
