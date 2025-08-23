@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model NewsLetterSubscriptions {
+  id                    Int       @id @default(autoincrement()) ///Entity ID
+  email                 String    @unique @db.VarChar(256) ///Email used for subscription
+  confirmationId        String    @unique @default(uuid()) @map("confirmation_id") @db.Char(32) ///Universion ID generated on subscription
+  confirmationExpiresAt DateTime  @map("confirmation_expires_at") ///Date of expiration to confirm subscription before enable new subscription for the same email
+  createdAt             DateTime  @default(now()) @map("created_at") ///Entity creation date
+  confirmedAt           DateTime? @map("confirmed_at") ///Date of the confirmation of subscription
+  canceledAt            DateTime? @map("canceled_at") ///Date of the cancelled subscription
+
+  @@map("news_letter_subscription")
+}
+
+model PostMetrics {
+  id            Int @id @default(autoincrement())
+  numberOfViews Int @map("number_of_views")
+}

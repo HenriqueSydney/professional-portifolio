@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Image from "next/image";
 import React, { JSX } from "react";
+import { normalizeId } from "./normalizeId";
 
 type Block = {
   id: string;
@@ -9,16 +10,17 @@ type Block = {
 };
 
 const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
+
   paragraph: (block) => (
     <p key={block.id}>
       {block.paragraph.rich_text.map((text: any, i: number) => (
-         renderRichText(text, i)
+        renderRichText(text, i)
       ))}
     </p>
   ),
 
   heading_1: (block) => (
-    <h1 key={block.id} className="text-3xl md:text-4xl font-bold mb-3 mt-6">
+    <h1 key={block.id} id={`id_${normalizeId(block.id)}`} className="text-3xl md:text-4xl font-bold mb-3 mt-6">
       {block.heading_1.rich_text.map((text: any, i: number) => (
         <React.Fragment key={i}>{text.plain_text}</React.Fragment>
       ))}
@@ -26,7 +28,7 @@ const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
   ),
 
   heading_2: (block) => (
-    <h2 key={block.id} className="text-xl md:text-2xl font-bold mb-3 mt-6">
+    <h2 key={block.id} id={`id_${normalizeId(block.id)}`} className="text-xl md:text-2xl font-bold mb-3 mt-6">
       {block.heading_2.rich_text.map((text: any, i: number) => (
         <React.Fragment key={i}>{text.plain_text}</React.Fragment>
       ))}
@@ -34,9 +36,9 @@ const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
   ),
 
   heading_3: (block) => (
-    <h3 key={block.id} className="text-lg md:text-xl font-bold mb-3 mt-6">
+    <h3 key={block.id} id={`id_${normalizeId(block.id)}`} className="text-lg md:text-xl font-bold mb-3 mt-6">
       {block.heading_3.rich_text.map((text: any, i: number) => (
-         renderRichText(text, i)
+        renderRichText(text, i)
       ))}
     </h3>
   ),
@@ -44,7 +46,7 @@ const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
   bulleted_list_item: (block) => (
     <li key={block.id} className="ml-4 list-disc">
       {block.bulleted_list_item.rich_text.map((text: any, i: number) => (
-         renderRichText(text, i)
+        renderRichText(text, i)
       ))}
     </li>
   ),
@@ -52,7 +54,7 @@ const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
   numbered_list_item: (block) => (
     <li key={block.id} className="ml-4 list-decimal">
       {block.numbered_list_item.rich_text.map((text: any, i: number) => (
-         renderRichText(text, i)
+        renderRichText(text, i)
       ))}
     </li>
   ),
@@ -62,7 +64,7 @@ const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
       <label className="flex items-center gap-2">
         <input type="checkbox" defaultChecked={block.to_do.checked} readOnly />
         {block.to_do.rich_text.map((text: any, i: number) => (
-           renderRichText(text, i)
+          renderRichText(text, i)
         ))}
       </label>
     </div>
@@ -72,7 +74,7 @@ const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
     <details key={block.id}>
       <summary>
         {block.toggle.rich_text.map((text: any, i: number) => (
-           renderRichText(text, i)
+          renderRichText(text, i)
         ))}
       </summary>
     </details>
@@ -81,7 +83,7 @@ const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
   quote: (block) => (
     <blockquote key={block.id} className="border-l-4 border-gray-300 pl-4 italic my-4">
       {block.quote.rich_text.map((text: any, i: number) => (
-         renderRichText(text, i)
+        renderRichText(text, i)
       ))}
     </blockquote>
   ),
@@ -91,25 +93,30 @@ const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
       <span>{block.callout.icon?.emoji}</span>
       <div>
         {block.callout.rich_text.map((text: any, i: number) => (
-           renderRichText(text, i)
+          renderRichText(text, i)
         ))}
       </div>
     </div>
   ),
   image: (block) => (
     <div key={block.id} className="my-4 w-full flex justify-center">
-      <Image        
+      <Image
         src={block.image.file.url}
         alt={block.image.caption.map((text: any) => text.plain_text).join(" ")}
-        width={500}
-        height={500}
-        className="my-4 max-w-full h-auto"
+        width={0}
+        height={0}
+        sizes="100vw"
+        className="w-4/4  sm:w-4/4 md:w-3/4 lg:w-3/4 xl:w-4/5 h-auto max-w-full"
+        placeholder="blur"
+        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAAyCAYAAACqECmXAAAAuUlEQVR42u3VQREAAAQAMCJ5yK+alxDuthLLrp4AAF5LoQOA0AEAoQMAQgcAhA4AQgcAhA4ACB0AEDoACB0AEDoAIHQAQOgAIHQAQOgAgNABAKEDgNABAKEDAEIHAIQOAEIHAIQOAAgdABA6AAgdABA6ACB0AEDoACB0AEDoAIDQAQChA4DQAQChAwBCBwCEDgBCBwCEDgAIHQAQOgAIXegAIHQAQOgAgNABAKEDgNABAKEDAEIHAM4CSk9Dxy9wAB8AAAAASUVORK5CYII="
+
       />
     </div>
   ),
 };
 
 export function renderNotionBlock(blocks: Block[]) {
+
   const renderedContent: React.ReactNode[] = [];
   let currentListType: 'ul' | 'ol' | null = null;
   let currentListItems: JSX.Element[] = [];
@@ -132,7 +139,6 @@ export function renderNotionBlock(blocks: Block[]) {
 
     if (type === "bulleted_list_item" || type === "numbered_list_item") {
       const desiredListType = type === "bulleted_list_item" ? "ul" : "ol";
-      console.log(JSON.stringify(block, null, 2))
       if (currentListType !== desiredListType) {
         flushList();
         currentListType = desiredListType;

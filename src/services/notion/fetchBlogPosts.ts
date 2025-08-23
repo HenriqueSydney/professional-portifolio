@@ -13,73 +13,74 @@ type GetBlogPostsParams = {
 }
 
 export async function fetchBlogPosts({ firstPageOnly, numberOfPostsPerPage, page }:GetBlogPostsParams) {
-    // const posts = await notion.blocks.children.list({
-    //     block_id: '24476eb72c638064bc81d43373565cf9',   
-    // })
 
-    // console.log(JSON.stringify(posts, null, 2));
-    const filters = [{
-        property: "Published",
-        checkbox: {
-            equals: true,
-        },
-    }]
+  const filters = [{
+    property: "Published",
+    checkbox: {
+      equals: true,
+    },
+  }]
 
-    let currentPage = 1;
-    if(page) {
-        currentPage = 1; 
-    }
+  let currentPage = 1;
+  if(page) {
+    currentPage = 1; 
+  }
 
-    const sorts: { property: string; direction: "ascending" | "descending" }[] =  [
-            {
-                property: 'Date',
-                direction: 'descending',
-            },          
-        ]  as const
+  const sorts: { property: string; direction: "ascending" | "descending" }[] =  [
+    {
+      property: 'Date',
+      direction: 'descending',
+    },          
+  ]  as const
 
-    if(firstPageOnly){
-        filters.push({
-            property: "Homepage",
-            checkbox: {
-                equals: true, 
-            },
-        })
-
-        sorts.push(  {
-            property: 'Priority',
-            direction: 'descending',
-        } as const)
-    }
-
-    const query = {
-        database_id: envVariables.NOTION_DATABASE_ID,
-        filter: {
-           and: filters
-        },
-        sorts,
-        page_size: numberOfPostsPerPage
-    }
-
-    const posts = await notion.databases.query(query)
-
-    const blogPosts = posts.results.filter(isFullPage).map((post) =>  {        
-        const props = post.properties as unknown as NotionDatabaseInfoOfPosts["properties"];
-        
-        return {
-            title: props.Title.title[0]?.plain_text ?? "Sem título",
-            slug: props.Slug.rich_text[0]?.plain_text ?? "",
-            excerpt: props.Excerpt.rich_text[0]?.plain_text ?? "",
-            categories: props.Tags.multi_select.length
-            ? props.Tags.multi_select.map((tag) => tag.name)
-            : ["Sem categoria"],
-            readTime: formatMinutesToHour(Number(props["Read Time"]?.number ?? 0)),
-            date: props.Date.date?.start ? date(props.Date.date.start).format('DD/MM/YYYY'): "",
-            featured: props.Homepage.checkbox,
-        };
+  if(firstPageOnly){
+    filters.push({
+      property: "Homepage",
+      checkbox: {
+        equals: true, 
+      },
     })
-    
-    console.log(blogPosts);
-  
-    return blogPosts    
+
+    sorts.push(  {
+      property: 'Priority',
+      direction: 'descending',
+    } as const)
+  }
+
+  const queryBase = {
+    database_id: envVariables.NOTION_DATABASE_ID,
+    filter: {
+      and: filters
+    },
+    sorts,
+    page_size: numberOfPostsPerPage
+  }
+
+  const startCursor: string | undefined = undefined  
+
+  const posts = await notion.databases.query({
+    ...queryBase,
+    //start_cursor: cursor
+  })
+
+  const blogPosts = posts.results.filter(isFullPage).map((post) =>  {    
+    const props = post.properties as unknown as NotionDatabaseInfoOfPosts["properties"];
+        
+    return {
+      id: post.id,
+      slug: props.Slug.rich_text[0]?.plain_text ?? "",
+      title: props.Title.title[0]?.plain_text ?? "Sem título",
+      excerpt: props.Excerpt.rich_text[0]?.plain_text ?? "",
+      category: props.Category.select?.name ?? "",
+      tags: props.Tags.multi_select.length
+        ? props.Tags.multi_select.map((tag) => tag.name)
+        : ["Sem categoria"],
+      readTime: formatMinutesToHour(Number(props["Read Time"]?.number ?? 0)),
+      date: props.Date.date?.start ? date(props.Date.date.start).format('DD MMM YYYY'): "",
+      featured: props.Homepage.checkbox,
+    };
+  })
+
+  return blogPosts    
 
 }

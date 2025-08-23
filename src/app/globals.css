@@ -7,34 +7,34 @@
     /* Light Theme - Green Tones */
     --background: 140 20% 98%;
     --foreground: 140 80% 8%;
-    
+
     --card: 140 30% 96%;
     --card-foreground: 140 80% 12%;
-    
+
     --popover: 140 30% 96%;
     --popover-foreground: 140 80% 12%;
-    
+
     --primary: 142 70% 45%;
     --primary-foreground: 140 20% 98%;
-    
+
     --secondary: 140 15% 88%;
     --secondary-foreground: 140 80% 15%;
-    
+
     --muted: 140 15% 90%;
     --muted-foreground: 140 25% 45%;
-    
+
     --accent: 145 65% 55%;
     --accent-foreground: 140 20% 98%;
-    
+
     --destructive: 0 84% 60%;
     --destructive-foreground: 140 20% 98%;
-    
+
     --border: 140 20% 85%;
     --input: 140 20% 88%;
     --ring: 142 70% 45%;
-    
+
     --radius: 0.75rem;
-    
+
     /* Custom Portfolio Colors - Light */
     --hero-gradient: linear-gradient(135deg, hsl(142, 70%, 45%), hsl(145, 65%, 55%));
     --card-hover: 140 25% 92%;
@@ -42,7 +42,11 @@
     --skill-bg: 140 20% 90%;
     --shadow-color: 142 70% 45%;
     --glow-color: 145 65% 55%;
-    
+
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+
     /* Sidebar */
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -53,37 +57,37 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-  
+
   .dark {
     /* Dark Theme - Purple Tones */
     --background: 260 15% 8%;
     --foreground: 260 10% 95%;
-    
+
     --card: 260 20% 12%;
     --card-foreground: 260 10% 92%;
-    
+
     --popover: 260 20% 12%;
     --popover-foreground: 260 10% 92%;
-    
+
     --primary: 270 85% 65%;
     --primary-foreground: 260 15% 8%;
-    
+
     --secondary: 260 15% 18%;
     --secondary-foreground: 260 10% 88%;
-    
+
     --muted: 260 15% 16%;
     --muted-foreground: 260 10% 60%;
-    
+
     --accent: 280 80% 70%;
     --accent-foreground: 260 15% 8%;
-    
+
     --destructive: 0 84% 60%;
     --destructive-foreground: 260 10% 95%;
-    
+
     --border: 260 15% 20%;
     --input: 260 15% 18%;
     --ring: 270 85% 65%;
-    
+
     /* Custom Portfolio Colors - Dark */
     --hero-gradient: linear-gradient(135deg, hsl(270, 85%, 65%), hsl(280, 80%, 70%));
     --card-hover: 260 20% 16%;
@@ -91,7 +95,7 @@
     --skill-bg: 260 15% 14%;
     --shadow-color: 270 85% 65%;
     --glow-color: 280 80% 70%;
-    
+
     --sidebar-background: 260 15% 10%;
     --sidebar-foreground: 260 10% 90%;
     --sidebar-primary: 270 85% 65%;
@@ -101,11 +105,23 @@
     --sidebar-border: 260 15% 18%;
     --sidebar-ring: 270 85% 65%;
   }
-  
+
   body {
     background: hsl(var(--background));
     color: hsl(var(--foreground));
   }
+}
+
+[id] {
+  scroll-margin-top: 50px;
+  /* substitua pelo tamanho do header */
+}
+
+#blog_content h1,
+#blog_content h2,
+#blog_content h3 {
+  scroll-margin-top: 100px;
+  /* ajuste conforme a altura do seu header + margem desejada */
 }
 
 /* Classes utilitárias customizadas para Tailwind v4 */
@@ -113,433 +129,569 @@
   .bg-hero-gradient {
     background: var(--hero-gradient);
   }
+
   .bg-text-gradient {
     background-image: var(--text-gradient);
   }
+
+  .bg-muted-foreground {
+    background-image: hsl(var(--muted-foreground));
+  }
+
   .text-gradient {
     background: var(--text-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+
   .ring-offset-background {
     --tw-ring-offset-color: hsl(var(--background));
   }
+
   * {
     border-color: hsl(var(--border));
   }
-  button, [role="button"] {
+
+  button,
+  [role="button"] {
     cursor: pointer;
   }
+
   .bg-primary {
     background-color: hsl(var(--primary));
   }
+
+  .bg-destructive {
+    background-color: hsl(var(--destructive));
+  }
+
+  .border-destructive {
+    border-color: hsl(var(--destructive));
+  }
+
   .bg-background {
     background-color: hsl(var(--background));
   }
+
+  .bg-foreground {
+    background-color: hsl(var(--foreground));
+  }
+
   .bg-card {
     background-color: hsl(var(--card));
   }
+
   .text-card-foreground {
     color: hsl(var(--card-foreground));
   }
+
   .text-primary {
     color: hsl(var(--primary));
   }
+
+  .text-destructive-foreground {
+    color: hsl(var(--destructive-foreground));
+  }
+
+  .text-destructive {
+    color: hsl(var(--destructive));
+  }
+
+  .hover\:text-primary:hover {
+    color: hsl(var(--primary));
+  }
+
   .text-muted-foreground {
     color: hsl(var(--muted-foreground));
   }
+
   .text-foreground {
     color: hsl(var(--foreground));
   }
+
   .shadow-glow {
     --tw-shadow: 0 0 20px hsl(var(--glow-color) / 0.3);
     --tw-shadow-colored: 0 0 20px var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   }
+
   .shadow-glow-lg {
     box-shadow: 0 0 40px hsl(var(--glow-color) / 0.4);
   }
+
   .hover\:shadow-glow:hover {
     --tw-shadow: 0 0 20px hsl(var(--glow-color) / 0.3);
     --tw-shadow-colored: 0 0 20px var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   }
+
   .rounded-md {
     border-radius: calc(var(--radius) - 2px);
   }
+
   .hover\:text-primary-foreground:hover {
     color: hsl(var(--primary-foreground));
   }
+
   .hover\:bg-primary:hover {
     background-color: hsl(var(--primary));
   }
+
   .hover\:shadow-glow-lg:hover {
     box-shadow: 0 0 40px hsl(var(--glow-color) / 0.4);
   }
+
   .hover\:bg-card:hover {
     background: hsl(var(--card));
   }
+
   .bg-hero-gradient {
     background: var(--hero-gradient);
   }
+
   .text-gradient {
     background: var(--text-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+
   .animate-fade-in {
     animation: fade-in 0.6s ease-out;
   }
+
   .animate-slide-up {
     animation: slide-up 0.6s ease-out;
   }
+
   .animate-scale-in {
     animation: scale-in 0.3s ease-out;
   }
+
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
 }
+
 @keyframes fade-in {
   0% {
     opacity: 0;
     transform: translateY(20px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 @keyframes slide-up {
   0% {
     opacity: 0;
     transform: translateY(40px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 @keyframes scale-in {
   0% {
     opacity: 0;
     transform: scale(0.95);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
   }
 }
+
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
 }
+
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
 }
+
 .card {
   padding: 2em;
 }
+
 .read-the-docs {
   color: #888;
 }
+
 @property --tw-translate-x {
   syntax: "*";
   inherits: false;
   initial-value: 0;
 }
+
 @property --tw-translate-y {
   syntax: "*";
   inherits: false;
   initial-value: 0;
 }
+
 @property --tw-translate-z {
   syntax: "*";
   inherits: false;
   initial-value: 0;
 }
+
 @property --tw-scale-x {
   syntax: "*";
   inherits: false;
   initial-value: 1;
 }
+
 @property --tw-scale-y {
   syntax: "*";
   inherits: false;
   initial-value: 1;
 }
+
 @property --tw-scale-z {
   syntax: "*";
   inherits: false;
   initial-value: 1;
 }
+
 @property --tw-rotate-x {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-rotate-y {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-rotate-z {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-skew-x {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-skew-y {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-space-y-reverse {
   syntax: "*";
   inherits: false;
   initial-value: 0;
 }
+
 @property --tw-space-x-reverse {
   syntax: "*";
   inherits: false;
   initial-value: 0;
 }
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
 }
+
 @property --tw-leading {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-font-weight {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-tracking {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-ordinal {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-slashed-zero {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-numeric-figure {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-numeric-spacing {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-numeric-fraction {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-shadow {
   syntax: "*";
   inherits: false;
   initial-value: 0 0 #0000;
 }
+
 @property --tw-shadow-color {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-shadow-alpha {
   syntax: "<percentage>";
   inherits: false;
   initial-value: 100%;
 }
+
 @property --tw-inset-shadow {
   syntax: "*";
   inherits: false;
   initial-value: 0 0 #0000;
 }
+
 @property --tw-inset-shadow-color {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-inset-shadow-alpha {
   syntax: "<percentage>";
   inherits: false;
   initial-value: 100%;
 }
+
 @property --tw-ring-color {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-ring-shadow {
   syntax: "*";
   inherits: false;
   initial-value: 0 0 #0000;
 }
+
 @property --tw-inset-ring-color {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-inset-ring-shadow {
   syntax: "*";
   inherits: false;
   initial-value: 0 0 #0000;
 }
+
 @property --tw-ring-inset {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-ring-offset-width {
   syntax: "<length>";
   inherits: false;
   initial-value: 0px;
 }
+
 @property --tw-ring-offset-color {
   syntax: "*";
   inherits: false;
   initial-value: #fff;
 }
+
 @property --tw-ring-offset-shadow {
   syntax: "*";
   inherits: false;
   initial-value: 0 0 #0000;
 }
+
 @property --tw-outline-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
 }
+
 @property --tw-blur {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-brightness {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-contrast {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-grayscale {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-hue-rotate {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-invert {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-opacity {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-saturate {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-sepia {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-drop-shadow {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-drop-shadow-color {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-drop-shadow-alpha {
   syntax: "<percentage>";
   inherits: false;
   initial-value: 100%;
 }
+
 @property --tw-drop-shadow-size {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-backdrop-blur {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-backdrop-brightness {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-backdrop-contrast {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-backdrop-grayscale {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-backdrop-hue-rotate {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-backdrop-invert {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-backdrop-opacity {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-backdrop-saturate {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-backdrop-sepia {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-duration {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-ease {
   syntax: "*";
   inherits: false;
 }
+
 @property --tw-content {
   syntax: "*";
   initial-value: "";
   inherits: false;
 }
+
 @keyframes pulse {
   50% {
     opacity: 0.5;
@@ -552,6 +704,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -563,6 +716,7 @@
     opacity: 0;
     transform: translateY(40px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -574,6 +728,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
@@ -581,9 +736,12 @@
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -597,9 +755,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -608,6 +768,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

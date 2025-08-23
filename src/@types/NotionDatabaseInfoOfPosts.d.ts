@@ -71,5 +71,13 @@ export type NotionDatabaseInfoOfPosts = {
         color: string;
       }[];
     };
+    Category: {
+      type: "select",
+      select: {
+        id: string;
+        name: string;
+        color: string;
+      };
+    }
   };
 };

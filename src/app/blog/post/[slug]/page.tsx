@@ -6,14 +6,16 @@ import { Calendar, Clock, ArrowLeft, Share2, BookOpen, User, Heart, MessageCircl
 import { getBlogPostBySlug } from "@/services/notion/getBlogPostBySlug";
 import Link from "next/link";
 import { renderNotionBlock } from "@/util/renderNotionBlock";
+import { TableOfContents } from "./components/TableOfContents";
+import { NewsLetterForm } from "@/components/NewsLetterForm";
 
 
 export default async function post({ params }: { params: { slug: string } }) {
-    const { slug } = await params;
+  const { slug } = await params;
 
-    const blogPost = await getBlogPostBySlug(slug);
-  
-    if(!blogPost) throw new Error('Post not found');
+  const blogPost = await getBlogPostBySlug(slug);
+
+  if (!blogPost) throw new Error('Post not found');
 
   // Mock de posts relacionados
   const relatedPosts = [
@@ -45,6 +47,7 @@ export default async function post({ params }: { params: { slug: string } }) {
 
   return (
     <div className="min-h-screen bg-background">
+      {blogPost && <TableOfContents />}
       {/* Header */}
       <section className="pt-24 pb-8 bg-gradient-to-br from-primary/10 via-background to-accent/10">
         <div className="container mx-auto px-4">
@@ -60,7 +63,7 @@ export default async function post({ params }: { params: { slug: string } }) {
               {blogPost.categories.map((category) => (
                 <Badge
                   key={category}
-                  variant={category === "Todos" ? "default" : "outline"}                 
+                  variant={category === "Todos" ? "default" : "outline"}
                   className="hover:bg-primary hover:text-primary-foreground transition-all duration-300"
                 >
                   {category}
@@ -133,10 +136,12 @@ export default async function post({ params }: { params: { slug: string } }) {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <Card className="p-8 md:p-12">
-              <CardContent className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-code:text-primary prose-pre:bg-muted prose-pre:border">
+              <CardContent
+                id='blog_content'
+                className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-code:text-primary prose-pre:bg-muted prose-pre:border">
                 {
-                    blogPost?.content ? renderNotionBlock(blogPost.content) : "Carregando conteúdo..."
-                }               
+                  blogPost?.content ? renderNotionBlock(blogPost.content) : "Carregando conteúdo..."
+                }
               </CardContent>
             </Card>
 
@@ -170,19 +175,19 @@ export default async function post({ params }: { params: { slug: string } }) {
 
             <div className="grid md:grid-cols-3 gap-6">
               {relatedPosts.map((post) => (
-                <Card 
-                  key={post.id} 
+                <Card
+                  key={post.id}
                   className="group hover:shadow-glow transition-all duration-300 hover:scale-105"
                 >
                   <CardContent className="p-6">
                     <Badge variant="outline" className="mb-3">
                       {post.category}
                     </Badge>
-                    
+
                     <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors duration-300 leading-tight">
                       {post.title}
                     </h3>
-                    
+
                     <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
@@ -193,7 +198,7 @@ export default async function post({ params }: { params: { slug: string } }) {
                         {post.readTime}
                       </div>
                     </div>
-                    
+
                     <Link href={`/blog/${post.slug}`}>
                       <Button variant="ghost" className="w-full justify-start p-0 h-auto text-primary hover:text-primary-foreground hover:bg-primary transition-all duration-300">
                         Ler artigo
@@ -210,28 +215,7 @@ export default async function post({ params }: { params: { slug: string } }) {
 
       {/* Newsletter CTA */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
-          <Card className="max-w-2xl mx-auto bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
-            <CardContent className="p-8 text-center">
-              <h3 className="text-2xl font-semibold mb-4">
-                Gostou do conteúdo?
-              </h3>
-              <p className="text-muted-foreground mb-6">
-                Receba novos artigos sobre DevOps, desenvolvimento e tecnologias modernas diretamente no seu e-mail.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                <input
-                  type="email"
-                  placeholder="Seu melhor e-mail"
-                  className="flex-1 px-4 py-2 rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-                <Button className="hover:shadow-glow transition-all duration-300">
-                  Inscrever-se
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <NewsLetterForm />
       </section>
     </div>
   );
