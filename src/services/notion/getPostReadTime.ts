@@ -1,24 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { notion } from "@/lib/notionClient";
+import { notionClient } from "@/lib/notion/notionClient";
+import { notion } from "@/lib/notion/notion";
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+
+type GetPostReadTimeResponse = [Error, null] | [null, number];
 
 /**
  * Retorna o tempo estimado de leitura de um post com base na quantidade de palavras.
  * Usa média de 200 palavras por minuto.
  */
-export async function getPostReadTime(pageId: string): Promise<number> {
-  const blocks = await notion.blocks.children.list({ block_id: pageId });
+export async function getPostReadTime(pageId: string): Promise<GetPostReadTimeResponse> {
 
-  const textContent = blocks.results
-    .map((block) => extractTextFromBlock(block as BlockObjectResponse))
-    .join(" ");
+  return await notionClient('getPostReadTime', async () => {
+    const blocks = await notion.blocks.children.list({ block_id: pageId });
 
-  const wordCount = textContent.trim().split(/\s+/).length;
-  const minutes = Math.max(1, Math.round(wordCount / 200));
+    const textContent = blocks.results
+      .map((block) => extractTextFromBlock(block as BlockObjectResponse))
+      .join(" ");
 
-  return minutes;
+    const wordCount = textContent.trim().split(/\s+/).length;
+    const minutes = Math.max(1, Math.round(wordCount / 200));
+
+    return minutes;
+  }, {
+    revalidate: false, // never
+    tags: ['blog-categories']
+  })
+
 }
-
 /**
  * Extrai texto plano de blocos suportados.
  */

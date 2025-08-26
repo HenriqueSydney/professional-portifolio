@@ -7,8 +7,8 @@ import { Projects } from "@/app/(home)/components/Projects";
 import { Blog } from "@/app/(home)/components/Blog";
 import { Contact } from "@/app/(home)/components/contact/Contact";
 
-
 export default function Home() {
+
   return (
     <main>
       <Hero />

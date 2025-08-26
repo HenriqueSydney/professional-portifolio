@@ -1,19 +1,24 @@
-import { NotionDatabaseInfoOfPosts } from "@/@types/NotionDatabaseInfoOfPosts";
+import { ResumeData } from "@/@types/Resume";
 import { envVariables } from "@/env";
-import { date } from "@/lib/dayjs";
-import { notion } from "@/lib/notionClient";
-import { formatMinutesToHour } from "@/util/formatMinutesToHour";
-import { BlockObjectResponse, isFullPage } from "@notionhq/client";
+import { notionClient } from "@/lib/notion/notionClient";
+import { notion } from "@/lib/notion/notion";
 
-export async function getResumeData(slug: string) {    
+type GetResumeDataResponse = [Error, null] | [null, ResumeData];
 
-  const query = {
-    database_id: envVariables.NOTION_DATABASE_ID,       
-    page_size: 1
-  }
+export async function getResumeData(): Promise<GetResumeDataResponse> {
 
-  const resumeData = await notion.databases.query({database_id: envVariables.NOTION_DATABASE_ID})
+  return await notionClient('getResumeData', async () => {
+    const query = {
+      database_id: envVariables.NOTION_DATABASE_ID,
+      page_size: 1
+    }
 
-   
-  return resumeData;
+    const resumeData = await notion.databases.query({ database_id: envVariables.NOTION_DATABASE_ID }) as unknown as ResumeData
+
+    return resumeData;
+  }, {
+    revalidate: false, // never
+    tags: ['blog-categories']
+  })
+
 }

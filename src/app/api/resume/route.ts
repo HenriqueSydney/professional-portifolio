@@ -3,23 +3,21 @@ import { NextRequest } from 'next/server';
 import { generateResumePDF } from '@/lib/pdf-generator';
 // import { analytics } from '@/lib/analytics';
 import { getResumeData } from '@/data/resumeData';
+import { apiLogger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
-    // 1. Buscar dados atualizados (pode vir de CMS, DB, etc.)
+    const start = performance.now();
+    apiLogger.debug({ request }, 'Resume download request')
+
     const resumeData = await getResumeData();
-    
-    // 2. Gerar PDF
+
     const pdfBuffer = await generateResumePDF(resumeData);
 
     const pdfData = new Uint8Array(pdfBuffer);
-    // // 3. Analytics (demonstra integração)
-    // await analytics.track('resume_downloaded', {
-    //   userAgent: request.headers.get('user-agent'),
-    //   timestamp: new Date().toISOString()
-    // });
-    
-    // 4. Retornar PDF
+
+    const time = performance.now() - start;
+    apiLogger.info({ time }, 'Resume download - OK')
     return new Response(pdfData, {
       headers: {
         'Content-Type': 'application/pdf',
@@ -28,8 +26,10 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
+
+    apiLogger.error({ stackTrace: error }, 'Resume download - Error')
     return Response.json(
-      { error: 'Failed to generate PDF' }, 
+      { error: 'Failed to generate PDF' },
       { status: 500 }
     );
   }

@@ -25,15 +25,22 @@ export default async function BlogPosts({ searchParams }: BlogPosts) {
   const fixedBool = fixed === 'true'
   const pageNumber = Number(page) || 1
 
-  const [blogCategories, blogPosts] = await Promise.all([
+  const [blogCategories, blogPostsResult] = await Promise.all([
     fetchBlogPostsCategories(),
-    fetchBlogPosts({ numberOfPostsPerPage: 10, page: pageNumber })
+    fetchBlogPosts({ numberOfPostsPerPage: 6, firstPageOnly: true })
   ])
 
-  const categoriesName = blogCategories.map(category => category.name)
-  const categories = ["Todos", ...categoriesName]
+  const [_, blogCategoriesSuccess] = blogCategories
 
-  const filteredPosts = blogPosts
+  let categories: string[] = ["Todos"]
+  if (blogCategoriesSuccess) {
+    const categoriesName = blogCategoriesSuccess.map(category => category.name)
+    categories = [...categories, ...categoriesName]
+  }
+
+  const [blogPostsError, blogPosts] = blogPostsResult
+
+  const filteredPosts = blogPostsError ? [] : blogPosts
 
   return (
     <div className="min-h-screen bg-background">
@@ -61,7 +68,7 @@ export default async function BlogPosts({ searchParams }: BlogPosts) {
                 Artigos em Destaque
               </h2>
               <div className="grid lg:grid-cols-2 gap-8">
-                {blogPosts.filter(post => post.featured).map((post, index) => (
+                {blogPosts && blogPosts.filter(post => post.featured).map((post, index) => (
                   <Card
                     key={post.id}
                     className="group hover:shadow-glow transition-all duration-300 hover:scale-105 animate-slide-up"
@@ -120,7 +127,7 @@ export default async function BlogPosts({ searchParams }: BlogPosts) {
             <h2 className="text-3xl font-semibold mb-8">
               {selectedCategory === "Todos" ? "Todos os Artigos" : `Artigos sobre ${selectedCategory}`}
             </h2>
-            {filteredPosts.length === 0 && (
+            {filteredPosts && filteredPosts.length === 0 && (
               <div className="text-center py-12">
                 <p className="text-muted-foreground text-lg">
                   {query && <>Nenhum artigo encontrado para &quot;{query}&quot; na categoria &quot;{selectedCategory}&quot;.</>}

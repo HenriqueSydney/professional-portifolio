@@ -3,20 +3,20 @@
 
 import { newsLetterSubscriptionFormSchema, NewsLetterSubscriptionFormData } from "./newsLetterSubscriptionFormSchema";
 import { render } from "@react-email/components";
-import { randomUUID } from "node:crypto";
 import { sendEmail } from "@/lib/mailer/sendEmail";
 import NewsletterSubscriptionEmail from "@/email/NewsletterSubscriptionEmail";
 import { makeNewsletterSubscriptionsRepository } from "@/repositories/factories/makeNewsletterSubscriptionsRepository";
 import { date } from "@/lib/dayjs";
 import { NewsLetterSubscriptions } from "@/generated/prisma";
+import { apiLogger } from "@/lib/logger";
+import { randomUUID } from "node:crypto";
 
 export async function sendNewsLetterSubscriptionConfirmation(params: NewsLetterSubscriptionFormData) {
+    const traceId = randomUUID();
     try {
-        // Validação runtime
         const { email } = newsLetterSubscriptionFormSchema.parse(params);
 
-        // Aqui você executaria a lógica (ex.: salvar no banco, enviar e-mail, etc.)
-        console.log('Mensagem recebida:', { email });
+        apiLogger.info({ email, traceId }, 'Message received for Newsletter subscription')
 
         const newsLetterSubscriptionRepository = makeNewsletterSubscriptionsRepository()
 
@@ -45,6 +45,9 @@ export async function sendNewsLetterSubscriptionConfirmation(params: NewsLetterS
             subject: '[HenriqueLima.Dev] Seja bem vindo! Confirme sua inscrição e começe a diversos conteúdos do mundo de Desenvolvimento e DevOps'
         })
 
+
+        apiLogger.info({ email, traceId }, 'Message sent for Newsletter subscription')
+
         return {
             success: true,
             message: 'Uma mensagem foi enviada para o seu e-mail. Confirme e começe a receber notícias fresquinhas!'
@@ -52,12 +55,14 @@ export async function sendNewsLetterSubscriptionConfirmation(params: NewsLetterS
 
     } catch (error) {
         if (error instanceof Error) {
+            apiLogger.warn({ stackTrace: error, traceId }, 'Error sending Newsletter subscription')
             return {
                 success: false,
                 message: error.message
             };
         }
 
+        apiLogger.error({ stackTrace: error, traceId }, 'Error sending Newsletter subscription')
         return {
             success: false,
             message: 'Ocorreu um erro desconhecido.'

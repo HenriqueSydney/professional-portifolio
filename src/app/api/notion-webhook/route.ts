@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { notion } from "@/lib/notionClient";
+import { apiLogger } from "@/lib/logger";
+import { notion } from "@/lib/notion/notion";
 import { getPostReadTime } from "@/services/notion/getPostReadTime";
 import { titleToSlug } from "@/util/titleToSlug";
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  
-  try { 
+
+  try {
 
     if (body.entity.type === "page" && ["page.created", "page.content_updated"].includes(body.type)) {
       const pageId = body.entity.id;
@@ -16,9 +17,14 @@ export async function POST(req: NextRequest) {
       // 1. Obtem informações da página
       const page = await notion.pages.retrieve({ page_id: pageId });
       const coverUrl = (page as any).cover?.external?.url ?? null;
+      const title = (page as any).Title.title[0]?.plain_text ?? "Sem título"
+
+      apiLogger.error({ title, pageId }, `Page creation or update received`)
 
       // 2. Extrai o tempo estimado de leitura
-      const readTime = await getPostReadTime(pageId);
+      let [readTimeError, readTime] = await getPostReadTime(pageId);
+
+      if (readTimeError) readTime = 0
 
       // 3. Gera excerpt automático (primeiras 30 palavras)
       const blocks = await notion.blocks.children.list({ block_id: pageId });
@@ -81,14 +87,14 @@ export async function POST(req: NextRequest) {
       // 4. Atualiza a própria página recém criada
       await notion.pages.update(update);
 
-      console.log(`✅ Página ${pageId} atualizada com sucesso`);
+      apiLogger.error({ title, pageId }, `Page updated successfully`)
     }
-   
 
-   
+
+
     return NextResponse.json({ ok: true });
-  } catch (err) {
-    console.error("Erro no webhook do Notion:", err);    
+  } catch (error) {
+    apiLogger.error({ stackTrace: error }, 'Erro no webhook do Notion')
     return NextResponse.json({ error: "Erro interno no webhook" });
   }
 }

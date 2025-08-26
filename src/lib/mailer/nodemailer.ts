@@ -4,6 +4,7 @@ import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { htmlToText } from "html-to-text";
 import { envVariables } from "@/env";
 import { IMailer, SendEmailOptions } from "./IMailer";
+import { apiLogger } from "../logger";
 
 export class NodemailerMailer implements IMailer {
   private static instance: NodemailerMailer;
@@ -52,7 +53,7 @@ export class NodemailerMailer implements IMailer {
     return NodemailerMailer.instance;
   }
 
-  public async sendMail({ to, subject, html, text }: SendEmailOptions): Promise<void> {
+  public async sendMail({ to, subject, html, text }: SendEmailOptions): Promise<SMTPTransport.SentMessageInfo> {
     const plainText = text ?? htmlToText(html, {
       wordwrap: 130,
       selectors: [{ selector: "a", options: { hideLinkHrefIfSameAsText: true } }],
@@ -70,6 +71,8 @@ export class NodemailerMailer implements IMailer {
       text: plainText,
     });
 
-    console.log("Message sent: %s", info.messageId);
+    apiLogger.info({ to, subject }, `Message sent: ${info.messageId}`);
+    return info
+
   }
 }

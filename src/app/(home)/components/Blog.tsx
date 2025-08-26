@@ -14,9 +14,15 @@ export async function Blog() {
     fetchBlogPosts({ numberOfPostsPerPage: 6, firstPageOnly: true })
   ])
 
-  const categoriesName = blogCategories.map(category => category.name)
-  const categories = ["Todos", ...categoriesName]
+  const [_, blogCategoriesSuccess] = blogCategories
 
+  let categories: string[] | undefined
+  if (blogCategoriesSuccess) {
+    const categoriesName = blogCategoriesSuccess.map(category => category.name)
+    categories = ["Todos", ...categoriesName]
+  }
+
+  const [__, blogPostsSuccess] = blogPosts
 
   return (
     <section id="blog" className="py-15 bg-muted/30">
@@ -32,7 +38,7 @@ export async function Blog() {
 
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-2 mb-12 animate-slide-up">
-          {categories.map((category) => (
+          {categories && categories.map((category) => (
             <Link key={category} href={`/blog?category=${category}`}>
               <Button
                 variant={category === "Todos" ? "default" : "outline"}
@@ -52,7 +58,7 @@ export async function Blog() {
             Artigos em Destaque
           </h3>
           <div className="grid lg:grid-cols-2 gap-8">
-            {blogPosts.filter(post => post.featured).map((post, index) => (
+            {blogPostsSuccess && blogPostsSuccess.filter(post => post.featured).map((post, index) => (
               <Card
                 key={index}
                 className="group hover:shadow-glow transition-all duration-300 hover:scale-105 animate-slide-up"
@@ -105,7 +111,7 @@ export async function Blog() {
         <div>
           <h3 className="text-2xl font-semibold mb-8">Últimos artigos</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogPosts.map((post, index) => (
+            {blogPostsSuccess && blogPostsSuccess.map((post, index) => (
               <Card
                 key={index}
                 className="group hover:shadow-glow transition-all duration-300 hover:scale-105 animate-slide-up"

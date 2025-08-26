@@ -13,9 +13,9 @@ import { NewsLetterForm } from "@/components/NewsLetterForm";
 export default async function post({ params }: { params: { slug: string } }) {
   const { slug } = await params;
 
-  const blogPost = await getBlogPostBySlug(slug);
+  const [blogPostError, blogPost] = await getBlogPostBySlug(slug);
 
-  if (!blogPost) throw new Error('Post not found');
+  if (blogPostError) throw new Error('Post not found');
 
   // Mock de posts relacionados
   const relatedPosts = [
