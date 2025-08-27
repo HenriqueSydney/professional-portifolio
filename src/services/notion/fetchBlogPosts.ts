@@ -13,7 +13,7 @@ type GetBlogPostsParams = {
 
 }
 
-type BlogPosts = {
+export type BlogPost = {
   id: string;
   slug: string;
   title: string;
@@ -25,7 +25,7 @@ type BlogPosts = {
   featured: boolean;
 }
 
-type FetchBlogPostsResponse = [Error, null] | [null, BlogPosts[]];
+type FetchBlogPostsResponse = [Error, null] | [null, BlogPost[]];
 
 export async function fetchBlogPosts({ firstPageOnly, numberOfPostsPerPage, page }: GetBlogPostsParams): Promise<FetchBlogPostsResponse> {
 
@@ -79,7 +79,7 @@ export async function fetchBlogPosts({ firstPageOnly, numberOfPostsPerPage, page
       //start_cursor: cursor
     })
 
-    const blogPosts: BlogPosts[] = posts.results.filter(isFullPage).map((post) => {
+    const blogPosts: BlogPost[] = posts.results.filter(isFullPage).map((post) => {
 
       const props = post.properties as unknown as NotionDatabaseInfoOfPosts["properties"];
 

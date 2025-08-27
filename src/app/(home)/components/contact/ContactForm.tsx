@@ -6,7 +6,8 @@ import {
   Send,
   MessageCircle,
   CheckCircle,
-  XCircle
+  XCircle,
+  Loader2Icon
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -16,9 +17,6 @@ import { ContactMessageData, contactMessageSchema } from "@/actions/sendContactM
 import { Input } from "@/components/Input";
 import { Textarea } from "@/components/Textarea";
 
-
-
-
 export function ContactForm() {
   const { toast } = useToast()
   const appointmentFormCheckout = useForm<ContactMessageData>({
@@ -27,9 +25,7 @@ export function ContactForm() {
 
   const {
     handleSubmit,
-    control,
     register,
-    setValue,
     reset,
     formState: { isSubmitting, errors },
   } = appointmentFormCheckout
@@ -118,8 +114,10 @@ export function ContactForm() {
             <Button
               size="lg"
               className="w-full hover:shadow-glow transition-all duration-300"
+              disabled={isSubmitting}
             >
-              <Send className="w-5 h-5 mr-2" />
+              {isSubmitting && <Loader2Icon className="animate-spin" />}
+              {!isSubmitting && <Send className="w-5 h-5 mr-2" />}
               Enviar Mensagem
             </Button>
           </CardContent>

@@ -15,9 +15,8 @@ export async function GET(
     { params }: { params: Promise<{ confirmationId: string }> }
 ) {
 
-    const { confirmationId } = await cancelSubscriptionNewsletterApiSchema.parseAsync(params)
-
     try {
+        const { confirmationId } = await cancelSubscriptionNewsletterApiSchema.parseAsync(params)
 
         const newsLetterSubscriptionRepository = makeNewsletterSubscriptionsRepository()
 

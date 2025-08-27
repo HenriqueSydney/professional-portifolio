@@ -17,6 +17,8 @@ export interface CacheOptions {
     tags?: string[];
 }
 
+
+
 export interface IRedisClient {
     /**
      * Gera uma chave de cache única baseada em prefixo, tags e parâmetros
@@ -77,6 +79,9 @@ export interface IRedisClient {
      * @returns Promise<void>
      */
     clearCacheByPrefix(prefix: string): Promise<void>;
+
+
+    getInstance(): Redis;
 
     /**
      * Verifica se a conexão com o Redis está ativa

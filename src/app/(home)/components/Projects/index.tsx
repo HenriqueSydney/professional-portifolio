@@ -1,18 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Github, Code2, Database, Cloud, Settings, AlertCircle } from "lucide-react";
-import { githubRepositories } from "@/services/githubRepositories";
+import { ExternalLink, Github, Code2, Database, Cloud, Settings, AlertCircle, DockIcon } from "lucide-react";
+import { githubRepositories } from "@/services/gitHub/githubRepositories";
 import Link from "next/link";
 
 
 import { DynamicIcon, IconName } from 'lucide-react/dynamic';
 import { Tooltip } from "@/components/Tooltip";
+import { ProjectModal } from "./ProjectModal";
 
 const MAX_NUMBER_OF_FEATURES = 6
 
 export async function Projects() {
   const projetcs = await githubRepositories();
+
 
   if (projetcs === null) return null
 
@@ -95,7 +97,7 @@ export async function Projects() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-end gap-3 pt-4">
+                      <div className="flex justify-end gap-4 pt-4">
                         <Link href={project.link} target="_blank">
                           <Button
                             variant="default"
@@ -107,6 +109,8 @@ export async function Projects() {
                             <ExternalLink className="w-4 h-4 mr-2" />
                           </Button>
                         </Link>
+                        <ProjectModal projectInfo={project} />
+
                       </div>
                     </div>
                   </CardContent>
@@ -117,14 +121,16 @@ export async function Projects() {
         </div>
 
         <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: "0.6s" }}>
-          <Button
-            variant="default"
-            size="lg"
-            className="bg-primary hover:bg-primary/90 shadow-glow hover:shadow-glow-lg transition-all duration-300"
-          >
-            <Github className="w-5 h-5 mr-2" />
-            Ver Todos os Projetos no GitHub
-          </Button>
+          <Link href="https://github.com/HenriqueSydney" target="_blank">
+            <Button
+              variant="default"
+              size="lg"
+              className="bg-primary hover:bg-primary/90 shadow-glow hover:shadow-glow-lg transition-all duration-300"
+            >
+              <Github className="w-5 h-5 mr-2" />
+              Ver Todos os Projetos no GitHub
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

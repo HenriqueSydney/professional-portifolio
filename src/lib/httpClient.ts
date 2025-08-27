@@ -19,7 +19,7 @@ export async function httpClient<T>(url: string, options?: RequestInit, response
   const operationId = `http:${options?.method ? options.method.toLowerCase() : 'get'}:${url.replace(/https?:\/\//, '').replace(/[^a-zA-Z0-9]/g, '_')}`;
 
   const method = options?.method ?? 'GET'
-  const cache = options?.cache
+  const cache = options?.cache === 'default' || options?.cache === 'force-cache'
   const revalidate = options?.next?.revalidate
   const tags = options?.next?.tags ?? []
 
@@ -114,6 +114,7 @@ export async function httpClient<T>(url: string, options?: RequestInit, response
       return [null, data as T] satisfies IHttpClientResponse<T>
 
     } catch (error: any) {
+      apiLogger.error({ stackTrace: error }, 'HTTP request error');
       span.setAttribute("cache.hit", false);
       span.recordException(error);
       span.setStatus({ code: SpanStatusCode.ERROR, message: error.message }); // ERROR

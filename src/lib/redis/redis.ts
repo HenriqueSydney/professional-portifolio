@@ -356,6 +356,10 @@ export class RedisClient implements IRedisClient {
         );
     }
 
+    getInstance(): Redis {
+        return this.redis
+    }
+
     /**
      * Verifica se o Redis está conectado
      */

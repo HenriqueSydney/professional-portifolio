@@ -5,10 +5,11 @@ import { cn } from "@/lib/utils"
 import { useNavLinks } from "@/hooks/use-nav-links"
 import { useVisibleAnchor } from "@/hooks/use-visible-anchor"
 import { usePathname } from "next/navigation"
+import React from "react"
 
 
 interface NavLinksProps {
-    variant?: "desktop" | "mobile" | "footer"
+    variant?: "desktop" | "mobile" | "footer" | "notFoundPage"
     setIsMobileMenuOpen?: (open: boolean) => void
 }
 
@@ -47,11 +48,14 @@ export function NavLinks({
         mobile: "text-left text-foreground hover:text-primary transition-colors duration-200 py-2",
         desktop: "text-foreground hover:text-primary transition-colors duration-200 relative group font-bold",
         footer: "text-muted-foreground hover:text-primary transition-colors duration-200 relative group ",
+        notFoundPage: "text-foreground hover:text-primary transition-colors duration-200 relative group font-bold  ",
     } as const
+
+    const totalOfItems = navItems.length
 
     return (
         <>
-            {navItems.map((item) => {
+            {navItems.map((item, i) => {
                 // console.log({ anchorVisible, item, pathName })
                 const isActive =
                     item.type === "anchor" && variant !== 'footer'
@@ -60,40 +64,45 @@ export function NavLinks({
 
                 if (item.type === "anchor") {
                     return (
-                        <button
-                            key={item.href}
-                            onClick={() => scrollToSection(item.href)}
-                            className={cn(baseClasses[variant], isActive && "text-primary")}
-                        >
-                            {item.label}
-                            {variant !== "mobile" && (
-                                <span
-                                    className={cn(
-                                        "absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300",
-                                        isActive ? "w-full" : "group-hover:w-full"
-                                    )}
-                                />
-                            )}
-                        </button>
+                        <React.Fragment key={item.href}>
+                            <button
+                                onClick={() => scrollToSection(item.href)}
+                                className={cn(baseClasses[variant], isActive && "text-primary")}
+                            >
+                                {item.label}
+                                {variant !== "mobile" && (
+                                    <span
+                                        className={cn(
+                                            "absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300",
+                                            isActive ? "w-full" : "group-hover:w-full"
+                                        )}
+                                    />
+                                )}
+                            </button>
+                            {totalOfItems != (i + 1) && variant === 'notFoundPage' && <span>|</span>}
+                        </React.Fragment>
                     )
                 }
 
                 return (
-                    <Link key={item.href} href={`/${item.href}`}>
-                        <button
-                            className={cn(baseClasses[variant], isActive && "text-primary")}
-                        >
-                            {item.label}
-                            {variant !== "mobile" && (
-                                <span
-                                    className={cn(
-                                        "absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300",
-                                        isActive ? "w-full" : "group-hover:w-full"
-                                    )}
-                                />
-                            )}
-                        </button>
-                    </Link>
+                    <React.Fragment key={item.href}>
+                        <Link key={item.href} href={`/${item.href}`}>
+                            <button
+                                className={cn(baseClasses[variant], isActive && "text-primary")}
+                            >
+                                {item.label}
+                                {variant !== "mobile" && (
+                                    <span
+                                        className={cn(
+                                            "absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300",
+                                            isActive ? "w-full" : "group-hover:w-full"
+                                        )}
+                                    />
+                                )}
+                            </button>
+                        </Link>
+                        {totalOfItems != (i + 1) && variant === 'notFoundPage' && <span>|</span>}
+                    </React.Fragment>
                 )
             })}
         </>

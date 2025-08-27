@@ -16,10 +16,10 @@ export async function GET(
     { params }: { params: Promise<{ confirmationId: string }> }
 ) {
 
-    const { confirmationId } = await confirmationEmailApiSchema.parseAsync(params)
+
 
     try {
-
+        const { confirmationId } = await confirmationEmailApiSchema.parseAsync(params)
         const newsLetterSubscriptionRepository = makeNewsletterSubscriptionsRepository()
 
         const subscription = await newsLetterSubscriptionRepository.findSubscriptionByConfirmationId(confirmationId)
