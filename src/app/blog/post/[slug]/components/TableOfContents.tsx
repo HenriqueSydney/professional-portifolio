@@ -90,19 +90,24 @@ export function TableOfContents() {
                 <div className="flex flex-col gap-4 p-5 bg-background/90 backdrop-blur-md border-l border-border/50 rounded-l-lg">
                     <h1 className="text-primary font-bold">Tabela de Conteúdo</h1>
                     <nav className="flex flex-col gap-2">
-                        {headersInfo.map((header) => (
-                            <button
-                                key={header.id}
-                                onClick={() => scrollToSection(header.id)}
-                                className={cn(
-                                    'block text-sm hover:underline text-left transition-colors',
-                                    lastAnchorVisible === header.id ? "text-primary font-semibold" : "text-muted-foreground"
-                                )}
-                                style={{ marginLeft: header.level === 'h2' ? 12 : header.level === 'h3' ? 24 : 0 }}
-                            >
-                                {header.title}
-                            </button>
-                        ))}
+                        {headersInfo.map((header) => {
+                            const isActive = lastAnchorVisible === `#${header.id}`;
+                            const marginLeft = header.level === 'h2' ? 14 : header.level === 'h3' ? 26 : 0
+                            return (
+
+                                <button
+                                    key={header.id}
+                                    onClick={() => scrollToSection(header.id)}
+                                    className={cn(
+                                        'block text-sm hover:underline text-left transition-colors',
+                                        isActive ? "text-primary font-semibold" : "text-muted-foreground"
+                                    )}
+                                    style={{ marginLeft }}
+                                >
+                                    {header.title}
+                                </button>
+                            )
+                        })}
                     </nav>
                 </div>
             </div>

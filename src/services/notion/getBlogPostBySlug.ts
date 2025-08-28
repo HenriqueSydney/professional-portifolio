@@ -7,7 +7,7 @@ import { notion } from "@/lib/notion/notion";
 import { formatMinutesToHour } from "@/util/formatMinutesToHour";
 import { BlockObjectResponse, isFullPage } from "@notionhq/client";
 
-type BlogPostBySlug = {
+export type BlogPostBySlug = {
   id: string;
   title: string;
   excerpt: string;
