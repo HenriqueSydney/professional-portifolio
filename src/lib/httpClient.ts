@@ -71,6 +71,8 @@ export async function httpClient<T>(url: string, options?: RequestInit, response
         cache: 'no-cache'
       })
 
+
+
       if (!response.ok) {
         const errorMessage = `HTTP Error: ${response.status} ${response.statusText}`;
         return [new Error(errorMessage), null] satisfies IHttpClientResponse<T>
@@ -114,6 +116,7 @@ export async function httpClient<T>(url: string, options?: RequestInit, response
       return [null, data as T] satisfies IHttpClientResponse<T>
 
     } catch (error: any) {
+      console.log(error)
       apiLogger.error({ stackTrace: error }, 'HTTP request error');
       span.setAttribute("cache.hit", false);
       span.recordException(error);

@@ -1,3 +1,5 @@
+'use server'
+
 import { NotionDatabaseInfoOfPosts } from "@/@types/NotionDatabaseInfoOfPosts";
 import { envVariables } from "@/env";
 import { notionClient } from "@/lib/notion/notionClient";
@@ -7,10 +9,11 @@ import { date } from "@/lib/dayjs";
 import { formatMinutesToHour } from "@/util/formatMinutesToHour";
 
 type GetBlogPostsParams = {
-  firstPageOnly?: boolean;
-  numberOfPostsPerPage?: number;
-  page?: number
-
+  firstPageOnly?: boolean
+  numberOfPostsPerPage?: number
+  nextCursor?: string
+  category?: "All" | "DevOps" | "Monitoring" | "Architecture" | "Security" | "Infrastructure" | "Frontend"
+  query?: string
 }
 
 export type BlogPost = {
@@ -25,22 +28,39 @@ export type BlogPost = {
   featured: boolean;
 }
 
-type FetchBlogPostsResponse = [Error, null] | [null, BlogPost[]];
+export type FetchBlogPostsData = {
+  hasMore: boolean | null
+  nextCursor: string | null
+  blogPosts: BlogPost[]
+}
 
-export async function fetchBlogPosts({ firstPageOnly, numberOfPostsPerPage, page }: GetBlogPostsParams): Promise<FetchBlogPostsResponse> {
+type FetchBlogPostsResponse = [Error, null] | [null, FetchBlogPostsData];
+
+export async function fetchBlogPosts(data: GetBlogPostsParams): Promise<FetchBlogPostsResponse> {
+  const {
+    firstPageOnly,
+    numberOfPostsPerPage,
+    nextCursor,
+    category,
+    query
+  } = data
+
+  const tags = [
+    firstPageOnly && `firstPage:${firstPageOnly}`,
+    nextCursor && `cursor:${nextCursor}`,
+    category && `category:${category}`,
+    numberOfPostsPerPage && `limit:${numberOfPostsPerPage}`,
+    query && `query:${query}`,
+  ].filter((t): t is string => Boolean(t));
+
 
   return await notionClient('fetchBlogPosts', async () => {
-    const filters = [{
+    const filters: any[] = [{
       property: "Published",
       checkbox: {
         equals: true,
       },
     }]
-
-    let currentPage = 1;
-    if (page) {
-      currentPage = 1;
-    }
 
     const sorts: { property: string; direction: "ascending" | "descending" }[] = [
       {
@@ -63,6 +83,41 @@ export async function fetchBlogPosts({ firstPageOnly, numberOfPostsPerPage, page
       } as const)
     }
 
+    if (category && category !== 'All') {
+      filters.push({
+        property: "Category",
+        select: {
+          equals: category,
+        },
+      })
+    }
+
+    if (query && query !== '') {
+      filters.push({
+        or: [{
+          property: "Title",
+          title: {
+            contains: query,
+          },
+        },
+        {
+          property: "Excerpt",
+          rich_text: {
+            contains: query,
+          },
+        },
+        {
+          property: "Tags",
+          multi_select: {
+            contains: query,
+          },
+        }
+        ]
+
+      })
+    }
+
+
     const queryBase = {
       database_id: envVariables.NOTION_DATABASE_ID,
       filter: {
@@ -72,12 +127,11 @@ export async function fetchBlogPosts({ firstPageOnly, numberOfPostsPerPage, page
       page_size: numberOfPostsPerPage
     }
 
-    const startCursor: string | undefined = undefined
-
     const posts = await notion.databases.query({
       ...queryBase,
-      //start_cursor: cursor
+      start_cursor: nextCursor
     })
+
 
     const blogPosts: BlogPost[] = posts.results.filter(isFullPage).map((post) => {
 
@@ -98,10 +152,17 @@ export async function fetchBlogPosts({ firstPageOnly, numberOfPostsPerPage, page
       };
     })
 
-    return blogPosts
+    const data = {
+      hasMore: posts.has_more,
+      nextCursor: posts.next_cursor,
+      blogPosts
+    }
+
+    return data
   }, {
+    cache: false,
     revalidate: false, // never
-    tags: ['blog-posts']
+    tags: ['blog-posts', ...tags]
   })
 
 }

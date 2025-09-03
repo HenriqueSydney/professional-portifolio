@@ -65,7 +65,7 @@ export interface IRedisClient {
      * @param cacheKey - Chave a ser invalidada
      * @returns Promise<void>
      */
-    invalidateCache(cacheKey: string): Promise<void>;
+    invalidateCache(cacheKey: string): Promise<boolean>;
 
     /**
      * Obtém estatísticas sobre o uso do cache

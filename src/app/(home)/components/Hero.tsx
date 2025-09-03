@@ -7,13 +7,15 @@ import { httpClient } from "@/lib/httpClient";
 import { downloadFileFromBlob } from "@/util/downloadFileFromBlob";
 import { SocialMediaLinks } from "@/components/SocialMediaLinks";
 
+const baseUrl = 'http://localhost:3000'
+
 export function Hero() {
 
 
   const skills = ["DevOps", "Node.js", "Next.js", "Cloud", "Kubernetes", "Docker"];
 
   async function handleDownloadResume() {
-    const [error, blob] = await httpClient<Blob>('/api/resume', {
+    const [error, blob] = await httpClient<Blob>(`${baseUrl}/api/resume`, {
       cache: 'no-cache',
     }, 'blob');
 
@@ -24,10 +26,17 @@ export function Hero() {
     downloadFileFromBlob(blob)
   }
 
+  const scrollToSection = (href: string) => {
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: 'start' });
+    }
+  };
+
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute inset-0 bg-hero-gradient opacity-10"></div>
+      <div className="absolute w-full inset-0 bg-hero-gradient opacity-10"></div>
       <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-float"></div>
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-float" style={{ animationDelay: "3s" }}></div>
       <div className="w-full hidden lg:block absolute rotate-y-180 left-10 top-0 bottom-0 bg-[url('/brush-stroke.png')] bg-no-repeat bg-center bg-cover pointer-events-none z-1 opacity-30" />
@@ -71,7 +80,12 @@ export function Hero() {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center lg:justify-start">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 shadow-glow hover:shadow-glow-lg transition-all duration-300">
+
+              <Button
+                onClick={() => scrollToSection('#contact')}
+                size="lg"
+                className="bg-primary hover:bg-primary/90 shadow-glow hover:shadow-glow-lg transition-all duration-300"
+              >
                 <Mail className="mr-2 h-5 w-5" />
                 Entre em Contato
               </Button>

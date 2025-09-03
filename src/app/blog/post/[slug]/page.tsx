@@ -1,38 +1,56 @@
+
+import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 import { getBlogPostBySlug } from "@/services/notion/getBlogPostBySlug";
-import Link from "next/link";
 import { renderNotionBlock } from "@/util/renderNotionBlock";
 import { TableOfContents } from "./components/TableOfContents";
 import { NewsLetterSubscriptionForm } from "@/components/NewsLetterSubscriptionForm";
-import { SocialActions } from "./components/SocialActions";
-import { PostHeader } from "./components/PostHeader";
+import { PostHeader } from "./components/PostHeader/PostHeader";
 import { RelatedPostsContainer } from "./components/RelatedPostsContainer";
-import { Comments } from "./components/Comments";
+import { CommentsContainer } from "./components/Comments/CommentsContainer";
+import { SocialActionContainer } from "./components/SocialAction/SocialActionContainer";
+import Image from "next/image";
 
 
-export default async function post({ params }: { params: { slug: string } }) {
+export default async function post({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  const [blogPostError, blogPost] = await getBlogPostBySlug(slug);
+  const blogPostResponse = await getBlogPostBySlug(slug)
+
+  const [blogPostError, blogPost] = blogPostResponse
 
   if (blogPostError) throw new Error('Post not found');
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 pt-24 bg-gradient-to-br from-primary/10 via-background to-accent/10">
-        <Link href="/blog">
-          <Button variant="ghost" className="mb-6 hover:bg-primary/10">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar ao Blog
-          </Button>
-        </Link>
+      <div className="relative">
+        <div className="absolute inset-0 z-0 h-full">
+          <Image
+            src={blogPost.cover}
+            alt="Blog post cover image"
+            fill
+            priority
+            className="object-cover object-center "
+          />
+          <div className="absolute inset-0 z-2 backdrop-blur-xs bg-gradient-to-br from-black/80 via-black/60 to-black/75" />
+        </div>
+        <div className="relative z-10 container mx-auto px-4 pt-24 bg-gradient-to-br from-primary/10 via-background to-accent/10">
+          <Link href="/blog">
+            <Button variant="ghost" className="mb-6 hover:bg-primary/10">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Voltar ao Blog
+            </Button>
+          </Link>
+          <PostHeader blogPost={blogPost} />
+
+        </div>
       </div>
+
       {blogPost && <TableOfContents />}
 
-      <PostHeader blogPost={blogPost} />
 
       <section className="py-8">
         <div className="container mx-auto px-4">
@@ -47,9 +65,9 @@ export default async function post({ params }: { params: { slug: string } }) {
               </CardContent>
             </Card>
 
-            <SocialActions numberOfLikes={0} />
+            <SocialActionContainer postId={blogPost.id} />
 
-            <Comments />
+            <CommentsContainer postId={blogPost.id} />
 
           </div>
         </div>

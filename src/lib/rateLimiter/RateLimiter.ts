@@ -4,11 +4,19 @@ import { IRateLimiter } from './IRateLimiter'
 import { NextRequest } from 'next/server'
 
 const RATE_LIMITS = {
-    global: { requests: 100, window: 60 },
-    api: { requests: 20, window: 60 },
-    auth: { requests: 5, window: 300, blockDuration: 900 },
-    public: { requests: 200, window: 60 }
+    global: { requests: 10000, window: 60 },
+    api: { requests: 10000, window: 60 },
+    auth: { requests: 10000, window: 300, blockDuration: 900 },
+    public: { requests: 10000, window: 60 }
 } as const
+
+
+// const RATE_LIMITS = {
+//     global: { requests: 100, window: 60 },
+//     api: { requests: 20, window: 60 },
+//     auth: { requests: 5, window: 300, blockDuration: 900 },
+//     public: { requests: 200, window: 60 }
+// } as const
 
 interface RateLimitConfig {
     requests: number

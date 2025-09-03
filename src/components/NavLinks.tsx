@@ -46,7 +46,7 @@ export function NavLinks({
 
     const baseClasses = {
         mobile: "text-left text-foreground hover:text-primary transition-colors duration-200 py-2",
-        desktop: "text-foreground hover:text-primary transition-colors duration-200 relative group font-bold",
+        desktop: "text-header-nav-links transition-colors duration-200 relative group font-bold",
         footer: "text-muted-foreground hover:text-primary transition-colors duration-200 relative group ",
         notFoundPage: "text-foreground hover:text-primary transition-colors duration-200 relative group font-bold  ",
     } as const
@@ -56,7 +56,6 @@ export function NavLinks({
     return (
         <>
             {navItems.map((item, i) => {
-                // console.log({ anchorVisible, item, pathName })
                 const isActive =
                     item.type === "anchor" && variant !== 'footer'
                         ? anchorVisible === item.href

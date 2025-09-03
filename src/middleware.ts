@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { register } from "./instrumentation";
+
+let locales = ['en-US', 'pt-BR']
 
 export default async function middleware(request: NextRequest) {
-  register()
+  //register()
   const { pathname } = request.nextUrl
 
   if (request.nextUrl.pathname.startsWith("/api/rate-limit")) {

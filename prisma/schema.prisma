@@ -14,6 +14,85 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role            @default(USER)
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  PostComments      PostComments[]
+  PostCommentsLikes PostCommentsLikes[]
+  PostLikes         PostLikes[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}
+
 model NewsLetterSubscriptions {
   id                    Int       @id @default(autoincrement()) ///Entity ID
   email                 String    @unique @db.VarChar(256) ///Email used for subscription
@@ -23,10 +102,63 @@ model NewsLetterSubscriptions {
   confirmedAt           DateTime? @map("confirmed_at") ///Date of the confirmation of subscription
   canceledAt            DateTime? @map("canceled_at") ///Date of the cancelled subscription
 
+  @@index([confirmedAt, canceledAt])
   @@map("news_letter_subscription")
 }
 
 model PostMetrics {
-  id            Int @id @default(autoincrement())
-  numberOfViews Int @map("number_of_views")
+  id              String      @id @unique
+  numberOfViews   Int         @default(0) @map("number_of_views") @db.SmallInt
+  totalOfComments Int         @default(0) @map("total_of_comments") @db.SmallInt
+  numberOfLikes   Int         @default(0) @map("number_of_likes") @db.SmallInt
+  PostLikes       PostLikes[]
+
+  @@map("post_metrics")
+}
+
+model PostLikes {
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  postId String      @map("post_id")
+  post   PostMetrics @relation(fields: [postId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@id([userId, postId])
+  @@index([postId])
+  @@map("post_likes")
+}
+
+model PostComments {
+  id Int @id @default(autoincrement())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  postId        String @map("post_id") @db.VarChar(256)
+  comment       String
+  numberOfLikes Int    @default(0) @map("number_of_likes") @db.SmallInt
+
+  createdAt         DateTime            @default(now()) @map("created_at") ///Entity creation date
+  updatedAt         DateTime            @default(now()) @map("updated_at") ///Entity creation date
+  PostCommentsLikes PostCommentsLikes[]
+
+  @@index([userId])
+  @@index([postId])
+  @@map("post_comments")
+}
+
+model PostCommentsLikes {
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  postCommentId Int          @map("post_comments_id")
+  postComments  PostComments @relation(fields: [postCommentId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@id([userId, postCommentId])
+  @@index([postCommentId])
+  @@map("post_comments_likes")
 }

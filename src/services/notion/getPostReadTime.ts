@@ -24,7 +24,7 @@ export async function getPostReadTime(pageId: string): Promise<GetPostReadTimeRe
     return minutes;
   }, {
     revalidate: false, // never
-    tags: ['blog-categories']
+    tags: ['post-read-time']
   })
 
 }

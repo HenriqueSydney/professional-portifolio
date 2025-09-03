@@ -15,10 +15,11 @@ export function useNavLinks(): NavItem[] {
 
     return [
         { href: "#about", label: "Sobre", type: navItemType },
-        { href: "#skills", label: "Habilidades", type: navItemType },
         { href: "#projects", label: "Projetos", type: navItemType },
-        { href: "blog", label: "Blog", type: "link" },
+        { href: "#certifications", label: "Certificações", type: navItemType },
+        { href: "#skills", label: "Habilidades", type: navItemType },
         { href: "#experience", label: "Experiência", type: navItemType },
+        { href: "blog", label: "Blog", type: "link" },
         { href: "#contact", label: "Contato", type: navItemType },
     ];
 }

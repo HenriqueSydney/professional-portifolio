@@ -10,6 +10,7 @@ import { BlockObjectResponse, isFullPage } from "@notionhq/client";
 export type BlogPostBySlug = {
   id: string;
   title: string;
+  cover: string;
   excerpt: string;
   categories: string[];
   readTime: string;
@@ -56,15 +57,17 @@ export async function getBlogPostBySlug(slug: string): Promise<FetchBlogPostsByS
       throw new NotFoundPostError()
     }
 
+
     const props = post.properties as unknown as NotionDatabaseInfoOfPosts["properties"];
 
     //const page = await notion.pages.retrieve({ page_id: post.id });
 
     const blocks = await notion.blocks.children.list({ block_id: post.id });
-
+    const defaultImage = 'https://images.unsplash.com/photo-1605379399642-870262d3d051?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     return {
       id: post.id,
       title: props.Title.title[0]?.plain_text ?? "Sem título",
+      cover: props.Cover.url ?? defaultImage,
       excerpt: props.Excerpt.rich_text[0]?.plain_text ?? "",
       categories: props.Tags.multi_select.length
         ? props.Tags.multi_select.map((tag) => tag.name)
@@ -84,8 +87,9 @@ export async function getBlogPostBySlug(slug: string): Promise<FetchBlogPostsByS
       author: "Henrique Sydney Ribeiro Lima",
     };
   }, {
+    cache: true,
     revalidate: false, // never
-    tags: ['blog-categories']
+    tags: [`blog-post-${slug}`]
   })
 
 }

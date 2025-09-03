@@ -12,7 +12,7 @@ export async function sendContactMessageAction(params: ContactMessageData) {
   try {
     const { name, email, subject, message } = contactMessageSchema.parse(params);
 
-    console.log('Mensagem recebida:', { name, email, subject, message });
+    apiLogger.debug({ name, email, subject, message }, 'Mensagem recebida',);
 
 
     apiLogger.info({ name, email, subject, message, traceId }, 'Contact message received')

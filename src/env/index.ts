@@ -15,7 +15,12 @@ const envSchema = z.object({
   GOOGLE_REFRESH_TOKEN: z.string(),
   GOOGLE_EMAIL: z.email(),
   GOOGLE_APP_PASSWORD: z.string(),
-  BASE_URL: z.string()
+  BASE_URL: z.string(),
+  GITHUB_ID: z.string(),
+  GITHUB_SECRET: z.string(),
+  AUTH_SECRET: z.string(),
+  LINK_PREVIEW: z.string(),
+  CACHE_ENABLED: z.coerce.boolean().default(true)
 });
 
 const env = envSchema.safeParse(process.env);

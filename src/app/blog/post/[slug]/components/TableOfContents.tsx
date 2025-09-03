@@ -26,7 +26,7 @@ export function TableOfContents() {
 
     };
 
-    //console.log({ anchorIds, anchors, headersInfo })
+
     useEffect(() => {
         const headers = document.querySelectorAll('#blog_content h1, #blog_content h2, #blog_content h3')
 
@@ -56,11 +56,11 @@ export function TableOfContents() {
 
     return (
         <div className="fixed right-0 top-1/4 -translate-y-1/2 group">
-            {/* Mini-indicator */}
+
             <div className="absolute right-0 top-0 bg-background/80 backdrop-blur-md border-l border-border/50 rounded-l-lg p-3 group-hover:hidden transition-all duration-300">
                 <div className="flex flex-col items-end gap-2 leading-none">
                     {headersInfo.map((header) => {
-                        //console.log({ lastAnchorVisible, headerId: `${header.id}` })
+
                         const isActive = lastAnchorVisible === `#${header.id}`;
                         const width = header.level === 'h1' ? 'w-8' : header.level === 'h2' ? 'w-6' : 'w-4';
 
@@ -71,8 +71,8 @@ export function TableOfContents() {
                                     'rounded-full transition-all duration-300',
                                     width,
                                     isActive
-                                        ? 'h-[4px] bg-primary shadow-[0_0_8px_#3b82f6]' // ativo: mais grosso e glow
-                                        : 'min-h-[3px] max-h-[3px] bg-stone-700' // inativo: mais fino e mais fraco
+                                        ? 'h-[4px] bg-primary shadow-[0_0_8px_#3b82f6]'
+                                        : 'min-h-[3px] max-h-[3px] bg-stone-700'
                                 )}
                             />
                         );
@@ -80,7 +80,6 @@ export function TableOfContents() {
                 </div>
             </div>
 
-            {/* Estado expandido com transição */}
             <div
                 className={cn(
                     "absolute right-0 top-0 w-64 transform transition-all duration-300 origin-right",

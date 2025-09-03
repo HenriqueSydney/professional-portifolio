@@ -14,6 +14,8 @@
     --popover: 140 30% 96%;
     --popover-foreground: 140 80% 12%;
 
+    --header-nav-links: 142 70% 45%;
+
     --primary: 142 70% 45%;
     --primary-foreground: 140 20% 98%;
 
@@ -68,6 +70,8 @@
 
     --popover: 260 20% 12%;
     --popover-foreground: 260 10% 92%;
+
+    --header-nav-links: 260 10% 95%;
 
     --primary: 270 85% 65%;
     --primary-foreground: 260 15% 8%;
@@ -180,6 +184,14 @@
     background-color: hsl(var(--background));
   }
 
+  .bg-background\/70 {
+    background-color: hsl(var(--background) / 0.7);
+  }
+
+  .bg-background\/20 {
+    background-color: hsl(var(--background) / 0.2);
+  }
+
   .bg-foreground {
     background-color: hsl(var(--foreground));
   }
@@ -190,6 +202,10 @@
 
   .text-card-foreground {
     color: hsl(var(--card-foreground));
+  }
+
+  .text-header-nav-links {
+    color: hsl(var(--header-nav-links));
   }
 
   .text-primary {
@@ -230,6 +246,15 @@
     --tw-shadow: 0 0 20px hsl(var(--glow-color) / 0.3);
     --tw-shadow-colored: 0 0 20px var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+
+  .hover\:destructive-glow:hover {
+    --tw-shadow-color: hsl(var(--destructive));
+    --tw-shadow: 0 0 20px hsl(var(--tw-shadow-color) / 0.3);
+    --tw-shadow-colored: 0 0 20px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000),
+      var(--tw-shadow);
   }
 
   .rounded-md {

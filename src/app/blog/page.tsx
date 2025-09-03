@@ -1,35 +1,29 @@
 import { fetchBlogPosts } from "@/services/notion/fetchBlogPosts"
 import { BlogListPostsFilter } from "./components/BlogListPostsFilter"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { ArrowRight, BookOpen, Calendar, Clock } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+import { BookOpen } from "lucide-react"
 import { fetchBlogPostsCategories } from "@/services/notion/fetchBlogPostsCategories"
 import { NewsLetterSubscriptionForm } from "@/components/NewsLetterSubscriptionForm"
 import { BlogPostCard } from "@/components/BlogPostCard"
+import { BlogPostsList } from "./components/BlogPostsList"
 
 type BlogPosts = {
-  searchParams: {
-    category?: "Todos" | "DevOps" | "Monitoring" | "Architecture" | "Security" | "Infrastructure" | "Frontend"
+  searchParams: Promise<{
+    category?: "All" | "DevOps" | "Monitoring" | "Architecture" | "Security" | "Infrastructure" | "Frontend"
     query?: string
-    favorites?: string
-    fixed?: string
-    page?: string
-  }
+    nextCursor?: string
+  }>
 }
 
 export default async function BlogPosts({ searchParams }: BlogPosts) {
-  const { category, query, favorites, fixed, page } = await searchParams
+  const { category, query } = await searchParams
 
-  const selectedCategory: "Todos" | "DevOps" | "Monitoring" | "Architecture" | "Security" | "Infrastructure" | "Frontend" = category || 'Todos'
-  const favoritesBool = favorites === 'true'
-  const fixedBool = fixed === 'true'
-  const pageNumber = Number(page) || 1
+  const selectedCategory: "All" | "DevOps" | "Monitoring" | "Architecture" | "Security" | "Infrastructure" | "Frontend" = category || 'All'
 
-  const [blogCategories, blogPostsResult] = await Promise.all([
+
+  const [blogCategories, highLigthedPostsResult, blogPostsResult] = await Promise.all([
     fetchBlogPostsCategories(),
-    fetchBlogPosts({ numberOfPostsPerPage: 6, firstPageOnly: true })
+    fetchBlogPosts({ numberOfPostsPerPage: 3, firstPageOnly: true }),
+    fetchBlogPosts({ numberOfPostsPerPage: 6, category: selectedCategory, query })
   ])
 
   const [_, blogCategoriesSuccess] = blogCategories
@@ -40,9 +34,13 @@ export default async function BlogPosts({ searchParams }: BlogPosts) {
     categories = [...categories, ...categoriesName]
   }
 
-  const [blogPostsError, blogPosts] = blogPostsResult
+  const [highLigthedPostsError, highLigthedPostsSuccess] = highLigthedPostsResult
 
-  const filteredPosts = blogPostsError ? [] : blogPosts
+  const highLigthedPosts = highLigthedPostsError ? [] : highLigthedPostsSuccess.blogPosts
+
+  const [blogPostsError, blogPostsSuccess] = blogPostsResult
+
+  const posts = blogPostsError ? [] : blogPostsSuccess.blogPosts
 
   return (
     <div className="min-h-screen bg-background">
@@ -63,42 +61,23 @@ export default async function BlogPosts({ searchParams }: BlogPosts) {
       <section className="py-4">
         <div className="container mx-auto px-4">
           {/* Featured Posts */}
-          {selectedCategory === "Todos" && (
+          {selectedCategory === "All" && (
             <div className="mb-16">
               <h2 className="text-3xl font-semibold mb-8 flex items-center gap-2">
                 <BookOpen className="h-8 w-8 text-primary" />
                 Artigos em Destaque
               </h2>
               <div className="grid lg:grid-cols-2 gap-8">
-                {blogPosts && blogPosts.filter(post => post.featured).map((post, index) => (
+                {highLigthedPosts && highLigthedPosts.filter(post => post.featured).map((post, index) => (
                   <BlogPostCard key={post.id} post={post} positionInList={index} transitionTimeFactor={0.1} />
                 ))}
               </div>
             </div>
           )}
 
-          {/* All Posts */}
-          <div>
-            <h2 className="text-3xl font-semibold mb-8">
-              {selectedCategory === "Todos" ? "Todos os Artigos" : `Artigos sobre ${selectedCategory}`}
-            </h2>
-            {filteredPosts && filteredPosts.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground text-lg">
-                  {query && <>Nenhum artigo encontrado para &quot;{query}&quot; na categoria &quot;{selectedCategory}&quot;.</>}
-                  {!query && <>Nenhum artigo encontrado na categoria &quot;{selectedCategory}&quot;.</>}
-                </p>
-              </div>
-            )}
+          <BlogPostsList hasMorePosts={blogPostsSuccess?.hasMore ?? false} postsNextCursor={blogPostsSuccess?.nextCursor} posts={posts} />
 
-            {filteredPosts.length > 0 && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredPosts.map((post, index) => (
-                  <BlogPostCard key={post.id} post={post} positionInList={index} transitionTimeFactor={0.05} />
-                ))}
-              </div>
-            )}
-          </div>
+
           <NewsLetterSubscriptionForm />
         </div>
       </section>

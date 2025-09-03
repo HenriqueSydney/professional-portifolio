@@ -52,11 +52,13 @@ export type NotionDatabaseInfoOfPosts = {
     };
     Cover: {
       type: "files";
+      url?: string | null
       files: {
         name: string;
         type: "external" | "file";
         external?: { url: string };
         file?: { url: string };
+
       }[];
     };
     Priority: {

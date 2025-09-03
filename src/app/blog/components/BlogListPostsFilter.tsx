@@ -7,38 +7,42 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useDebouncedCallback } from 'use-debounce';
 
 interface IBlocgListPostFilterParams {
-    categories: string[]
+  categories: string[]
 }
 
-export function BlogListPostsFilter ({ categories }: IBlocgListPostFilterParams){
+export function BlogListPostsFilter({ categories }: IBlocgListPostFilterParams) {
   const searchParams = useSearchParams()
   const pathname = usePathname();
   const { replace } = useRouter();
- 
 
-  function handleCategoryChange(value: string){
+
+  function handleCategoryChange(value: string) {
     const params = new URLSearchParams(searchParams)
-    params.set('page', '1');
-    params.set('category', value)
+    params.delete('nextCursor');
+    if (value === 'Todos') {
+      params.set('category', 'All')
+    } else {
+      params.set('category', value)
+    }
     replace(`${pathname}?${params.toString()}`);
   }
 
   const handleQueryChange = useDebouncedCallback((value: string) => {
-  
+
     const params = new URLSearchParams(searchParams)
-    params.set('page', '1');
-    if(value) {
+    params.delete('nextCursor');
+    if (value) {
       params.set('query', value)
     } else {
       params.delete('query');
     }
 
     replace(`${pathname}?${params.toString()}`)
-  }, 300) 
-   
+  }, 300)
+
   const selectedCategory = searchParams.has('category') ? searchParams.get('category')?.toString() : 'Todos'
 
-  return ( 
+  return (
     <div>
       <div className="relative max-w-md mx-auto">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -65,6 +69,6 @@ export function BlogListPostsFilter ({ categories }: IBlocgListPostFilterParams)
         ))}
       </div>
 
-    </div>      
+    </div>
   )
 }

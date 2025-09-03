@@ -1,8 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import {
   Mail,
   Phone,
@@ -11,11 +8,12 @@ import {
   Linkedin,
   Instagram,
   Facebook,
-  Send,
-  MessageCircle
 } from "lucide-react";
 import { ContactForm } from "./ContactForm";
-export function Contact() {
+import { auth } from "@/auth";
+export async function Contact() {
+  const session = await auth()
+
   const contactInfo = [
     {
       icon: Mail,
@@ -78,7 +76,7 @@ export function Contact() {
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Form */}
-          <ContactForm />
+          <ContactForm name={session?.user.name} email={session?.user.email} />
 
           {/* Contact Information */}
           <div className="flex flex-col justify-between animate-slide-up" style={{ animationDelay: "0.2s" }}>

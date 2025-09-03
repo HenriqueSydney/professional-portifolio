@@ -17,10 +17,20 @@ import { ContactMessageData, contactMessageSchema } from "@/actions/sendContactM
 import { Input } from "@/components/Input";
 import { Textarea } from "@/components/Textarea";
 
-export function ContactForm() {
+interface IContactForm {
+  name?: string | null
+  email?: string | null
+}
+
+export function ContactForm({ name, email }: IContactForm) {
   const { toast } = useToast()
+
   const appointmentFormCheckout = useForm<ContactMessageData>({
-    resolver: zodResolver(contactMessageSchema)
+    resolver: zodResolver(contactMessageSchema),
+    defaultValues: {
+      email: email ?? '',
+      name: name ?? ''
+    }
   })
 
   const {

@@ -1,41 +1,14 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Briefcase, GraduationCap } from "lucide-react";
+import { IconMap } from "@/mapper/IconMapper";
+import { getProfileStats } from "@/services/notion/getProfileStats";
+import { Briefcase, MapPin } from "lucide-react";
+import { iconNames } from "lucide-react/dynamic";
 
-export function About() {
-  const stats = [
-    { label: "Anos de Experiência", value: "8+", icon: Briefcase },
-    { label: "Projetos Concluídos", value: "50+", icon: Calendar },
-    { label: "Tecnologias", value: "15+", icon: GraduationCap },
-    { label: "Certificações e Cursos", value: "10+", icon: Badge },
-  ];
+export async function About() {
+  const [statsError, statsSuccess] = await getProfileStats()
 
-  const education = [
-    {
-      title: "Pós-graduação em Engenharia DevOps",
-      institution: "CEUB",
-      period: "2024 - Jul/2025",
-      status: "Em andamento"
-    },
-    {
-      title: "Análise e Desenvolvimento de Sistemas",
-      institution: "CEUB",
-      period: "2022 - Dez/2025",
-      status: "4º semestre"
-    },
-    {
-      title: "Pós-graduação em Gestão de Pessoas e Coaching",
-      institution: "CEUB",
-      period: "2015",
-      status: "Concluído"
-    },
-    {
-      title: "Graduação em Nutrição Clínica",
-      institution: "CEUB",
-      period: "2012",
-      status: "Concluído"
-    }
-  ];
+
+
 
   return (
     <section id="about" className="py-15 bg-muted/30">
@@ -82,37 +55,23 @@ export function About() {
           </div>
 
           <div className="grid grid-cols-2 gap-4 animate-slide-up" style={{ animationDelay: "0.2s" }}>
-            {stats.map((stat, index) => (
-              <Card key={index} className="hover:shadow-glow transition-all duration-300 hover:scale-105">
-                <CardContent className="p-6 text-center">
-                  <stat.icon className="h-8 w-8 text-primary mx-auto mb-2" />
-                  <div className="text-3xl font-bold text-primary mb-1">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
-                </CardContent>
-              </Card>
-            ))}
+            {!statsError && statsSuccess.map((stat) => {
+              const LucideIcon = IconMap[stat.iconName]
+              const Icon = LucideIcon ? <LucideIcon className="h-8 w-8 text-primary mx-auto mb-2" /> : <Briefcase className="h-8 w-8 text-primary mx-auto mb-2" />
+
+              return (
+                <Card key={stat.id} className="hover:shadow-glow transition-all duration-300 hover:scale-105">
+                  <CardContent className="p-6 text-center">
+                    {Icon}
+                    <div className="text-3xl font-bold text-primary mb-1">{stat.value}</div>
+                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  </CardContent>
+                </Card>
+              )
+            })}
           </div>
         </div>
 
-        {/* <div className="animate-slide-up" style={{ animationDelay: "0.4s" }}>
-          <h3 className="text-2xl font-semibold mb-8 text-center">Formação Acadêmica</h3>
-          <div className="grid md:grid-cols-2 gap-6">
-            {education.map((edu, index) => (
-              <Card key={index} className="hover:shadow-glow transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-semibold text-lg">{edu.title}</h4>
-                    <Badge variant={edu.status === "Em andamento" ? "default" : "secondary"}>
-                      {edu.status}
-                    </Badge>
-                  </div>
-                  <p className="text-primary font-medium mb-1">{edu.institution}</p>
-                  <p className="text-muted-foreground">{edu.period}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div> */}
       </div>
     </section>
   );

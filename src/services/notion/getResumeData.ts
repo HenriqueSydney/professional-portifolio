@@ -18,7 +18,7 @@ export async function getResumeData(): Promise<GetResumeDataResponse> {
     return resumeData;
   }, {
     revalidate: false, // never
-    tags: ['blog-categories']
+    tags: ['resume-data']
   })
 
 }

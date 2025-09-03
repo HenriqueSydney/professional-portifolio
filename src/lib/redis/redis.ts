@@ -148,6 +148,10 @@ export class RedisClient implements IRedisClient {
      */
     async get<T>(key: string): Promise<T | null> {
 
+        if (!envVariables.CACHE_ENABLED) {
+            return Promise.resolve(null)
+        }
+
         return await this.executeRedisOperation(
             'get',
             async () => {
@@ -274,7 +278,8 @@ export class RedisClient implements IRedisClient {
     /**
      * Invalida cache específico
      */
-    async invalidateCache(cacheKey: string): Promise<void> {
+    async invalidateCache(cacheKey: string): Promise<boolean> {
+
         return await this.executeRedisOperation(
             'del',
             async () => {
@@ -282,11 +287,14 @@ export class RedisClient implements IRedisClient {
                     const result = await this.redis.del(cacheKey);
                     if (result > 0) {
                         this.logger.info(`Cache invalidado: ${cacheKey}`);
+                        return true
                     } else {
                         this.logger.info(`Cache não encontrado: ${cacheKey}`);
+                        return false
                     }
                 } catch (error) {
                     this.logger.error({ stackTrace: error }, `Erro ao invalidar cache ${cacheKey}`);
+                    return false
                 }
             },
             { 'db.redis.key': cacheKey }
