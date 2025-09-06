@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server'
 
 import { SpanKind, SpanStatusCode, trace } from "@opentelemetry/api";
+
 import { makeRedisClient } from "./redis/makeRedisClient";
 import { apiLogger } from "./logger";
 
@@ -81,22 +83,22 @@ export async function httpClient<T>(url: string, options?: RequestInit, response
       let data: T | Blob | string | ArrayBuffer | FormData;
 
       switch (responseType) {
-        case 'blob':
-          data = await response.blob();
-          break;
-        case 'text':
-          data = await response.text();
-          break;
-        case 'arrayBuffer':
-          data = await response.arrayBuffer();
-          break;
-        case 'formData':
-          data = await response.formData();
-          break;
-        case 'json':
-        default:
-          data = await response.json();
-          break;
+      case 'blob':
+        data = await response.blob();
+        break;
+      case 'text':
+        data = await response.text();
+        break;
+      case 'arrayBuffer':
+        data = await response.arrayBuffer();
+        break;
+      case 'formData':
+        data = await response.formData();
+        break;
+      case 'json':
+      default:
+        data = await response.json();
+        break;
       }
 
       if (cache && method === 'GET' && responseType == 'json') {

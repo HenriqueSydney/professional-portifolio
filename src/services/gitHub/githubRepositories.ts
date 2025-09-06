@@ -1,8 +1,9 @@
 'use server'
 
+import { IconName } from "lucide-react/dynamic";
+
 import { httpClient } from "@/lib/httpClient";
 import { apiLogger } from "@/lib/logger";
-import { IconName } from "lucide-react/dynamic";
 
 
 type ProjectMetadata = {

@@ -1,0 +1,351 @@
+{
+    "header": {
+        "logoutButton": "Logout",
+        "loginDialog": {
+            "button": "Sign In",
+            "title": "Login",
+            "description": "Sign in and start interacting with me on my posts.",
+            "providers": {
+                "github": "Sign in with GitHub",
+                "gitlab": "Sign in with GitLab",
+                "google": "Sign in with Google",
+                "loading": "Signing in..."
+            },
+            "terms": "By signing in, you agree to the",
+            "termsLink": "terms of use"
+        }
+    },
+    "navLinks": {
+        "about": "About",
+        "projects": "Projects",
+        "certifications": "Certifications",
+        "skills": "Skills",
+        "experience": "Experience",
+        "contact": "Contact",
+        "blog": "Blog"
+    },
+    "footer": {
+        "role": "Fullstack Developer & DevOps Specialist",
+        "descriptionBeforeHighlight": "DevOps and cloud architecture specialist, transforming complex challenges into",
+        "descriptionHighlight": "simple and scalable solutions",
+        "descriptionAfterHighlight": "that drive innovation and business growth.",
+        "contact": {
+            "title": "Contact",
+            "locale": "Águas Claras, Brasília - DF (Brazil)"
+        },
+        "navLink": {
+            "title": "Quick Links"
+        },
+        "bottom": {
+            "madeWith": "Made with",
+            "andMuch": "and a lot of",
+            "copyright": "Henrique Lima. All rights reserved. Built with Next.js & Tailwind."
+        }
+    },
+    "homepage": {
+        "hero": {
+            "badge": "Available for new opportunities",
+            "greeting": {
+                "beforeName": "Hi, I'm",
+                "name": "Henrique Sydney"
+            },
+            "role": "Fullstack Developer & DevOps Specialist",
+            "description": "8 years of experience transforming ideas into robust solutions. Specialized in Node.js, Next.js, DevOps and Cloud Computing. Currently focused on Multicloud certification (AWS, Azure, Google Cloud).",
+            "contactButton": "Get In Touch",
+            "downloadResumeButton": "Download Resume"
+        },
+        "about": {
+            "title": {
+                "beforeHighlight": "About",
+                "highlight": "Me"
+            },
+            "intro": {
+                "part1": "DevOps and cloud architecture specialist, transforming complex challenges into",
+                "highlight": "simple and scalable solutions",
+                "part2": "that drive innovation and business growth."
+            },
+            "journey": {
+                "title": "My Journey",
+                "paragraphs": {
+                    "p1": {
+                        "part1": "My professional journey began as a",
+                        "highlight1": "full-stack developer",
+                        "part2": "where I built a solid and practical technical foundation.",
+                        "highlight2": "Over 8 years",
+                        "part3": "I worked in the complete development cycle, from idea conception to final delivery,",
+                        "highlight3": "mastering technologies like DevOps and cloud architecture"
+                    },
+                    "p2": {
+                        "part1": "I work in the",
+                        "highlight1": "Federal Government",
+                        "part2": "as a Techlead of the Debureaucratization and People Management Innovation Laboratory, where I lead",
+                        "highlight2": "modernization and automation initiatives for critical processes and workflows,",
+                        "underline": "strategically"
+                    },
+                    "p3": {
+                        "part1": "My experience encompasses",
+                        "highlight1": "application provisioning",
+                        "part2": "across multiple cloud providers",
+                        "highlight2": "(AWS, Azure, Google Cloud and Digital Ocean)",
+                        "part3": "and on-premise environments. I'm proficient in",
+                        "highlight3": "Infrastructure as Code (Terraform, Crossplane)",
+                        "part4": "and the use of modern technologies like",
+                        "highlight4": "Kubernetes and Ansible",
+                        "part5": "with the goal of delivering solutions that are, by design,",
+                        "highlight5": "scalable, secure and innovative"
+                    }
+                },
+                "location": "Águas Claras, Brasília - DF"
+            }
+        },
+        "projects": {
+            "title": {
+                "beforeHighlight": "Relevant",
+                "highlight": "Projects"
+            },
+            "subtitle": "Innovative solutions I developed to solve complex problems and optimize processes",
+            "features": {
+                "title": "Key Features",
+                "more": "And much more..."
+            },
+            "technologies": {
+                "title": "Technologies Used"
+            },
+            "buttons": {
+                "code": "Check the code",
+                "viewAll": "View All Projects on GitHub",
+                "readme": "Read the README.md"
+            }
+        },
+        "certifications": {
+            "title": {
+                "beforeHighlight": "Courses &",
+                "highlight": "Certifications"
+            },
+            "subtitle": "Continuous Learning! Never stop learning!",
+            "blocks": {
+                "certifications": "Certifications",
+                "courses": "Courses"
+            },
+            "buttons": {
+                "seeMore": "See more",
+                "seeLess": "See less"
+            }
+        },
+        "skills": {
+            "title": {
+                "beforeSpan": "My",
+                "span": "Skills"
+            },
+            "subtitle": "Technologies and tools I master to create robust and scalable solutions",
+            "note": "(Conceptual mastery estimate - visual composition demonstration)"
+        },
+        "experience": {
+            "title": {
+                "beforeHighlight": "Professional",
+                "highlight": "Experience"
+            },
+            "subtitle": "Over 8 years of experience in development and leadership of innovative projects",
+            "buttons": {
+                "seeMore": "See more",
+                "seeLess": "See less"
+            }
+        },
+        "blog": {
+            "title": {
+                "beforeSpan": "Blog &",
+                "span": "Articles"
+            },
+            "subtitle": "Sharing knowledge about development, DevOps and modern technologies",
+            "categories": {
+                "all": "All"
+            },
+            "featuredPostsTitle": "Featured Articles",
+            "latestPostsTitle": "Latest articles",
+            "button": "Check Other Posts",
+            "postCard": {
+                "readPostButton": "Read Article"
+            },
+            "newsletter": {
+                "title": "Want to be notified about new articles?",
+                "description": "Get the latest content about DevOps, development and modern technologies first-hand.",
+                "placeholderEmail": "Your best email",
+                "button": "Subscribe",
+                "toast": {
+                    "error": {
+                        "title": "Oops. Unfortunately something went wrong.",
+                        "description": "Don't worry, I've been notified and will provide a solution soon."
+                    },
+                    "success": {
+                        "title": "Your contact request was sent successfully.",
+                        "description": "As soon as possible, I'll get in touch with a response."
+                    }
+                }
+            }
+        },
+        "contact": {
+            "title": {
+                "beforeHighlight": "Get In",
+                "highlight": "Touch"
+            },
+            "subtitle": "Let's talk about your next project or collaboration opportunity",
+            "contactInfo": {
+                "title": "Contact Information",
+                "email": "Email",
+                "phone": "Phone",
+                "location": "Location"
+            },
+            "socialMedia": {
+                "title": "Social Media",
+                "github": "GitHub",
+                "linkedin": "LinkedIn",
+                "instagram": "Instagram",
+                "facebook": "Facebook"
+            },
+            "availability": {
+                "title": "Available for Projects",
+                "description": "I'm currently available for new projects and opportunities. I usually respond within 24 hours.",
+                "button": "Schedule a Conversation"
+            },
+            "messageBox": {
+                "title": "Send a Message",
+                "labels": {
+                    "name": "Name",
+                    "email": "Email",
+                    "subject": "Subject",
+                    "message": "Message"
+                },
+                "placeholders": {
+                    "name": "Your full name",
+                    "email": "your.email@example.com",
+                    "subject": "what would you like to talk about?",
+                    "message": "Tell me more about your project or opportunity"
+                },
+                "sendButton": "Send Message"
+            }
+        }
+    },
+    "blog": {
+        "title": {
+            "beforeHighlight": "Blog &",
+            "highlight": "Articles"
+        },
+        "description": "Sharing knowledge about development, DevOps and modern technologies",
+        "categories": {
+            "all": "All"
+        },
+        "featuredPosts": "Featured Articles",
+        "newsletter": {
+            "title": "Subscribe to our Newsletter"
+        },
+        "blogListPostsFilter": {
+            "search": {
+                "placeholder": "Search articles..."
+            },
+            "categories": {
+                "all": "All"
+            }
+        },
+        "blogPostsList": {
+            "title": {
+                "all": "All Articles",
+                "category": "Articles about {category}"
+            },
+            "noPosts": {
+                "withQuery": "No articles found for \"{query}\" in category \"{category}\".",
+                "withoutQuery": "No articles found in category \"{category}\"."
+            },
+            "loading": "Loading more articles...",
+            "error": {
+                "loadMore": "Error loading more posts",
+                "unexpected": "Unexpected error loading posts",
+                "retryButton": "Try again"
+            }
+        },
+        "post": {
+            "backToBlog": "Back to Blog",
+            "loadingContent": "Loading content...",
+            "notFound": "Post not found",
+            "imageAlt": "Main blog image",
+            "relatedPosts": {
+                "invitationToReadArticle": "Read article",
+                "titleBeforeHighlight": "Related",
+                "titleHightLight": "Articles"
+            },
+            "header": {
+                "postViews": "views"
+            },
+            "socialAction": {
+                "commentButton": "Comment",
+                "likes": {
+                    "handleLikeError": "Error liking post",
+                    "likeButton": "Like"
+                },
+                "callToFeedback": "Liked the content? Leave your feedback!",
+                "loginInvitation": "To comment, please sign in.",
+                "shareButton": {
+                    "button": {
+                        "text": "Share"
+                    },
+                    "shareData": {
+                        "title": "Interesting article I found",
+                        "text": "Check out this very interesting article!"
+                    },
+                    "menu": {
+                        "title": "Share this article",
+                        "copyLink": "Copy link",
+                        "copyLinkSuccess": "Link copied!"
+                    }
+                }
+            },
+            "comments": {
+                "title": "Comments",
+                "allLoaded": "All comments have been loaded",
+                "loadMore": "Loading...",
+                "commentEditForm": {
+                    "placeholder": "Edit your contribution to the discussion or topic",
+                    "submit": "Confirm edit",
+                    "cancel": "Cancel",
+                    "error": {
+                        "title": "Oops. Unfortunately something went wrong.",
+                        "description": "Don't worry, I've been notified and will provide a solution soon."
+                    }
+                },
+                "comment": {
+                    "like": {
+                        "error": "Error liking comment"
+                    },
+                    "remove": {
+                        "error": "Error trying to remove comment"
+                    },
+                    "user": {
+                        "unknown": "Unknown User"
+                    },
+                    "posted": "Posted {timeAgo}",
+                    "edited": "Post edited {timeAgo}",
+                    "editButton": "Edit",
+                    "expand": {
+                        "more": "See more",
+                        "less": "See less"
+                    }
+                },
+                "commentForm": {
+                    "placeholder": "Write your contribution to the discussion or topic",
+                    "submit": "Submit comment",
+                    "error": {
+                        "title": "Oops. Unfortunately something went wrong.",
+                        "description": "Don't worry, I've been notified and will provide a solution soon."
+                    },
+                    "success": {
+                        "title": "Comment sent successfully!",
+                        "description": "Thank you for participating in the discussion."
+                    }
+                }
+            }
+        }
+    },
+    "termsOfUse": {
+        "backToHomepageButton": "Back to Homepage",
+        "updatedAt": "last updated"
+    }
+}

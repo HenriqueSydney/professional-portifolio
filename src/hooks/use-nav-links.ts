@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export type NavItem = {
     href: string;
@@ -9,17 +10,18 @@ export type NavItem = {
 };
 
 export function useNavLinks(): NavItem[] {
-    const pathName = usePathname();
+  const pathName = usePathname();
+  const t = useTranslations('navLinks')
 
-    const navItemType = pathName === "/" ? "anchor" : "link";
+  const navItemType = pathName === "/" ? "anchor" : "link";
 
-    return [
-        { href: "#about", label: "Sobre", type: navItemType },
-        { href: "#projects", label: "Projetos", type: navItemType },
-        { href: "#certifications", label: "Certificações", type: navItemType },
-        { href: "#skills", label: "Habilidades", type: navItemType },
-        { href: "#experience", label: "Experiência", type: navItemType },
-        { href: "blog", label: "Blog", type: "link" },
-        { href: "#contact", label: "Contato", type: navItemType },
-    ];
+  return [
+    { href: "#about", label: t('about'), type: navItemType },
+    { href: "#projects", label: t('projects'), type: navItemType },
+    { href: "#certifications", label: t('certifications'), type: navItemType },
+    { href: "#skills", label: t('skills'), type: navItemType },
+    { href: "#experience", label: t('experience'), type: navItemType },
+    { href: "blog", label: t('blog'), type: "link" },
+    { href: "#contact", label: t('contact'), type: navItemType },
+  ];
 }

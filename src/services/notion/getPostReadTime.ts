@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { notionClient } from "@/lib/notion/notionClient";
-import { notion } from "@/lib/notion/notion";
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+
+import { notion } from "@/lib/notion/notion";
+import { notionClient } from "@/lib/notion/notionClient";
 
 type GetPostReadTimeResponse = [Error, null] | [null, number];
 

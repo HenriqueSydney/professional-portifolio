@@ -1,7 +1,12 @@
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import createMiddleware from 'next-intl/middleware';
 
-let locales = ['en-US', 'pt-BR']
+import { routing } from './i18n/routing';
+
+
+const intlMiddleware = createMiddleware(routing);
+
 
 export default async function middleware(request: NextRequest) {
   //register()
@@ -38,14 +43,18 @@ export default async function middleware(request: NextRequest) {
       })
     }
 
-    // Adiciona headers informativos
     const response = NextResponse.next()
     response.headers.set("x-pathname", request.nextUrl.pathname);
     response.headers.set('X-RateLimit-Limit', result.limit?.toString() || '0')
     response.headers.set('X-RateLimit-Remaining', result.remaining?.toString() || '0')
     response.headers.set('X-RateLimit-Reset', result.reset?.toString() || '0')
 
-    return response
+
+    if (request.nextUrl.pathname.startsWith("/api")) {
+      return NextResponse.next()
+    }
+
+    return intlMiddleware(request)
 
   } catch (error) {
     console.error('Middleware rate limit error:', error)
@@ -55,23 +64,7 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // OPÇÃO A: Exclui arquivos estáticos (Recomendada)
   matcher: [
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:ico|png|jpg|jpeg|gif|svg|webp|css|js|woff|woff2|ttf|eot|xml|txt|map)$).*)',
   ],
-
-  // OPÇÃO B: Apenas rotas específicas (mais restritiva)
-  // matcher: [
-  //   '/api/:path*',     // Todas as APIs
-  //   '/((?!_next).*)',  // Todas as páginas, exceto _next
-  // ],
-
-  // OPÇÃO C: Muito específica
-  // matcher: [
-  //   '/api/:path*',
-  //   '/',
-  //   '/about',
-  //   '/blog/:path*',
-  //   '/dashboard/:path*',
-  // ],
 };

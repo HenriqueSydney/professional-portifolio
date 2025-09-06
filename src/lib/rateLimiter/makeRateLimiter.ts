@@ -6,10 +6,10 @@ let rateLimiter: IRateLimiter | null = null
 
 export function makeRateLimiter() {
 
-    if (!rateLimiter) {
-        rateLimiter = new RateLimiter();
+  if (!rateLimiter) {
+    rateLimiter = new RateLimiter();
 
-    }
-    return rateLimiter
+  }
+  return rateLimiter
 
 }

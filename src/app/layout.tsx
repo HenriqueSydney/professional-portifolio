@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SessionProvider } from "next-auth/react";
+import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "next-themes";
+
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+
 import "./globals.css";
-import { Footer } from "@/components/Footer";
-import { NextAuthProvider } from "@/providers/NextAuthProvider";
-import { Header } from "@/components/Header";
-import { SessionProvider } from "next-auth/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,16 +26,17 @@ export const metadata: Metadata = {
   description: "Professional Portfolio",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+interface IRootLayout {
   children: React.ReactNode;
-}>) {
+};
+
+export default async function RootLayout({
+  children
+}: IRootLayout) {
+
+
   return (
-
     <html lang="pt-BR" suppressHydrationWarning>
-
-
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -45,11 +48,13 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <TooltipProvider>
-              <div className="min-h-screen bg-background">
-                <Header />
-                {children}
-                <Footer />
-              </div>
+              <NextIntlClientProvider>
+                <div className="min-h-screen bg-background">
+                  <Header />
+                  {children}
+                  <Footer />
+                </div>
+              </NextIntlClientProvider>
               <Toaster />
             </TooltipProvider>
           </ThemeProvider>

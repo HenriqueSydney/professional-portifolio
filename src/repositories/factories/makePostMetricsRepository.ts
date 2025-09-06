@@ -6,9 +6,9 @@ let postMetricsRepo: IPostMetricsRepository | null = null
 
 export function makePostMetricsRepository() {
 
-    if (!postMetricsRepo) {
-        postMetricsRepo = new PrismaPostMetricsRepository()
-    }
-    return postMetricsRepo
+  if (!postMetricsRepo) {
+    postMetricsRepo = new PrismaPostMetricsRepository()
+  }
+  return postMetricsRepo
 
 }

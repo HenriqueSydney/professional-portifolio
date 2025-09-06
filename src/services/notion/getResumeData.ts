@@ -1,7 +1,9 @@
-import { ResumeData } from "@/@types/Resume";
 import { envVariables } from "@/env";
-import { notionClient } from "@/lib/notion/notionClient";
+
+import { ResumeData } from "@/@types/Resume";
+
 import { notion } from "@/lib/notion/notion";
+import { notionClient } from "@/lib/notion/notionClient";
 
 type GetResumeDataResponse = [Error, null] | [null, ResumeData];
 

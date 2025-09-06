@@ -149,7 +149,7 @@ const mockResumeData: ResumeData = {
 };
 
 // Função para buscar dados do resume
-export async function getResumeData(version: string = 'latest'): Promise<ResumeData> {
+export async function getResumeData(): Promise<ResumeData> {
   // Em produção, isso viria de um CMS, banco de dados, ou API
   // Por enquanto, retornamos os dados mock
 

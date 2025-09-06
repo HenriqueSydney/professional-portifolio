@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useCallback } from 'react'
+import { useCallback,useEffect, useRef } from 'react'
 
 interface UseInfiniteScrollOptions {
     hasMore: boolean
@@ -11,40 +11,40 @@ interface UseInfiniteScrollOptions {
 }
 
 export function useInfiniteScroll({
-    hasMore,
-    isLoading,
-    onLoadMore,
-    rootMargin = '100px',
-    threshold = 0.1
+  hasMore,
+  isLoading,
+  onLoadMore,
+  rootMargin = '100px',
+  threshold = 0.1
 }: UseInfiniteScrollOptions) {
-    const sentinelRef = useRef<HTMLDivElement>(null)
+  const sentinelRef = useRef<HTMLDivElement>(null)
 
-    const handleIntersection = useCallback(
-        (entries: IntersectionObserverEntry[]) => {
-            const [entry] = entries
+  const handleIntersection = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries
 
-            if (entry.isIntersecting && hasMore && !isLoading) {
-                onLoadMore()
-            }
-        },
-        [hasMore, isLoading, onLoadMore]
-    )
+      if (entry.isIntersecting && hasMore && !isLoading) {
+        onLoadMore()
+      }
+    },
+    [hasMore, isLoading, onLoadMore]
+  )
 
-    useEffect(() => {
-        const sentinel = sentinelRef.current
-        if (!sentinel) return
+  useEffect(() => {
+    const sentinel = sentinelRef.current
+    if (!sentinel) return
 
-        const observer = new IntersectionObserver(handleIntersection, {
-            rootMargin,
-            threshold
-        })
+    const observer = new IntersectionObserver(handleIntersection, {
+      rootMargin,
+      threshold
+    })
 
-        observer.observe(sentinel)
+    observer.observe(sentinel)
 
-        return () => {
-            observer.disconnect()
-        }
-    }, [handleIntersection, rootMargin, threshold])
+    return () => {
+      observer.disconnect()
+    }
+  }, [handleIntersection, rootMargin, threshold])
 
-    return sentinelRef
+  return sentinelRef
 }

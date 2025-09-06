@@ -1,10 +1,14 @@
 // lib/mailer/NodemailerMailer.ts
+import { envVariables } from "@/env";
+
 import nodemailer, { Transporter } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
+
 import { htmlToText } from "html-to-text";
-import { envVariables } from "@/env";
-import { IMailer, SendEmailOptions } from "./IMailer";
+
 import { apiLogger } from "../logger";
+
+import { IMailer, SendEmailOptions } from "./IMailer";
 
 export class NodemailerMailer implements IMailer {
   private static instance: NodemailerMailer;

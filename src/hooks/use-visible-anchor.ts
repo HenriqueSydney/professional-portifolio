@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect,useState } from 'react';
 
 interface UseVisibleAnchorOptions {
   threshold?: number; // Percentual da seção que precisa estar visível (0-1)

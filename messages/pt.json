@@ -1,0 +1,351 @@
+{
+  "header": {
+    "logoutButton": "Logout",
+    "loginDialog": {
+      "button": "Entrar",
+      "title": "Login",
+      "description": "Faça seu login e comece a interagir comigo em meus posts.",
+      "providers": {
+        "github": "Entrar com GitHub",
+        "gitlab": "Entrar com GitLab",
+        "google": "Entrar com Google",
+        "loading": "Entrando..."
+      },
+      "terms": "Ao entrar, você concorda com os",
+      "termsLink": "termos de uso"
+    }
+  },
+  "navLinks": {
+    "about": "Sobre",
+    "projects": "Projetos",
+    "certifications": "Certificações",
+    "skills": "Habilidades",
+    "experience": "Experiência",
+    "contact": "Contato",
+    "blog": "Blog"
+  },
+  "footer": {
+    "role": "Fullstack Developer & DevOps Specialist",
+    "descriptionBeforeHighlight": "DevOps and cloud architecture specialist, transforming complex challenges into",
+    "descriptionHighlight": "simple and scalable solutions",
+    "descriptionAfterHighlight": "that drive innovation and business growth.",
+    "contact": {
+      "title": "Contact",
+      "locale": "Águas Claras, Brasília - DF (Brazil)"
+    },
+    "navLink": {
+      "title": "Links Rápidos"
+    },
+    "bottom": {
+      "madeWith": "Made with",
+      "andMuch": "and a lot of",
+      "copyright": "Henrique Lima. All rights reserved. Built with Next.js & Tailwind."
+    }
+  },
+  "homepage": {
+    "hero": {
+      "badge": "Disponível para novas oportunidades",
+      "greeting": {
+        "beforeName": "Olá, eu sou",
+        "name": "Henrique Sydney"
+      },
+      "role": "Desenvolvedor Fullstack & Especialista DevOps",
+      "description": "8 anos de experiência transformando ideias em soluções robustas. Especializado em Node.js, Next.js, DevOps e Cloud Computing. Atualmente focado em certificação Multicloud (AWS, Azure, Google Cloud).",
+      "contactButton": "Entre em Contato",
+      "downloadResumeButton": "Download CV"
+    },
+    "about": {
+      "title": {
+        "beforeHighlight": "Sobre",
+        "highlight": "Mim"
+      },
+      "intro": {
+        "part1": "Especialista em DevOps e arquitetura de nuvem, transformando desafios complexos em soluções",
+        "highlight": "simples e escaláveis",
+        "part2": "que impulsionam a inovação e o crescimento do negócio."
+      },
+      "journey": {
+        "title": "Minha Jornada",
+        "paragraphs": {
+          "p1": {
+            "part1": "Minha jornada profissional começou como",
+            "highlight1": "desenvolvedor full-stack",
+            "part2": "onde construí uma base técnica sólida e prática.",
+            "highlight2": "Ao longo de 8 anos",
+            "part3": "atuei no ciclo completo de desenvolvimento, desde a concepção de ideias até a entrega final,",
+            "highlight3": "dominando tecnologias como DevOps e arquitetura de nuvem"
+          },
+          "p2": {
+            "part1": "Trabalho na",
+            "highlight1": "Governo Federal",
+            "part2": "como Techlead do Laboratório de Desburocratização e Inovação de Gestão de Pessoas, onde lidero iniciativas de",
+            "highlight2": "modernização e automatização de processos e fluxos críticos,",
+            "underline": "de forma estratégica"
+          },
+          "p3": {
+            "part1": "Minha experiência abrange o",
+            "highlight1": "provisionamento de aplicações",
+            "part2": "em múltiplos provedores de nuvem",
+            "highlight2": "(AWS, Azure, Google Cloud e Digital Ocean)",
+            "part3": "e em ambientes on-premise. Sou proficiente em",
+            "highlight3": "Infraestrutura como Código (Terraform, Crossplane)",
+            "part4": "e no uso de tecnologias modernas como",
+            "highlight4": "Kubernetes e Ansible",
+            "part5": "com o objetivo de entregar soluções que são, por design,",
+            "highlight5": "escaláveis, seguras e inovadoras"
+          }
+        },
+        "location": "Águas Claras, Brasília - DF"
+      }
+    },
+    "projects": {
+      "title": {
+        "beforeHighlight": "Projetos",
+        "highlight": "Relevantes"
+      },
+      "subtitle": "Soluções inovadoras que desenvolvi para resolver problemas complexos e otimizar processos",
+      "features": {
+        "title": "Principais Funcionalidades",
+        "more": "E muito mais..."
+      },
+      "technologies": {
+        "title": "Tecnologias Utilizadas"
+      },
+      "buttons": {
+        "code": "Confira o código",
+        "viewAll": "Ver Todos os Projetos no GitHub",
+        "readme": "Leia o README.md"
+      }
+    },
+    "certifications": {
+      "title": {
+        "beforeHighlight": "Cursos &",
+        "highlight": "Certificações"
+      },
+      "subtitle": "Aprendizado Contínuo! Nunca parando de aprender!",
+      "blocks": {
+        "certifications": "Certificações",
+        "courses": "Cursos"
+      },
+      "buttons": {
+        "seeMore": "Veja mais",
+        "seeLess": "Veja menos"
+      }
+    },
+    "skills": {
+      "title": {
+        "beforeSpan": "Minhas",
+        "span": "Habilidades"
+      },
+      "subtitle": "Tecnologias e ferramentas que domino para criar soluções robustas e escaláveis",
+      "note": "(Estimativa de domínio conceitual - demonstração de composição visual)"
+    },
+    "experience": {
+      "title": {
+        "beforeHighlight": "Experiência",
+        "highlight": "Profissional"
+      },
+      "subtitle": "Mais de 8 anos de experiência em desenvolvimento e liderança de projetos inovadores",
+      "buttons": {
+        "seeMore": "Veja mais",
+        "seeLess": "Veja menos"
+      }
+    },
+    "blog": {
+      "title": {
+        "beforeSpan": "Blog &",
+        "span": "Artigos"
+      },
+      "subtitle": "Compartilhando conhecimento sobre desenvolvimento, DevOps e tecnologias modernas",
+      "categories": {
+        "all": "Todos"
+      },
+      "featuredPostsTitle": "Artigos em Destaque",
+      "latestPostsTitle": "Últimos artigos",
+      "button": "Conferir outros Posts",
+      "postCard": {
+        "readPostButton": "Ler Artigo"
+      },
+      "newsletter": {
+        "title": "Quer ser notificado sobre novos artigos?",
+        "description": "Receba em primeira mão os novos conteúdos sobre DevOps, desenvolvimento e tecnologias modernas.",
+        "placeholderEmail": "Seu melhor e-mail",
+        "button": "Inscrever-se",
+        "toast": {
+          "error": {
+            "title": "Oppsss. Infelizmente algo deu errado.",
+            "description": "Não se preocupe, pois já fui comunicado e em breve darei uma solução."
+          },
+          "success": {
+            "title": "Sua solicitação de contato foi enviada com sucesso.",
+            "description": "Tão logo seja possível, entrarei em contato com uma resposta."
+          }
+        }
+      }
+    },
+    "contact": {
+      "title": {
+        "beforeHighlight": "Entre em",
+        "highlight": "Contato"
+      },
+      "subtitle": "Vamos conversar sobre seu próximo projeto ou oportunidade de colaboração",
+      "contactInfo": {
+        "title": "Informações de Contato",
+        "email": "E-mail",
+        "phone": "Telefone",
+        "location": "Localização"
+      },
+      "socialMedia": {
+        "title": "Redes Sociais",
+        "github": "GitHub",
+        "linkedin": "LinkedIn",
+        "instagram": "Instagram",
+        "facebook": "Facebook"
+      },
+      "availability": {
+        "title": "Disponível para Projetos",
+        "description": "Atualmente estou disponível para novos projetos e oportunidades. Geralmente respondo em até 24 horas.",
+        "button": "Agendar Conversa"
+      },
+      "messageBox": {
+        "title": "Envie uma Mensagem",
+        "labels": {
+          "name": "Nome",
+          "email": "E-mail",
+          "subject": "Assunto",
+          "message": "Mensagem"
+        },
+        "placeholders": {
+          "name": "Seu nome completo",
+          "email": "seu.email@exemplo.com",
+          "subject": "sobre o que você gostaria de falar?",
+          "message": "Conte-me mais sobre seu projeto ou oportunidade"
+        },
+        "sendButton": "Enviar Mensagem"
+      }
+    }
+  },
+  "blog": {
+    "title": {
+      "beforeHighlight": "Blog &",
+      "highlight": "Artigos"
+    },
+    "description": "Compartilhando conhecimento sobre desenvolvimento, DevOps e tecnologias modernas",
+    "categories": {
+      "all": "Todos"
+    },
+    "featuredPosts": "Artigos em Destaque",
+    "newsletter": {
+      "title": "Assine nossa Newsletter"
+    },
+    "blogListPostsFilter": {
+      "search": {
+        "placeholder": "Buscar artigos..."
+      },
+      "categories": {
+        "all": "Todos"
+      }
+    },
+    "blogPostsList": {
+      "title": {
+        "all": "Todos os Artigos",
+        "category": "Artigos sobre {category}"
+      },
+      "noPosts": {
+        "withQuery": "Nenhum artigo encontrado para \"{query}\" na categoria \"{category}\".",
+        "withoutQuery": "Nenhum artigo encontrado na categoria \"{category}\"."
+      },
+      "loading": "Carregando mais artigos...",
+      "error": {
+        "loadMore": "Erro ao carregar mais posts",
+        "unexpected": "Erro inesperado ao carregar posts",
+        "retryButton": "Tentar novamente"
+      }
+    },
+    "post": {
+      "backToBlog": "Voltar ao Blog",
+      "loadingContent": "Carregando conteúdo...",
+      "notFound": "Post não localizado",
+      "imageAlt": "Imagem principal do blog",
+      "relatedPosts": {
+        "invitationToReadArticle": "Ler artigo",
+        "titleBeforeHighlight": "Artigos",
+        "titleHightLight": "Relacionados"
+      },
+      "header": {
+        "postViews": "visualizações"
+      },
+      "socialAction": {
+        "commentButton": "Comentar",
+        "likes": {
+          "handleLikeError": "Erro ao dar like",
+          "likeButton": "Curtir"
+        },
+        "callToFeedback": "Gostou do conteúdo? Deixe seu feedback!",
+        "loginInvitation": "Para comentar, faça seu login.",
+        "shareButton": {
+          "button": {
+            "text": "Compartilhar"
+          },
+          "shareData": {
+            "title": "Artigo interessante que encontrei",
+            "text": "Confira este artigo muito interessante!"
+          },
+          "menu": {
+            "title": "Compartilhar este artigo",
+            "copyLink": "Copiar link",
+            "copyLinkSuccess": "Link copiado!"
+          }
+        }
+      },
+      "comments": {
+        "title": "Comentários",
+        "allLoaded": "Todos os comentários foram carregados",
+        "loadMore": "Carregando...",
+        "commentEditForm": {
+          "placeholder": "Edite sua contribuição para a discussão ou para o tema",
+          "submit": "Confirmar edição",
+          "cancel": "Cancelar",
+          "error": {
+            "title": "Oppsss. Infelizmente algo deu errado.",
+            "description": "Não se preocupe, pois já fui comunicado e em breve darei uma solução."
+          }
+        },
+        "comment": {
+          "like": {
+            "error": "Erro ao dar like"
+          },
+          "remove": {
+            "error": "Erro ao tentar remover o comentário"
+          },
+          "user": {
+            "unknown": "Usuário Desconhecido"
+          },
+          "posted": "Postado {timeAgo}",
+          "edited": "Post editado {timeAgo}",
+          "editButton": "Editar",
+          "expand": {
+            "more": "Ver mais",
+            "less": "Ver menos"
+          }
+        },
+        "commentForm": {
+          "placeholder": "Escreva sua contribuição para a discussão ou para o tema",
+          "submit": "Enviar comentário",
+          "error": {
+            "title": "Oppsss. Infelizmente algo deu errado.",
+            "description": "Não se preocupe, pois já fui comunicado e em breve darei uma solução."
+          },
+          "success": {
+            "title": "Comentário enviado com sucesso!",
+            "description": "Obrigado por participar da discussão."
+          }
+        }
+      }
+    }
+  },
+  "termsOfUse": {
+    "backToHomepageButton": "Voltar para Página Inicial",
+    "updatedAt": "última atualização"
+  }
+}

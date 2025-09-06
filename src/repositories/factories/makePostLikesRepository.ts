@@ -6,9 +6,9 @@ let postLikesRepo: IPostLikesRepository | null = null
 
 export function makePostLikesRepository() {
 
-    if (!postLikesRepo) {
-        postLikesRepo = new PrismaPostLikesRepository()
-    }
-    return postLikesRepo
+  if (!postLikesRepo) {
+    postLikesRepo = new PrismaPostLikesRepository()
+  }
+  return postLikesRepo
 
 }

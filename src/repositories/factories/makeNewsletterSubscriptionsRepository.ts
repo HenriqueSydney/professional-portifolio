@@ -6,9 +6,9 @@ let newsletterRepo: INewsLetterSubscriptionsRepository | null = null
 
 export function makeNewsletterSubscriptionsRepository() {
 
-    if (!newsletterRepo) {
-        newsletterRepo = new PrismaNewsLetterSubscriptionsRepository()
-    }
-    return newsletterRepo
+  if (!newsletterRepo) {
+    newsletterRepo = new PrismaNewsLetterSubscriptionsRepository()
+  }
+  return newsletterRepo
 
 }

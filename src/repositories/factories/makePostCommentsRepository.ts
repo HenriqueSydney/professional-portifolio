@@ -6,9 +6,9 @@ let postCommentsRepo: IPostCommentsReposity | null = null
 
 export function makePostCommentsRepository() {
 
-    if (!postCommentsRepo) {
-        postCommentsRepo = new PrismaPostCommentsRepository()
-    }
-    return postCommentsRepo
+  if (!postCommentsRepo) {
+    postCommentsRepo = new PrismaPostCommentsRepository()
+  }
+  return postCommentsRepo
 
 }

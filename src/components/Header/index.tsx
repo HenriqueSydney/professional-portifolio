@@ -1,14 +1,17 @@
 'use client'
 
-import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "./ThemeToggle";
-import { NavLinks } from "../NavLinks";
-import { LoginDialog } from "./LoginDialog";
-import { UserMenu } from "./UserMenu";
 import { useSession } from "next-auth/react";
+import { useEffect,useState } from "react";
+
+import { Button } from "@/components/ui/button";
+
+import { NavLinks } from "../NavLinks";
+
 import { InternalizationToggle } from "./InternalizationToggle";
+import { LoginDialog } from "./LoginDialog";
+import { ThemeToggle } from "./ThemeToggle";
+import { UserMenu } from "./UserMenu";
 
 export function Header() {
   const auth = useSession()
@@ -30,7 +33,7 @@ export function Header() {
       className={`fixed top-0 left-0 right-0 backdrop-blur-md z-50 transition-all duration-300 ${isScrolled
         ? "bg-background/70  border-b border-border/50"
         : "bg-background/20 "
-        }`}
+      }`}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">

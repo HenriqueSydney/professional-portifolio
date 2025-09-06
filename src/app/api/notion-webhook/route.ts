@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { NextRequest, NextResponse } from 'next/server';
+
+import { getPostReadTime } from "@/services/notion/getPostReadTime";
+
 import { apiLogger } from "@/lib/logger";
 import { notion } from "@/lib/notion/notion";
-import { getPostReadTime } from "@/services/notion/getPostReadTime";
 import { titleToSlug } from "@/util/titleToSlug";
-import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

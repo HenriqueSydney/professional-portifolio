@@ -1,5 +1,6 @@
 import { Pagination } from "@/@types/Pagination";
-import { PostComments, User, Prisma } from "@/generated/prisma";
+
+import { PostComments, Prisma,User } from "@/generated/prisma";
 
 export type PostCommentesWithUser = PostComments & {
     user: User

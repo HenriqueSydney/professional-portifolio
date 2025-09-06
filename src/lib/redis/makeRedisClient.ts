@@ -6,10 +6,10 @@ let redisClient: IRedisClient | null = null
 
 export function makeRedisClient() {
 
-    if (!redisClient) {
-        redisClient = new RedisClient();
+  if (!redisClient) {
+    redisClient = new RedisClient();
 
-    }
-    return redisClient
+  }
+  return redisClient
 
 }

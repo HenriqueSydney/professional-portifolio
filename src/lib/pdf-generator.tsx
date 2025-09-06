@@ -1,9 +1,11 @@
+import { Document, Link, Page, pdf, StyleSheet, Text, View } from '@react-pdf/renderer';
+
 import { ResumeData } from '@/@types/Resume';
+
 import { Certifications } from '@/services/notion/getCertifications';
 import { Experience } from '@/services/notion/getExperience';
 import { ProfileStats } from '@/services/notion/getProfileStats';
 import { Skills } from '@/services/notion/getSkills';
-import { Document, Page, Text, View, StyleSheet, pdf, Link } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
   page: {
@@ -180,7 +182,7 @@ interface IResumeDocument {
   experience: Experience[]
 }
 
-const ResumeDocument = ({ basicProfile, certifications, experience, skills, profileStats }: IResumeDocument) => (
+const ResumeDocument = ({ basicProfile, certifications, experience, skills }: IResumeDocument) => (
   <Document>
     <Page size="A4" style={styles.page}>
       {/* Header */}

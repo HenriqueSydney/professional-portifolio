@@ -1,11 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Home } from "lucide-react";
-import Link from "next/link";
-
-import NOT_FOUND_IMAGE from '@/../public/not-found.svg'
+import { Home } from "lucide-react";
 import Image from "next/image";
+
 import { GoBackButton } from "@/components/GoBackButton";
 import { NavLinks } from "@/components/NavLinks";
+import { Button } from "@/components/ui/button";
+
+import NOT_FOUND_IMAGE from '@/../public/not-found.svg'
+import { Link } from "@/i18n/navigation";
 
 export default function NotFound() {
 

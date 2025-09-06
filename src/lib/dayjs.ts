@@ -1,7 +1,9 @@
 import dayjs from "dayjs"
 import duration from "dayjs/plugin/duration"
 import relativeTime from "dayjs/plugin/relativeTime"
+
 import "dayjs/locale/pt-br"
+import "dayjs/locale/en"
 
 // define locale
 dayjs.locale("pt-br")

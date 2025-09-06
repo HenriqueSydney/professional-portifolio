@@ -1,7 +1,7 @@
 
 
-import { notionClient } from "@/lib/notion/notionClient";
 import { notion } from "@/lib/notion/notion";
+import { notionClient } from "@/lib/notion/notionClient";
 
 export type Experience = {
     id: string
@@ -69,43 +69,43 @@ type NotionDatabaseInfoOfSkills = {
 };
 
 const CATEGORY_ORDER = [
-    'Linguagens & Frameworks',
-    'DevOps & Cloud',
-    'Bancos de Dados',
-    'Monitoramento & Observabilidade',
-    'CI/CD'
+  'Linguagens & Frameworks',
+  'DevOps & Cloud',
+  'Bancos de Dados',
+  'Monitoramento & Observabilidade',
+  'CI/CD'
 ];
 
 type GetExperienceResponse = [Error, null] | [null, Experience[]];
 
 export async function getExperience(): Promise<GetExperienceResponse> {
-    return await notionClient('getExperience', async () => {
-        const response = await notion.databases.query({
-            database_id: '26276eb72c6380a4a6b7f2232c28d5d5',
-            sorts: [{ property: 'Order', direction: 'descending' }]
-        });
+  return await notionClient('getExperience', async () => {
+    const response = await notion.databases.query({
+      database_id: '26276eb72c6380a4a6b7f2232c28d5d5',
+      sorts: [{ property: 'Order', direction: 'descending' }]
+    });
 
-        const experiences = response.results.map((page) => {
-            const pageInfo = page as unknown as NotionDatabaseInfoOfSkills;
-            const attribute = pageInfo.properties
-            return {
-                id: page.id,
-                title: attribute.Title?.title?.[0]?.plain_text || '',
-                company: attribute.Company?.rich_text?.[0]?.plain_text || '',
-                period: attribute.Period?.rich_text?.[0]?.plain_text || '',
-                location: attribute.Location?.rich_text?.[0]?.plain_text || '',
-                description: attribute.Description?.rich_text?.[0]?.plain_text || '',
-                achievements: attribute.Achievements?.multi_select.map(achievement => achievement.name)
-            };
-        });
+    const experiences = response.results.map((page) => {
+      const pageInfo = page as unknown as NotionDatabaseInfoOfSkills;
+      const attribute = pageInfo.properties
+      return {
+        id: page.id,
+        title: attribute.Title?.title?.[0]?.plain_text || '',
+        company: attribute.Company?.rich_text?.[0]?.plain_text || '',
+        period: attribute.Period?.rich_text?.[0]?.plain_text || '',
+        location: attribute.Location?.rich_text?.[0]?.plain_text || '',
+        description: attribute.Description?.rich_text?.[0]?.plain_text || '',
+        achievements: attribute.Achievements?.multi_select.map(achievement => achievement.name)
+      };
+    });
 
 
-        return experiences
+    return experiences
 
-    }, {
-        cache: false,
-        revalidate: false, // never
-        tags: ['experience']
-    })
+  }, {
+    cache: false,
+    revalidate: false, // never
+    tags: ['experience']
+  })
 
 }

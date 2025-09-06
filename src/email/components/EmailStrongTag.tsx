@@ -5,8 +5,8 @@ type EmailStrongTag = {
 }
 
 export function EmailStrongTag({ children }: EmailStrongTag) {
-    return (
-        <strong className="text-[hsl(270,85%,65%)]">{children}</strong>
-    )
+  return (
+    <strong className="text-[hsl(270,85%,65%)]">{children}</strong>
+  )
 
 }
