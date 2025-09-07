@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -106,42 +100,93 @@ model NewsLetterSubscriptions {
   @@map("news_letter_subscription")
 }
 
+enum TranslatedModel {
+  MICROSOFT_TRANSLATOR
+  GOOGLE_CLOUD_TRANSLATE
+  DEEPL
+  AMAZON_TRANSLATE
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Posts {
+  id         Int      @id @default(autoincrement()) ///Entity ID
+  notionId   String   @unique @map("notion_id") ///Notion Post ID
+  slug       String   @unique /// Post Slug
+  category   String   @db.VarChar(50) ///Post Category
+  tags       String[] @default([]) ///Post Tags
+  coverUrl   String   @map("cover_url") ///Post Cover Image URL
+  excerpt_pt String   @map("excerpt_pt") @db.VarChar(500) ///Post Excerpt in Portuguese (varchar 500)
+  excerpt_en String   @map("excerpt_en") @db.VarChar(500) ///Post Excerpt in English (varchar 500)
+  readTime   Int      @map("read_time") ///Post Read estimated time
+  featured   Boolean ///If post is featured to be highlighted
+  Priority   Int      @db.SmallInt ///Post priority to be at top of posts
+
+  translatedModel TranslatedModel @map("translated_model") ///Translation model used to translate to english
+  ptBr            Json            @map("pt_br") ///Notion JSON in Portuguese
+  en              Json ///Notion JSON in English
+
+  status      PostStatus @default(DRAFT) ///Status of the post DRAFT, PUBLISHED OR ARCHIVED
+  publishedAt DateTime?  @map("published_at") ///Date of Publish
+  createdAt   DateTime   @default(now()) @map("created_at") ///Date of creation
+  updatedAt   DateTime   @updatedAt @map("updated_at") ///Last date that was edited
+
+  PostMetrics  PostMetrics?
+  PostComments PostComments[]
+
+  @@index([tags, category])
+  @@index([featured])
+  @@index([translatedModel])
+  @@index([slug])
+  @@index([status, publishedAt]) // Para listagem de posts publicados
+  @@index([createdAt])
+  @@map("posts")
+}
+
 model PostMetrics {
-  id              String      @id @unique
-  numberOfViews   Int         @default(0) @map("number_of_views") @db.SmallInt
-  totalOfComments Int         @default(0) @map("total_of_comments") @db.SmallInt
-  numberOfLikes   Int         @default(0) @map("number_of_likes") @db.SmallInt
+  id              Int         @id @default(autoincrement()) ///Entity ID
+  postId          Int         @unique @map("post_id") ///Post Id
+  post            Posts       @relation(fields: [postId], references: [id])
+  numberOfViews   Int         @default(0) @map("number_of_views") ///Number of incremental views
+  totalOfComments Int         @default(0) @map("total_of_comments") @db.SmallInt ///Total of comments
+  numberOfLikes   Int         @default(0) @map("number_of_likes") @db.SmallInt ///Number of likes
   PostLikes       PostLikes[]
 
   @@map("post_metrics")
 }
 
 model PostLikes {
-  userId String @map("user_id")
+  userId String @map("user_id") ///User Id
   user   User   @relation(fields: [userId], references: [id])
 
-  postId String      @map("post_id")
-  post   PostMetrics @relation(fields: [postId], references: [id])
+  postMetricsId Int         @map("post_metrics_id") ///Post Metrics Id
+  post          PostMetrics @relation(fields: [postMetricsId], references: [id])
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") ///Date of creation
 
-  @@id([userId, postId])
-  @@index([postId])
+  @@id([userId, postMetricsId])
+  @@index([postMetricsId])
   @@map("post_likes")
 }
 
 model PostComments {
-  id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement()) ///Entity ID
 
-  userId String @map("user_id")
+  userId String @map("user_id") ///User ID
   user   User   @relation(fields: [userId], references: [id])
 
-  postId        String @map("post_id") @db.VarChar(256)
-  comment       String
-  numberOfLikes Int    @default(0) @map("number_of_likes") @db.SmallInt
+  postId Int   @map("post_id") ///Post ID
+  post   Posts @relation(fields: [postId], references: [id])
+
+  comment       String ///Actual comment
+  numberOfLikes Int    @default(0) @map("number_of_likes") @db.SmallInt ///Number of likes of the comment
 
   createdAt         DateTime            @default(now()) @map("created_at") ///Entity creation date
-  updatedAt         DateTime            @default(now()) @map("updated_at") ///Entity creation date
+  updatedAt         DateTime            @default(now()) @map("updated_at") ///Entity last updated date
   PostCommentsLikes PostCommentsLikes[]
 
   @@index([userId])
@@ -150,15 +195,32 @@ model PostComments {
 }
 
 model PostCommentsLikes {
-  userId String @map("user_id")
+  userId String @map("user_id") ///User ID
   user   User   @relation(fields: [userId], references: [id])
 
-  postCommentId Int          @map("post_comments_id")
+  postCommentId Int          @map("post_comments_id") ///Comment ID
   postComments  PostComments @relation(fields: [postCommentId], references: [id])
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") ///Entity creation date
 
   @@id([userId, postCommentId])
   @@index([postCommentId])
   @@map("post_comments_likes")
+}
+
+enum ProfileInformationType {
+  STATS
+  SKILLS
+  EXPERIENCE
+  CERTIFICATION
+}
+
+model ProfileInformation {
+  id                     Int                    @id @default(autoincrement()) ///Entity ID
+  profileInformationType ProfileInformationType @unique @map("profile_information_type") ///Profile type of Information (ENUM)
+  ptBr                   Json                   @map("pt_br") ///Information in original language (pt-BR)
+  en                     Json ///Information translated to english
+
+  @@index([profileInformationType])
+  @@map("profile_information")
 }

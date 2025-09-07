@@ -3,6 +3,8 @@ import { Heart, MessageCircle } from "lucide-react";
 import { makePostMetricsRepository } from "@/repositories/factories/makePostMetricsRepository";
 
 import { PostViewTracker } from "./PostViewTracker";
+import { repositoryClient } from "@/lib/repositoryClient";
+import { PostMetrics as PostMetricsModel } from "@/generated/prisma";
 
 interface IPostMetrics {
   postId: string;
@@ -10,8 +12,15 @@ interface IPostMetrics {
 
 export async function PostMetrics({ postId }: IPostMetrics) {
   const postMetricsRepository = makePostMetricsRepository();
-  const postMetrics =
-    await postMetricsRepository.findPostMetricsByPostId(postId);
+  const [_, postMetrics] = await repositoryClient<PostMetricsModel | null>(
+    "postMetricsRepository.findPostMetricsByPostId",
+    () => postMetricsRepository.findPostMetricsByPostId(postId),
+    {
+      cache: true,
+      tags: [`post-metrics-${postId}`],
+      params: `postId=${postId}`,
+    }
+  );
 
   return (
     <>

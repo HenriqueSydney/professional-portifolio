@@ -12,7 +12,7 @@ import { LoadMoreComments } from "./LoadMoreComments";
 interface ILoadMoreCommentsClient {
   initialComments: PostCommentesWithUser[];
   totalOfRecords: number;
-  postId: string;
+  postId: number;
 }
 
 export function Comments({

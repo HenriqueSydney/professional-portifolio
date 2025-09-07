@@ -7,11 +7,10 @@ export class PrismaUsersRepository implements IUserRepository {
   async findUserById(id: string): Promise<User | null> {
     const user = await prisma.user.findUnique({
       where: {
-        id
-      }
-    })
+        id,
+      },
+    });
 
-    return user
+    return user;
   }
-
 }

@@ -47,7 +47,7 @@ export declare type AllModelsToStringIndex<TypeMap extends TypeMapDef, Args exte
 } : {};
 
 declare class AnyNull extends NullTypesEnumValue {
-  #private;
+    #private;
 }
 
 export declare type ApplyOmit<T, OmitConfig> = Compute<{
@@ -342,15 +342,15 @@ export declare function createParam(name: string): Param<unknown, string>;
 declare type CustomDataProxyFetch = (fetch: unknown) => unknown;
 
 declare class DataLoader<T = unknown> {
-  private options;
-  batches: {
+    private options;
+    batches: {
         [key: string]: Job[];
     };
-  private tickActive;
-  constructor(options: DataLoaderOptions<T>);
-  request(request: T): Promise<any>;
-  private dispatchBatches;
-  get [Symbol.toStringTag](): string;
+    private tickActive;
+    constructor(options: DataLoaderOptions<T>);
+    request(request: T): Promise<any>;
+    private dispatchBatches;
+    get [Symbol.toStringTag](): string;
 }
 
 declare type DataLoaderOptions<T> = {
@@ -398,7 +398,7 @@ declare type Datasources = {
 };
 
 declare class DbNull extends NullTypesEnumValue {
-  #private;
+    #private;
 }
 
 export declare const Debug: typeof debugCreate & {
@@ -451,249 +451,249 @@ export declare namespace Decimal {
 }
 
 export declare class Decimal {
-  readonly d: number[];
-  readonly e: number;
-  readonly s: number;
+    readonly d: number[];
+    readonly e: number;
+    readonly s: number;
 
-  constructor(n: Decimal.Value);
+    constructor(n: Decimal.Value);
 
-  absoluteValue(): Decimal;
-  abs(): Decimal;
+    absoluteValue(): Decimal;
+    abs(): Decimal;
 
-  ceil(): Decimal;
+    ceil(): Decimal;
 
-  clampedTo(min: Decimal.Value, max: Decimal.Value): Decimal;
-  clamp(min: Decimal.Value, max: Decimal.Value): Decimal;
+    clampedTo(min: Decimal.Value, max: Decimal.Value): Decimal;
+    clamp(min: Decimal.Value, max: Decimal.Value): Decimal;
 
-  comparedTo(n: Decimal.Value): number;
-  cmp(n: Decimal.Value): number;
+    comparedTo(n: Decimal.Value): number;
+    cmp(n: Decimal.Value): number;
 
-  cosine(): Decimal;
-  cos(): Decimal;
+    cosine(): Decimal;
+    cos(): Decimal;
 
-  cubeRoot(): Decimal;
-  cbrt(): Decimal;
+    cubeRoot(): Decimal;
+    cbrt(): Decimal;
 
-  decimalPlaces(): number;
-  dp(): number;
+    decimalPlaces(): number;
+    dp(): number;
 
-  dividedBy(n: Decimal.Value): Decimal;
-  div(n: Decimal.Value): Decimal;
+    dividedBy(n: Decimal.Value): Decimal;
+    div(n: Decimal.Value): Decimal;
 
-  dividedToIntegerBy(n: Decimal.Value): Decimal;
-  divToInt(n: Decimal.Value): Decimal;
+    dividedToIntegerBy(n: Decimal.Value): Decimal;
+    divToInt(n: Decimal.Value): Decimal;
 
-  equals(n: Decimal.Value): boolean;
-  eq(n: Decimal.Value): boolean;
+    equals(n: Decimal.Value): boolean;
+    eq(n: Decimal.Value): boolean;
 
-  floor(): Decimal;
+    floor(): Decimal;
 
-  greaterThan(n: Decimal.Value): boolean;
-  gt(n: Decimal.Value): boolean;
+    greaterThan(n: Decimal.Value): boolean;
+    gt(n: Decimal.Value): boolean;
 
-  greaterThanOrEqualTo(n: Decimal.Value): boolean;
-  gte(n: Decimal.Value): boolean;
+    greaterThanOrEqualTo(n: Decimal.Value): boolean;
+    gte(n: Decimal.Value): boolean;
 
-  hyperbolicCosine(): Decimal;
-  cosh(): Decimal;
+    hyperbolicCosine(): Decimal;
+    cosh(): Decimal;
 
-  hyperbolicSine(): Decimal;
-  sinh(): Decimal;
+    hyperbolicSine(): Decimal;
+    sinh(): Decimal;
 
-  hyperbolicTangent(): Decimal;
-  tanh(): Decimal;
+    hyperbolicTangent(): Decimal;
+    tanh(): Decimal;
 
-  inverseCosine(): Decimal;
-  acos(): Decimal;
+    inverseCosine(): Decimal;
+    acos(): Decimal;
 
-  inverseHyperbolicCosine(): Decimal;
-  acosh(): Decimal;
+    inverseHyperbolicCosine(): Decimal;
+    acosh(): Decimal;
 
-  inverseHyperbolicSine(): Decimal;
-  asinh(): Decimal;
+    inverseHyperbolicSine(): Decimal;
+    asinh(): Decimal;
 
-  inverseHyperbolicTangent(): Decimal;
-  atanh(): Decimal;
+    inverseHyperbolicTangent(): Decimal;
+    atanh(): Decimal;
 
-  inverseSine(): Decimal;
-  asin(): Decimal;
+    inverseSine(): Decimal;
+    asin(): Decimal;
 
-  inverseTangent(): Decimal;
-  atan(): Decimal;
+    inverseTangent(): Decimal;
+    atan(): Decimal;
 
-  isFinite(): boolean;
+    isFinite(): boolean;
 
-  isInteger(): boolean;
-  isInt(): boolean;
+    isInteger(): boolean;
+    isInt(): boolean;
 
-  isNaN(): boolean;
+    isNaN(): boolean;
 
-  isNegative(): boolean;
-  isNeg(): boolean;
+    isNegative(): boolean;
+    isNeg(): boolean;
 
-  isPositive(): boolean;
-  isPos(): boolean;
+    isPositive(): boolean;
+    isPos(): boolean;
 
-  isZero(): boolean;
+    isZero(): boolean;
 
-  lessThan(n: Decimal.Value): boolean;
-  lt(n: Decimal.Value): boolean;
+    lessThan(n: Decimal.Value): boolean;
+    lt(n: Decimal.Value): boolean;
 
-  lessThanOrEqualTo(n: Decimal.Value): boolean;
-  lte(n: Decimal.Value): boolean;
+    lessThanOrEqualTo(n: Decimal.Value): boolean;
+    lte(n: Decimal.Value): boolean;
 
-  logarithm(n?: Decimal.Value): Decimal;
-  log(n?: Decimal.Value): Decimal;
+    logarithm(n?: Decimal.Value): Decimal;
+    log(n?: Decimal.Value): Decimal;
 
-  minus(n: Decimal.Value): Decimal;
-  sub(n: Decimal.Value): Decimal;
+    minus(n: Decimal.Value): Decimal;
+    sub(n: Decimal.Value): Decimal;
 
-  modulo(n: Decimal.Value): Decimal;
-  mod(n: Decimal.Value): Decimal;
+    modulo(n: Decimal.Value): Decimal;
+    mod(n: Decimal.Value): Decimal;
 
-  naturalExponential(): Decimal;
-  exp(): Decimal;
+    naturalExponential(): Decimal;
+    exp(): Decimal;
 
-  naturalLogarithm(): Decimal;
-  ln(): Decimal;
-
-  negated(): Decimal;
-  neg(): Decimal;
-
-  plus(n: Decimal.Value): Decimal;
-  add(n: Decimal.Value): Decimal;
-
-  precision(includeZeros?: boolean): number;
-  sd(includeZeros?: boolean): number;
-
-  round(): Decimal;
-
-  sine() : Decimal;
-  sin() : Decimal;
-
-  squareRoot(): Decimal;
-  sqrt(): Decimal;
-
-  tangent() : Decimal;
-  tan() : Decimal;
-
-  times(n: Decimal.Value): Decimal;
-  mul(n: Decimal.Value) : Decimal;
-
-  toBinary(significantDigits?: number): string;
-  toBinary(significantDigits: number, rounding: Decimal.Rounding): string;
-
-  toDecimalPlaces(decimalPlaces?: number): Decimal;
-  toDecimalPlaces(decimalPlaces: number, rounding: Decimal.Rounding): Decimal;
-  toDP(decimalPlaces?: number): Decimal;
-  toDP(decimalPlaces: number, rounding: Decimal.Rounding): Decimal;
-
-  toExponential(decimalPlaces?: number): string;
-  toExponential(decimalPlaces: number, rounding: Decimal.Rounding): string;
-
-  toFixed(decimalPlaces?: number): string;
-  toFixed(decimalPlaces: number, rounding: Decimal.Rounding): string;
-
-  toFraction(max_denominator?: Decimal.Value): Decimal[];
-
-  toHexadecimal(significantDigits?: number): string;
-  toHexadecimal(significantDigits: number, rounding: Decimal.Rounding): string;
-  toHex(significantDigits?: number): string;
-  toHex(significantDigits: number, rounding?: Decimal.Rounding): string;
-
-  toJSON(): string;
-
-  toNearest(n: Decimal.Value, rounding?: Decimal.Rounding): Decimal;
-
-  toNumber(): number;
-
-  toOctal(significantDigits?: number): string;
-  toOctal(significantDigits: number, rounding: Decimal.Rounding): string;
-
-  toPower(n: Decimal.Value): Decimal;
-  pow(n: Decimal.Value): Decimal;
-
-  toPrecision(significantDigits?: number): string;
-  toPrecision(significantDigits: number, rounding: Decimal.Rounding): string;
-
-  toSignificantDigits(significantDigits?: number): Decimal;
-  toSignificantDigits(significantDigits: number, rounding: Decimal.Rounding): Decimal;
-  toSD(significantDigits?: number): Decimal;
-  toSD(significantDigits: number, rounding: Decimal.Rounding): Decimal;
-
-  toString(): string;
-
-  truncated(): Decimal;
-  trunc(): Decimal;
-
-  valueOf(): string;
-
-  static abs(n: Decimal.Value): Decimal;
-  static acos(n: Decimal.Value): Decimal;
-  static acosh(n: Decimal.Value): Decimal;
-  static add(x: Decimal.Value, y: Decimal.Value): Decimal;
-  static asin(n: Decimal.Value): Decimal;
-  static asinh(n: Decimal.Value): Decimal;
-  static atan(n: Decimal.Value): Decimal;
-  static atanh(n: Decimal.Value): Decimal;
-  static atan2(y: Decimal.Value, x: Decimal.Value): Decimal;
-  static cbrt(n: Decimal.Value): Decimal;
-  static ceil(n: Decimal.Value): Decimal;
-  static clamp(n: Decimal.Value, min: Decimal.Value, max: Decimal.Value): Decimal;
-  static clone(object?: Decimal.Config): Decimal.Constructor;
-  static config(object: Decimal.Config): Decimal.Constructor;
-  static cos(n: Decimal.Value): Decimal;
-  static cosh(n: Decimal.Value): Decimal;
-  static div(x: Decimal.Value, y: Decimal.Value): Decimal;
-  static exp(n: Decimal.Value): Decimal;
-  static floor(n: Decimal.Value): Decimal;
-  static hypot(...n: Decimal.Value[]): Decimal;
-  static isDecimal(object: any): object is Decimal;
-  static ln(n: Decimal.Value): Decimal;
-  static log(n: Decimal.Value, base?: Decimal.Value): Decimal;
-  static log2(n: Decimal.Value): Decimal;
-  static log10(n: Decimal.Value): Decimal;
-  static max(...n: Decimal.Value[]): Decimal;
-  static min(...n: Decimal.Value[]): Decimal;
-  static mod(x: Decimal.Value, y: Decimal.Value): Decimal;
-  static mul(x: Decimal.Value, y: Decimal.Value): Decimal;
-  static noConflict(): Decimal.Constructor;   // Browser only
-  static pow(base: Decimal.Value, exponent: Decimal.Value): Decimal;
-  static random(significantDigits?: number): Decimal;
-  static round(n: Decimal.Value): Decimal;
-  static set(object: Decimal.Config): Decimal.Constructor;
-  static sign(n: Decimal.Value): number;
-  static sin(n: Decimal.Value): Decimal;
-  static sinh(n: Decimal.Value): Decimal;
-  static sqrt(n: Decimal.Value): Decimal;
-  static sub(x: Decimal.Value, y: Decimal.Value): Decimal;
-  static sum(...n: Decimal.Value[]): Decimal;
-  static tan(n: Decimal.Value): Decimal;
-  static tanh(n: Decimal.Value): Decimal;
-  static trunc(n: Decimal.Value): Decimal;
-
-  static readonly default?: Decimal.Constructor;
-  static readonly Decimal?: Decimal.Constructor;
-
-  static readonly precision: number;
-  static readonly rounding: Decimal.Rounding;
-  static readonly toExpNeg: number;
-  static readonly toExpPos: number;
-  static readonly minE: number;
-  static readonly maxE: number;
-  static readonly crypto: boolean;
-  static readonly modulo: Decimal.Modulo;
-
-  static readonly ROUND_UP: 0;
-  static readonly ROUND_DOWN: 1;
-  static readonly ROUND_CEIL: 2;
-  static readonly ROUND_FLOOR: 3;
-  static readonly ROUND_HALF_UP: 4;
-  static readonly ROUND_HALF_DOWN: 5;
-  static readonly ROUND_HALF_EVEN: 6;
-  static readonly ROUND_HALF_CEIL: 7;
-  static readonly ROUND_HALF_FLOOR: 8;
-  static readonly EUCLID: 9;
+    naturalLogarithm(): Decimal;
+    ln(): Decimal;
+
+    negated(): Decimal;
+    neg(): Decimal;
+
+    plus(n: Decimal.Value): Decimal;
+    add(n: Decimal.Value): Decimal;
+
+    precision(includeZeros?: boolean): number;
+    sd(includeZeros?: boolean): number;
+
+    round(): Decimal;
+
+    sine() : Decimal;
+    sin() : Decimal;
+
+    squareRoot(): Decimal;
+    sqrt(): Decimal;
+
+    tangent() : Decimal;
+    tan() : Decimal;
+
+    times(n: Decimal.Value): Decimal;
+    mul(n: Decimal.Value) : Decimal;
+
+    toBinary(significantDigits?: number): string;
+    toBinary(significantDigits: number, rounding: Decimal.Rounding): string;
+
+    toDecimalPlaces(decimalPlaces?: number): Decimal;
+    toDecimalPlaces(decimalPlaces: number, rounding: Decimal.Rounding): Decimal;
+    toDP(decimalPlaces?: number): Decimal;
+    toDP(decimalPlaces: number, rounding: Decimal.Rounding): Decimal;
+
+    toExponential(decimalPlaces?: number): string;
+    toExponential(decimalPlaces: number, rounding: Decimal.Rounding): string;
+
+    toFixed(decimalPlaces?: number): string;
+    toFixed(decimalPlaces: number, rounding: Decimal.Rounding): string;
+
+    toFraction(max_denominator?: Decimal.Value): Decimal[];
+
+    toHexadecimal(significantDigits?: number): string;
+    toHexadecimal(significantDigits: number, rounding: Decimal.Rounding): string;
+    toHex(significantDigits?: number): string;
+    toHex(significantDigits: number, rounding?: Decimal.Rounding): string;
+
+    toJSON(): string;
+
+    toNearest(n: Decimal.Value, rounding?: Decimal.Rounding): Decimal;
+
+    toNumber(): number;
+
+    toOctal(significantDigits?: number): string;
+    toOctal(significantDigits: number, rounding: Decimal.Rounding): string;
+
+    toPower(n: Decimal.Value): Decimal;
+    pow(n: Decimal.Value): Decimal;
+
+    toPrecision(significantDigits?: number): string;
+    toPrecision(significantDigits: number, rounding: Decimal.Rounding): string;
+
+    toSignificantDigits(significantDigits?: number): Decimal;
+    toSignificantDigits(significantDigits: number, rounding: Decimal.Rounding): Decimal;
+    toSD(significantDigits?: number): Decimal;
+    toSD(significantDigits: number, rounding: Decimal.Rounding): Decimal;
+
+    toString(): string;
+
+    truncated(): Decimal;
+    trunc(): Decimal;
+
+    valueOf(): string;
+
+    static abs(n: Decimal.Value): Decimal;
+    static acos(n: Decimal.Value): Decimal;
+    static acosh(n: Decimal.Value): Decimal;
+    static add(x: Decimal.Value, y: Decimal.Value): Decimal;
+    static asin(n: Decimal.Value): Decimal;
+    static asinh(n: Decimal.Value): Decimal;
+    static atan(n: Decimal.Value): Decimal;
+    static atanh(n: Decimal.Value): Decimal;
+    static atan2(y: Decimal.Value, x: Decimal.Value): Decimal;
+    static cbrt(n: Decimal.Value): Decimal;
+    static ceil(n: Decimal.Value): Decimal;
+    static clamp(n: Decimal.Value, min: Decimal.Value, max: Decimal.Value): Decimal;
+    static clone(object?: Decimal.Config): Decimal.Constructor;
+    static config(object: Decimal.Config): Decimal.Constructor;
+    static cos(n: Decimal.Value): Decimal;
+    static cosh(n: Decimal.Value): Decimal;
+    static div(x: Decimal.Value, y: Decimal.Value): Decimal;
+    static exp(n: Decimal.Value): Decimal;
+    static floor(n: Decimal.Value): Decimal;
+    static hypot(...n: Decimal.Value[]): Decimal;
+    static isDecimal(object: any): object is Decimal;
+    static ln(n: Decimal.Value): Decimal;
+    static log(n: Decimal.Value, base?: Decimal.Value): Decimal;
+    static log2(n: Decimal.Value): Decimal;
+    static log10(n: Decimal.Value): Decimal;
+    static max(...n: Decimal.Value[]): Decimal;
+    static min(...n: Decimal.Value[]): Decimal;
+    static mod(x: Decimal.Value, y: Decimal.Value): Decimal;
+    static mul(x: Decimal.Value, y: Decimal.Value): Decimal;
+    static noConflict(): Decimal.Constructor;   // Browser only
+    static pow(base: Decimal.Value, exponent: Decimal.Value): Decimal;
+    static random(significantDigits?: number): Decimal;
+    static round(n: Decimal.Value): Decimal;
+    static set(object: Decimal.Config): Decimal.Constructor;
+    static sign(n: Decimal.Value): number;
+    static sin(n: Decimal.Value): Decimal;
+    static sinh(n: Decimal.Value): Decimal;
+    static sqrt(n: Decimal.Value): Decimal;
+    static sub(x: Decimal.Value, y: Decimal.Value): Decimal;
+    static sum(...n: Decimal.Value[]): Decimal;
+    static tan(n: Decimal.Value): Decimal;
+    static tanh(n: Decimal.Value): Decimal;
+    static trunc(n: Decimal.Value): Decimal;
+
+    static readonly default?: Decimal.Constructor;
+    static readonly Decimal?: Decimal.Constructor;
+
+    static readonly precision: number;
+    static readonly rounding: Decimal.Rounding;
+    static readonly toExpNeg: number;
+    static readonly toExpPos: number;
+    static readonly minE: number;
+    static readonly maxE: number;
+    static readonly crypto: boolean;
+    static readonly modulo: Decimal.Modulo;
+
+    static readonly ROUND_UP: 0;
+    static readonly ROUND_DOWN: 1;
+    static readonly ROUND_CEIL: 2;
+    static readonly ROUND_FLOOR: 3;
+    static readonly ROUND_HALF_UP: 4;
+    static readonly ROUND_HALF_DOWN: 5;
+    static readonly ROUND_HALF_EVEN: 6;
+    static readonly ROUND_HALF_CEIL: 7;
+    static readonly ROUND_HALF_FLOOR: 8;
+    static readonly EUCLID: 9;
 }
 
 /**
@@ -758,82 +758,84 @@ export declare type DevTypeMapFnDef = {
 
 export declare namespace DMMF {
     export {
-      Datamodel,
-      DatamodelEnum,
-      datamodelEnumToSchemaEnum,
-      Deprecation,
-      Document_2 as Document,
-      EnumValue,
-      Field,
-      FieldDefault,
-      FieldDefaultScalar,
-      FieldKind,
-      FieldLocation,
-      FieldNamespace,
-      FieldRefAllowType,
-      FieldRefType,
-      Index,
-      IndexField,
-      IndexType,
-      InputType,
-      InputTypeRef,
-      Mappings,
-      Model,
-      ModelAction,
-      ModelMapping,
-      OtherOperationMappings,
-      OutputType,
-      OutputTypeRef,
-      PrimaryKey,
-      Query,
-      QueryOutput,
-      Schema,
-      SchemaArg,
-      SchemaEnum,
-      SchemaField,
-      SortOrder,
-      TypeRef,
-      uniqueIndex    }
+        datamodelEnumToSchemaEnum,
+        Document_2 as Document,
+        Mappings,
+        OtherOperationMappings,
+        DatamodelEnum,
+        SchemaEnum,
+        EnumValue,
+        Datamodel,
+        uniqueIndex,
+        PrimaryKey,
+        Model,
+        FieldKind,
+        FieldNamespace,
+        FieldLocation,
+        Field,
+        FieldDefault,
+        FieldDefaultScalar,
+        Index,
+        IndexType,
+        IndexField,
+        SortOrder,
+        Schema,
+        Query,
+        QueryOutput,
+        TypeRef,
+        InputTypeRef,
+        SchemaArg,
+        OutputType,
+        SchemaField,
+        OutputTypeRef,
+        Deprecation,
+        InputType,
+        FieldRefType,
+        FieldRefAllowType,
+        ModelMapping,
+        ModelAction
+    }
 }
 
 declare namespace DMMF_2 {
     export {
-      Datamodel,
-      DatamodelEnum,
-      datamodelEnumToSchemaEnum,
-      Deprecation,
-      Document_2 as Document,
-      EnumValue,
-      Field,
-      FieldDefault,
-      FieldDefaultScalar,
-      FieldKind,
-      FieldLocation,
-      FieldNamespace,
-      FieldRefAllowType,
-      FieldRefType,
-      Index,
-      IndexField,
-      IndexType,
-      InputType,
-      InputTypeRef,
-      Mappings,
-      Model,
-      ModelAction,
-      ModelMapping,
-      OtherOperationMappings,
-      OutputType,
-      OutputTypeRef,
-      PrimaryKey,
-      Query,
-      QueryOutput,
-      Schema,
-      SchemaArg,
-      SchemaEnum,
-      SchemaField,
-      SortOrder,
-      TypeRef,
-      uniqueIndex    }
+        datamodelEnumToSchemaEnum,
+        Document_2 as Document,
+        Mappings,
+        OtherOperationMappings,
+        DatamodelEnum,
+        SchemaEnum,
+        EnumValue,
+        Datamodel,
+        uniqueIndex,
+        PrimaryKey,
+        Model,
+        FieldKind,
+        FieldNamespace,
+        FieldLocation,
+        Field,
+        FieldDefault,
+        FieldDefaultScalar,
+        Index,
+        IndexType,
+        IndexField,
+        SortOrder,
+        Schema,
+        Query,
+        QueryOutput,
+        TypeRef,
+        InputTypeRef,
+        SchemaArg,
+        OutputType,
+        SchemaField,
+        OutputTypeRef,
+        Deprecation,
+        InputType,
+        FieldRefType,
+        FieldRefAllowType,
+        ModelMapping,
+        ModelAction
+    }
 }
 
 export declare function dmmfToRuntimeDataModel(dmmfDataModel: DMMF_2.Datamodel): RuntimeDataModel;
@@ -1265,50 +1267,50 @@ export declare type ExtensionArgs = Optional<RequiredExtensionArgs>;
 
 declare namespace Extensions {
     export {
-      defineExtension,
-      getExtensionContext
+        defineExtension,
+        getExtensionContext
     }
 }
 export { Extensions }
 
 declare namespace Extensions_2 {
     export {
-      AllModelsToStringIndex,
-      ClientBuiltInProp,
-      ClientOptionDef,
-      ClientOtherOps,
-      DefaultArgs,
-      DevTypeMapDef,
-      DevTypeMapFnDef,
-      DynamicClientExtensionArgs,
-      DynamicClientExtensionThis,
-      DynamicClientExtensionThisBuiltin,
-      DynamicModelExtensionArgs,
-      DynamicModelExtensionFluentApi,
-      DynamicModelExtensionFnResult,
-      DynamicModelExtensionFnResultBase,
-      DynamicModelExtensionFnResultNull,
-      DynamicModelExtensionOperationFn,
-      DynamicModelExtensionThis,
-      DynamicQueryExtensionArgs,
-      DynamicQueryExtensionCb,
-      DynamicQueryExtensionCbArgs,
-      DynamicQueryExtensionCbArgsArgs,
-      DynamicResultExtensionArgs,
-      DynamicResultExtensionData,
-      DynamicResultExtensionNeeds,
-      ExtendsHook,
-      GetOmit,
-      GetPayloadResult,
-      GetPayloadResultExtensionKeys,
-      GetPayloadResultExtensionObject,
-      GetSelect,
-      InternalArgs,
-      MergeExtArgs,
-      ModelKey,
-      TypeMapCbDef,
-      TypeMapDef,
-      RequiredExtensionArgs as UserArgs
+        InternalArgs,
+        DefaultArgs,
+        GetPayloadResultExtensionKeys,
+        GetPayloadResultExtensionObject,
+        GetPayloadResult,
+        GetSelect,
+        GetOmit,
+        DynamicQueryExtensionArgs,
+        DynamicQueryExtensionCb,
+        DynamicQueryExtensionCbArgs,
+        DynamicQueryExtensionCbArgsArgs,
+        DynamicResultExtensionArgs,
+        DynamicResultExtensionNeeds,
+        DynamicResultExtensionData,
+        DynamicModelExtensionArgs,
+        DynamicModelExtensionThis,
+        DynamicModelExtensionOperationFn,
+        DynamicModelExtensionFnResult,
+        DynamicModelExtensionFnResultBase,
+        DynamicModelExtensionFluentApi,
+        DynamicModelExtensionFnResultNull,
+        DynamicClientExtensionArgs,
+        DynamicClientExtensionThis,
+        ClientBuiltInProp,
+        DynamicClientExtensionThisBuiltin,
+        ExtendsHook,
+        MergeExtArgs,
+        AllModelsToStringIndex,
+        TypeMapDef,
+        DevTypeMapDef,
+        DevTypeMapFnDef,
+        ClientOptionDef,
+        ClientOtherOps,
+        TypeMapCbDef,
+        ModelKey,
+        RequiredExtensionArgs as UserArgs
     }
 }
 
@@ -2013,7 +2015,7 @@ declare type JsonFieldSelection = {
 };
 
 declare class JsonNull extends NullTypesEnumValue {
-  #private;
+    #private;
 }
 
 /**
@@ -2272,17 +2274,17 @@ declare type Mappings = ReadonlyDeep_2<{
  * recompute.
  */
 declare class MergedExtensionsList {
-  private head?;
-  private constructor();
-  static empty(): MergedExtensionsList;
-  static single(extension: ExtensionArgs): MergedExtensionsList;
-  isEmpty(): boolean;
-  append(extension: ExtensionArgs): MergedExtensionsList;
-  getAllComputedFields(dmmfModelName: string): ComputedFieldsMap | undefined;
-  getAllClientExtensions(): ClientArg | undefined;
-  getAllModelExtensions(dmmfModelName: string): ModelArg | undefined;
-  getAllQueryCallbacks(jsModelName: string, operation: string): any;
-  getAllBatchQueryCallbacks(): BatchQueryOptionsCb[];
+    private head?;
+    private constructor();
+    static empty(): MergedExtensionsList;
+    static single(extension: ExtensionArgs): MergedExtensionsList;
+    isEmpty(): boolean;
+    append(extension: ExtensionArgs): MergedExtensionsList;
+    getAllComputedFields(dmmfModelName: string): ComputedFieldsMap | undefined;
+    getAllClientExtensions(): ClientArg | undefined;
+    getAllModelExtensions(dmmfModelName: string): ModelArg | undefined;
+    getAllQueryCallbacks(jsModelName: string, operation: string): any;
+    getAllBatchQueryCallbacks(): BatchQueryOptionsCb[];
 }
 
 export declare type MergeExtArgs<TypeMap extends TypeMapDef, ExtArgs extends Record<any, any>, Args extends Record<any, any>> = ComputeDeep<ExtArgs & Args & AllModelsToStringIndex<TypeMap, Args, 'result'> & AllModelsToStringIndex<TypeMap, Args, 'model'>>;
@@ -2309,23 +2311,23 @@ export declare type Metrics = {
 };
 
 export declare class MetricsClient {
-  private _client;
-  constructor(client: Client);
-  /**
+    private _client;
+    constructor(client: Client);
+    /**
      * Returns all metrics gathered up to this point in prometheus format.
      * Result of this call can be exposed directly to prometheus scraping endpoint
      *
      * @param options
      * @returns
      */
-  prometheus(options?: MetricsOptions): Promise<string>;
-  /**
+    prometheus(options?: MetricsOptions): Promise<string>;
+    /**
      * Returns all metrics gathered up to this point in prometheus format.
      *
      * @param options
      * @returns
      */
-  json(options?: MetricsOptions): Promise<Metrics>;
+    json(options?: MetricsOptions): Promise<Metrics>;
 }
 
 declare type MetricsOptions = {
@@ -2449,14 +2451,14 @@ export declare type Narrowable = string | number | bigint | boolean | [];
 export declare type NeverToUnknown<T> = [T] extends [never] ? unknown : T;
 
 declare class NullTypesEnumValue extends ObjectEnumValue {
-  _getNamespace(): string;
+    _getNamespace(): string;
 }
 
 /**
  * Base class for unique values of object-valued enums.
  */
 export declare abstract class ObjectEnumValue {
-  constructor(arg?: symbol);
+    constructor(arg?: symbol);
     abstract _getNamespace(): string;
     _getName(): string;
     toString(): string;
@@ -2595,20 +2597,20 @@ declare type PrimaryKey = ReadonlyDeep_2<{
 }>;
 
 export declare class PrismaClientInitializationError extends Error {
-  clientVersion: string;
-  errorCode?: string;
-  retryable?: boolean;
-  constructor(message: string, clientVersion: string, errorCode?: string);
-  get [Symbol.toStringTag](): string;
+    clientVersion: string;
+    errorCode?: string;
+    retryable?: boolean;
+    constructor(message: string, clientVersion: string, errorCode?: string);
+    get [Symbol.toStringTag](): string;
 }
 
 export declare class PrismaClientKnownRequestError extends Error implements ErrorWithBatchIndex {
-  code: string;
-  meta?: Record<string, unknown>;
-  clientVersion: string;
-  batchRequestIdx?: number;
-  constructor(message: string, { code, clientVersion, meta, batchRequestIdx }: KnownErrorParams);
-  get [Symbol.toStringTag](): string;
+    code: string;
+    meta?: Record<string, unknown>;
+    clientVersion: string;
+    batchRequestIdx?: number;
+    constructor(message: string, { code, clientVersion, meta, batchRequestIdx }: KnownErrorParams);
+    get [Symbol.toStringTag](): string;
 }
 
 export declare type PrismaClientOptions = {
@@ -2669,23 +2671,23 @@ export declare type PrismaClientOptions = {
 };
 
 export declare class PrismaClientRustPanicError extends Error {
-  clientVersion: string;
-  constructor(message: string, clientVersion: string);
-  get [Symbol.toStringTag](): string;
+    clientVersion: string;
+    constructor(message: string, clientVersion: string);
+    get [Symbol.toStringTag](): string;
 }
 
 export declare class PrismaClientUnknownRequestError extends Error implements ErrorWithBatchIndex {
-  clientVersion: string;
-  batchRequestIdx?: number;
-  constructor(message: string, { clientVersion, batchRequestIdx }: UnknownErrorParams);
-  get [Symbol.toStringTag](): string;
+    clientVersion: string;
+    batchRequestIdx?: number;
+    constructor(message: string, { clientVersion, batchRequestIdx }: UnknownErrorParams);
+    get [Symbol.toStringTag](): string;
 }
 
 export declare class PrismaClientValidationError extends Error {
-  name: string;
-  clientVersion: string;
-  constructor(message: string, { clientVersion }: Options_2);
-  get [Symbol.toStringTag](): string;
+    name: string;
+    clientVersion: string;
+    constructor(message: string, { clientVersion }: Options_2);
+    get [Symbol.toStringTag](): string;
 }
 
 declare function prismaGraphQLToJSError({ error, user_facing_error }: RequestError, clientVersion: string, activeProvider: string): PrismaClientKnownRequestError | PrismaClientUnknownRequestError;
@@ -2828,19 +2830,20 @@ declare type Provider = 'mysql' | 'postgres' | 'sqlite' | 'sqlserver';
 
 declare namespace Public {
     export {
-      validator
+        validator
     }
 }
 export { Public }
 
 declare namespace Public_2 {
     export {
-      Args,
-      Exact,
-      Operation,
-      Payload,
-      PrismaPromise,
-      Result    }
+        Args,
+        Result,
+        Payload,
+        PrismaPromise,
+        Operation,
+        Exact
+    }
 }
 
 declare type Query = ReadonlyDeep_2<{
@@ -2928,7 +2931,7 @@ declare type QueryEngineProtocol = 'graphql' | 'json';
 
 declare type QueryEngineRequest = {
     query: string;
-    variables: object;
+    variables: Object;
 };
 
 declare type QueryEngineResultData<T> = {
@@ -3171,21 +3174,21 @@ declare interface RequestError {
 }
 
 declare class RequestHandler {
-  client: Client;
-  dataloader: DataLoader<RequestParams>;
-  private logEmitter?;
-  constructor(client: Client, logEmitter?: LogEmitter);
-  request(params: RequestParams): Promise<any>;
-  mapQueryEngineResult({ dataPath, unpacker }: RequestParams, response: QueryEngineResultData<any>): any;
-  /**
+    client: Client;
+    dataloader: DataLoader<RequestParams>;
+    private logEmitter?;
+    constructor(client: Client, logEmitter?: LogEmitter);
+    request(params: RequestParams): Promise<any>;
+    mapQueryEngineResult({ dataPath, unpacker }: RequestParams, response: QueryEngineResultData<any>): any;
+    /**
      * Handles the error and logs it, logging the error is done synchronously waiting for the event
      * handlers to finish.
      */
-  handleAndLogRequestError(params: HandleErrorParams): never;
-  handleRequestError({ error, clientMethod, callsite, transaction, args, modelName, globalOmit, }: HandleErrorParams): never;
-  sanitizeMessage(message: any): any;
-  unpack(data: unknown, dataPath: string[], unpacker?: Unpacker): any;
-  get [Symbol.toStringTag](): string;
+    handleAndLogRequestError(params: HandleErrorParams): never;
+    handleRequestError({ error, clientMethod, callsite, transaction, args, modelName, globalOmit, }: HandleErrorParams): never;
+    sanitizeMessage(message: any): any;
+    unpack(data: unknown, dataPath: string[], unpacker?: Unpacker): any;
+    get [Symbol.toStringTag](): string;
 }
 
 declare type RequestOptions<InteractiveTransactionPayload> = {
@@ -3246,21 +3249,22 @@ export declare type Result_2<T, A, F extends Operation> = Result<T, A, F>;
 
 declare namespace Result_3 {
     export {
-      Aggregate,
-      ApplyOmit,
-      Count,
-      DefaultSelection,
-      ExtractGlobalOmit,
-      GetAggregateResult,
-      GetBatchResult,
-      GetCountResult,
-      GetFindResult,
-      GetGroupByResult,
-      GetResult,
-      OmitValue,
-      SelectablePayloadFields,
-      SelectField,
-      UnwrapPayload    }
+        Count,
+        GetFindResult,
+        SelectablePayloadFields,
+        SelectField,
+        DefaultSelection,
+        UnwrapPayload,
+        ApplyOmit,
+        OmitValue,
+        GetCountResult,
+        Aggregate,
+        GetAggregateResult,
+        GetBatchResult,
+        GetGroupByResult,
+        GetResult,
+        ExtractGlobalOmit
+    }
 }
 
 declare type Result_4<T> = {
@@ -3402,8 +3406,8 @@ declare type SerializeParams = {
 };
 
 declare class Skip {
-  constructor(param?: symbol);
-  ifUndefined<T>(value: T | undefined): T | Skip;
+    constructor(param?: symbol);
+    ifUndefined<T>(value: T | undefined): T | Skip;
 }
 
 export declare const skip: Skip;
@@ -3664,13 +3668,13 @@ declare enum SpanStatusCode {
  * A SQL instance can be nested within each other to build SQL strings.
  */
 export declare class Sql {
-  readonly values: Value[];
-  readonly strings: string[];
-  constructor(rawStrings: readonly string[], rawValues: readonly RawValue[]);
-  get sql(): string;
-  get statement(): string;
-  get text(): string;
-  inspect(): {
+    readonly values: Value[];
+    readonly strings: string[];
+    constructor(rawStrings: readonly string[], rawValues: readonly RawValue[]);
+    get sql(): string;
+    get statement(): string;
+    get text(): string;
+    inspect(): {
         sql: string;
         statement: string;
         text: string;
@@ -3809,10 +3813,10 @@ declare interface Transaction extends AdapterInfo, SqlQueryable {
 
 declare namespace Transaction_2 {
     export {
-      InteractiveTransactionInfo,
-      IsolationLevel_2 as IsolationLevel,
-      Options,
-      TransactionHeaders
+        Options,
+        IsolationLevel_2 as IsolationLevel,
+        InteractiveTransactionInfo,
+        TransactionHeaders
     }
 }
 
@@ -3833,10 +3837,10 @@ declare type TransactionOptions_2<InteractiveTransactionPayload> = {
 };
 
 export declare class TypedSql<Values extends readonly unknown[], Result> {
-  [PrivateResultType]: Result;
-  constructor(sql: string, values: Values);
-  get sql(): string;
-  get values(): Values;
+    [PrivateResultType]: Result;
+    constructor(sql: string, values: Values);
+    get sql(): string;
+    get values(): Values;
 }
 
 export declare type TypeMapCbDef = Fn<{
@@ -3855,15 +3859,16 @@ declare type TypeRef<AllowedLocations extends FieldLocation> = {
 
 declare namespace Types {
     export {
-      Extensions_2 as Extensions,
-      isSkip,
-      OperationPayload as Payload,
-      Public_2 as Public,
-      Result_3 as Result,
-      Skip,
-      skip,
-      UnknownTypedSql,
-      Utils    }
+        Result_3 as Result,
+        Extensions_2 as Extensions,
+        Utils,
+        Public_2 as Public,
+        isSkip,
+        Skip,
+        skip,
+        UnknownTypedSql,
+        OperationPayload as Payload
+    }
 }
 export { Types }
 
@@ -3904,36 +3909,37 @@ declare type UserArgs_2 = any;
 
 declare namespace Utils {
     export {
-      Call,
-      Cast,
-      Compute,
-      ComputeDeep,
-      EmptyToUnknown,
-      Equals,
-      Exact,
-      Fn,
-      JsPromise,
-      Narrow,
-      Narrowable,
-      NeverToUnknown,
-      Omit_2 as Omit,
-      Optional,
-      OptionalFlat,
-      OptionalKeys,
-      Or,
-      PatchFlat,
-      Path,
-      PayloadToResult,
-      Pick_2 as Pick,
-      ReadonlyDeep,
-      Record_2 as Record,
-      RenameAndNestPayloadKeys,
-      RequiredKeys,
-      Return,
-      Select,
-      ToTuple,
-      UnwrapPromise,
-      UnwrapTuple    }
+        EmptyToUnknown,
+        NeverToUnknown,
+        PatchFlat,
+        Omit_2 as Omit,
+        Pick_2 as Pick,
+        ComputeDeep,
+        Compute,
+        OptionalFlat,
+        ReadonlyDeep,
+        Narrowable,
+        Narrow,
+        Exact,
+        Cast,
+        Record_2 as Record,
+        UnwrapPromise,
+        UnwrapTuple,
+        Path,
+        Fn,
+        Call,
+        RequiredKeys,
+        OptionalKeys,
+        Optional,
+        Return,
+        ToTuple,
+        RenameAndNestPayloadKeys,
+        PayloadToResult,
+        Select,
+        Equals,
+        Or,
+        JsPromise
+    }
 }
 
 declare type ValidationError = {

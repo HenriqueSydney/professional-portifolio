@@ -42,6 +42,9 @@
       "copyright": "Henrique Lima. All rights reserved. Built with Next.js & Tailwind."
     }
   },
+  "errorAndNotFoundPage": {
+    "goBackButton": "Página Anterior"
+  },
   "homepage": {
     "hero": {
       "badge": "Disponível para novas oportunidades",

@@ -182,8 +182,30 @@ exports.Prisma.NewsLetterSubscriptionsScalarFieldEnum = {
   canceledAt: 'canceledAt'
 };
 
+exports.Prisma.PostsScalarFieldEnum = {
+  id: 'id',
+  notionId: 'notionId',
+  slug: 'slug',
+  category: 'category',
+  tags: 'tags',
+  coverUrl: 'coverUrl',
+  excerpt_pt: 'excerpt_pt',
+  excerpt_en: 'excerpt_en',
+  readTime: 'readTime',
+  featured: 'featured',
+  Priority: 'Priority',
+  translatedModel: 'translatedModel',
+  ptBr: 'ptBr',
+  en: 'en',
+  status: 'status',
+  publishedAt: 'publishedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.PostMetricsScalarFieldEnum = {
   id: 'id',
+  postId: 'postId',
   numberOfViews: 'numberOfViews',
   totalOfComments: 'totalOfComments',
   numberOfLikes: 'numberOfLikes'
@@ -191,7 +213,7 @@ exports.Prisma.PostMetricsScalarFieldEnum = {
 
 exports.Prisma.PostLikesScalarFieldEnum = {
   userId: 'userId',
-  postId: 'postId',
+  postMetricsId: 'postMetricsId',
   createdAt: 'createdAt'
 };
 
@@ -211,9 +233,20 @@ exports.Prisma.PostCommentsLikesScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ProfileInformationScalarFieldEnum = {
+  id: 'id',
+  profileInformationType: 'profileInformationType',
+  ptBr: 'ptBr',
+  en: 'en'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -225,9 +258,35 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
 exports.Role = exports.$Enums.Role = {
   ADMIN: 'ADMIN',
   USER: 'USER'
+};
+
+exports.TranslatedModel = exports.$Enums.TranslatedModel = {
+  MICROSOFT_TRANSLATOR: 'MICROSOFT_TRANSLATOR',
+  GOOGLE_CLOUD_TRANSLATE: 'GOOGLE_CLOUD_TRANSLATE',
+  DEEPL: 'DEEPL',
+  AMAZON_TRANSLATE: 'AMAZON_TRANSLATE'
+};
+
+exports.PostStatus = exports.$Enums.PostStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.ProfileInformationType = exports.$Enums.ProfileInformationType = {
+  STATS: 'STATS',
+  SKILLS: 'SKILLS',
+  EXPERIENCE: 'EXPERIENCE',
+  CERTIFICATION: 'CERTIFICATION'
 };
 
 exports.Prisma.ModelName = {
@@ -237,10 +296,12 @@ exports.Prisma.ModelName = {
   VerificationToken: 'VerificationToken',
   Authenticator: 'Authenticator',
   NewsLetterSubscriptions: 'NewsLetterSubscriptions',
+  Posts: 'Posts',
   PostMetrics: 'PostMetrics',
   PostLikes: 'PostLikes',
   PostComments: 'PostComments',
-  PostCommentsLikes: 'PostCommentsLikes'
+  PostCommentsLikes: 'PostCommentsLikes',
+  ProfileInformation: 'ProfileInformation'
 };
 
 /**

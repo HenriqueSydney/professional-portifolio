@@ -17,7 +17,6 @@ const compat = new FlatCompat({
 });
 
 export default [
-
   // Config custom TypeScript + React Hooks
   {
     ignores: ["dist/**", "node_modules/**", ".next/**"],
@@ -37,49 +36,54 @@ export default [
       "simple-import-sort": simpleImportSort,
     },
     rules: {
-      'simple-import-sort/imports': [
-        'error',
+      "simple-import-sort/imports": [
+        "error",
         {
           groups: [
-            ['^@/env'],
+            ["^@/env"],
             // Node.js imports (builtin modules).
-            ['^node'],
+            ["^node"],
             // Next.js imports
-            ['^@?\\w'],
+            ["^@?\\w"],
             // Prisma
-            ['^@prisma'],
+            ["^@prisma"],
             // Scoped packages, começando por @sabia.
-            ['^@sabia'],
+            ["^@sabia"],
             // Tipagens
-            ['^@/@types'],
+            ["^@/@types"],
             // Internal components.
-            ['^@/components', '^components'],
+            ["^@/components", "^components"],
             // Providers.
-            ['^@/providers'],
+            ["^@/providers"],
             // Services.
-            ['^@/service'],
+            ["^@/service"],
             // Utilities.
-            ['^@/utils'],
+            ["^@/utils"],
             // Errors.
-            ['^@/erros'],
+            ["^@/erros"],
             // Outros scoped packages.
-            ['^@'],
+            ["^@"],
             // Parent imports.
-            ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+            ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
             // Other relative imports (same-folder and `.` last).
-            ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
+            ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
             // Style imports.
-            ['^.+\\.?(css)$'],
+            ["^.+\\.?(css)$"],
           ],
         },
       ],
-      'simple-import-sort/exports': 'error',
+      "simple-import-sort/exports": "error",
       ...reactHooks.configs.recommended.rules,
-      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+      "react-refresh/only-export-components": [
+        "warn",
+        { allowConstantExport: true },
+      ],
       "@typescript-eslint/no-unused-vars": "off",
-      "indent": ["error", 2], // indentação automática de 2 espaços
+      indent: ["error", 2], // indentação automática de 2 espaços
       "react-refresh/only-export-components": "off",
-
+      rules: {
+        semi: ["error", "never"],
+      },
     },
   },
 
