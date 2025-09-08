@@ -16,7 +16,6 @@ export async function SocialActionContainer({
     "postMetricsRepository.findPostMetricsByPostId",
     () => postMetricsRepository.findPostMetricsByPostId(postId),
     {
-      cache: true,
       tags: [`post-metrics-${postId}`],
       params: `postId=${postId}`,
     }

@@ -184,8 +184,6 @@ export async function fetchBlogPosts(
       return data;
     },
     {
-      cache: false,
-      revalidate: false, // never
       tags: ["blog-posts", ...tags],
     }
   );

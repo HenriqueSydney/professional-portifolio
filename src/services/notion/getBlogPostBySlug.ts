@@ -108,8 +108,6 @@ export async function getBlogPostBySlug(
       };
     },
     {
-      cache: true,
-      revalidate: false, // never
       tags: [`blog-post-${slug}`],
     }
   );

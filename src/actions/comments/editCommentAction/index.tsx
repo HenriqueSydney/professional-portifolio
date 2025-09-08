@@ -60,10 +60,9 @@ export async function editCommentAction(params: EditCommentData) {
             comment: message,
           }),
         {
-          cache: false,
+          cache: "revalidate-tags",
           tags: ["post-comments", `comment-${commentId}`],
           params: `commentId=${commentId}`,
-          revalidateCachedTags: true,
         }
       );
 

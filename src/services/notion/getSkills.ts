@@ -113,8 +113,6 @@ export async function getSkills(): Promise<GetProfileStatsResponse> {
       return groupedStacks;
     },
     {
-      cache: false,
-      revalidate: false, // never
       tags: ["skills"],
     }
   );

@@ -28,10 +28,9 @@ export async function removeCommentAction(commentId: number) {
       "postCommentsRepository.deleteById",
       () => postCommentsRepository.deleteById(commentId),
       {
-        cache: false,
+        cache: "revalidate-tags",
         tags: [`comment-${commentId}`],
         params: `commentId=${commentId}`,
-        revalidateCachedTags: true,
       }
     );
 

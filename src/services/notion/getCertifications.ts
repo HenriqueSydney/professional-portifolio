@@ -99,8 +99,6 @@ export async function getCertifications(): Promise<GetCertificationsResponse> {
       return groupedCertifications;
     },
     {
-      cache: false,
-      revalidate: false, // never
       tags: ["certifications"],
     }
   );

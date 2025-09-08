@@ -5,46 +5,78 @@ import NewsletterSubscriptionCancelEmail from "@/email/NewsletterSubscriptionCan
 import { SubscriptionNotFoundError } from "@/errors/SubscriptionNotFoundError";
 import { sendEmail } from "@/lib/mailer/sendEmail";
 import { makeNewsletterSubscriptionsRepository } from "@/repositories/factories/makeNewsletterSubscriptionsRepository";
+import { repositoryClient } from "@/lib/repositoryClient";
+import { NewsLetterSubscriptions } from "@/generated/prisma";
+import { apiLogger } from "@/lib/logger";
 
 const cancelSubscriptionNewsletterApiSchema = z.object({
-  confirmationId: z.uuid({ version: 'v4' })
-})
-
+  confirmationId: z.uuid({ version: "v4" }),
+});
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ confirmationId: string }> }
 ) {
-
   try {
-    const { confirmationId } = await cancelSubscriptionNewsletterApiSchema.parseAsync(params)
+    const { confirmationId } =
+      await cancelSubscriptionNewsletterApiSchema.parseAsync(params);
 
-    const newsLetterSubscriptionRepository = makeNewsletterSubscriptionsRepository()
+    const newsLetterSubscriptionRepository =
+      makeNewsletterSubscriptionsRepository();
 
-    const subscription = await newsLetterSubscriptionRepository.findSubscriptionByConfirmationId(confirmationId)
+    const [subscriptionError, subscription] =
+      await repositoryClient<NewsLetterSubscriptions | null>(
+        "newsLetterSubscriptionRepository.findSubscriptionByConfirmationId",
+        () =>
+          newsLetterSubscriptionRepository.findSubscriptionByConfirmationId(
+            confirmationId
+          ),
+        {
+          cache: "no-cache",
+        }
+      );
 
-    if (!subscription) {
-      throw new SubscriptionNotFoundError()
+    if (subscriptionError || !subscription) {
+      throw new SubscriptionNotFoundError();
     }
 
     const html = await render(
-      <NewsletterSubscriptionCancelEmail
-        confirmationId={confirmationId}
-      />
+      <NewsletterSubscriptionCancelEmail confirmationId={confirmationId} />
+    );
+
+    const [cancelSubscriptionError] =
+      await repositoryClient<NewsLetterSubscriptions | null>(
+        "newsLetterSubscriptionRepository.cancelSubscriptionById",
+        () =>
+          newsLetterSubscriptionRepository.cancelSubscriptionById(
+            subscription.id
+          ),
+        {
+          cache: "no-cache",
+        }
+      );
+
+    if (cancelSubscriptionError) {
+      throw new Error("Subscription canceling error");
+    }
+
+    await newsLetterSubscriptionRepository.cancelSubscriptionById(
+      subscription.id
     );
 
     await sendEmail({
       to: subscription.email,
       html,
-      subject: '[HenriqueLima.Dev] Seja bem vindo! Confirme sua inscrição e começe a diversos conteúdos do mundo de Desenvolvimento e DevOps'
-    })
+      subject:
+        "[HenriqueLima.Dev] Que pena! Mas não se preocupe! Sempre estarei te esperando de volta!",
+    });
 
-
-    return Response.redirect('/newsletter/canceled')
+    return Response.redirect("/newsletter/canceled");
   } catch (error) {
-    console.error(error)
-    return Response.redirect(`/newsletter/error/${error}`)
+    apiLogger.error(
+      { stackTrace: error },
+      "Newsletter cancel Subscription error"
+    );
+    return Response.redirect(`/newsletter/error/${error}`);
   }
-
-
 }

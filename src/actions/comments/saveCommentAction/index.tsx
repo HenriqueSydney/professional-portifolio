@@ -56,9 +56,9 @@ export async function saveCommentAction(params: CommentData) {
             comment: message,
           }),
         {
+          cache: "revalidate-tags",
           tags: [`post-${postId}-comments`],
           params: `postId=${postId}&userId=${id}`,
-          revalidateCachedTags: true,
         }
       );
 

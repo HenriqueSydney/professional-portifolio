@@ -13,7 +13,7 @@ export type OperationType =
   (typeof OPERATION_TYPES)[keyof typeof OPERATION_TYPES];
 
 export interface OperationWrapperOptions {
-  cache?: boolean;
+  cache?: "force-cache" | "no-cache" | "revalidate-tags";
   revalidate?: number | false;
   tags?: string[];
   params?: string;
@@ -29,11 +29,10 @@ export async function operationWrapper<T>(
   options: OperationWrapperOptions = {}
 ): Promise<OperationWrapperResponse<T>> {
   const {
-    cache = true,
+    cache = "force-cache",
     revalidate = 0,
     tags = [],
     params = "",
-    revalidateCachedTags = false,
   } = options;
   const redisClient = makeRedisClient();
   const attributeKey = `${operationType}.operation`;
@@ -44,7 +43,6 @@ export async function operationWrapper<T>(
       "cache.enabled": cache,
       "cache.revalidate": revalidate.toString(),
       "cache.tags": tags.join("; "),
-      "cache.revalidate_tags": revalidateCachedTags,
     },
   };
 
@@ -55,9 +53,9 @@ export async function operationWrapper<T>(
     async (span) => {
       const start = performance.now();
       try {
-        const effectiveCache = cache && !revalidateCachedTags;
+        const effectiveCache = cache === "force-cache";
 
-        if (revalidateCachedTags && tags.length > 0) {
+        if (cache === "revalidate-tags" && tags.length > 0) {
           apiLogger.debug(`Invalidating cache for tags: ${tags.join(", ")}`);
           span.setAttribute("cache.invalidated_tags", tags.join("; "));
 

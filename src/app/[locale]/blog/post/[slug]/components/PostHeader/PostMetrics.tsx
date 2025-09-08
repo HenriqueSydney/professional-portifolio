@@ -16,7 +16,6 @@ export async function PostMetrics({ postId }: IPostMetrics) {
     "postMetricsRepository.findPostMetricsByPostId",
     () => postMetricsRepository.findPostMetricsByPostId(postId),
     {
-      cache: true,
       tags: [`post-metrics-${postId}`],
       params: `postId=${postId}`,
     }

@@ -6,53 +6,73 @@ import { AppError } from "@/errors/AppError";
 import { SubscriptionNotFoundError } from "@/errors/SubscriptionNotFoundError";
 import { sendEmail } from "@/lib/mailer/sendEmail";
 import { makeNewsletterSubscriptionsRepository } from "@/repositories/factories/makeNewsletterSubscriptionsRepository";
+import { NewsLetterSubscriptions } from "@/generated/prisma";
+import { repositoryClient } from "@/lib/repositoryClient";
 
 const confirmationEmailApiSchema = z.object({
-  confirmationId: z.uuid({ version: 'v4' })
-})
-
+  confirmationId: z.uuid({ version: "v4" }),
+});
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ confirmationId: string }> }
 ) {
-
-
-
   try {
-    const { confirmationId } = await confirmationEmailApiSchema.parseAsync(params)
-    const newsLetterSubscriptionRepository = makeNewsletterSubscriptionsRepository()
+    const { confirmationId } =
+      await confirmationEmailApiSchema.parseAsync(params);
+    const newsLetterSubscriptionRepository =
+      makeNewsletterSubscriptionsRepository();
 
-    const subscription = await newsLetterSubscriptionRepository.findSubscriptionByConfirmationId(confirmationId)
+    const [subscriptionError, subscription] =
+      await repositoryClient<NewsLetterSubscriptions | null>(
+        "newsLetterSubscriptionRepository.findSubscriptionByConfirmationId",
+        () =>
+          newsLetterSubscriptionRepository.findSubscriptionByConfirmationId(
+            confirmationId
+          ),
+        {
+          cache: "no-cache",
+        }
+      );
 
-    if (!subscription) {
-      throw new SubscriptionNotFoundError()
+    if (subscriptionError || !subscription) {
+      throw new SubscriptionNotFoundError();
     }
 
-    await newsLetterSubscriptionRepository.confirmSubscriptionById(subscription.id)
+    const [confirmSubscriptionByIdError, confirmSubscriptionById] =
+      await repositoryClient<NewsLetterSubscriptions | null>(
+        "newsLetterSubscriptionRepository.confirmSubscriptionById",
+        () =>
+          newsLetterSubscriptionRepository.confirmSubscriptionById(
+            subscription.id
+          ),
+        {
+          cache: "no-cache",
+        }
+      );
+
+    if (confirmSubscriptionByIdError || !confirmSubscriptionById) {
+      throw new Error("Subscription confirmation Error");
+    }
 
     const html = await render(
-      <NewsletterConfirmationEmail
-        confirmationId={confirmationId}
-      />
+      <NewsletterConfirmationEmail confirmationId={confirmationId} />
     );
 
     await sendEmail({
       to: subscription.email,
       html,
-      subject: '[HenriqueLima.Dev] Seja bem vindo! Confirme sua inscrição e começe a diversos conteúdos do mundo de Desenvolvimento e DevOps'
-    })
+      subject:
+        "[HenriqueLima.Dev] Seja bem vindo! Confirme sua inscrição e começe a diversos conteúdos do mundo de Desenvolvimento e DevOps",
+    });
 
-
-    return Response.redirect('/newsletter/confirmed')
+    return Response.redirect("/newsletter/confirmed");
   } catch (error) {
-    let errorMessage = 'Erro inexperado'
+    let errorMessage = "Erro inexperado";
     if (error instanceof AppError) {
-      errorMessage = error.message
+      errorMessage = error.message;
     }
 
-    return Response.redirect(`/newsletter/error/${error}`)
+    return Response.redirect(`/newsletter/error/${error}`);
   }
-
-
 }

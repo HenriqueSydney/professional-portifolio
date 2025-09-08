@@ -43,20 +43,48 @@ export async function handlePostLikesAction(data: AddLikesToPostData) {
 
     if (session && userId) {
       decrementPromises.push(
-        postsMetricsRepository.decrementLikeToPostByPostId(postId, userId)
-      );
-      incrementPromises.push(
-        postsMetricsRepository.incrementLikeToPostByPostId(postId, userId)
-      );
-    } else {
-      decrementPromises.push(
-        postsMetricsRepository.decrementLikeOfANotLoggedUserToPostByPostId(
-          postId
+        repositoryClient(
+          "postsMetricsRepository.decrementLikeToPostByPostId",
+          () =>
+            postsMetricsRepository.decrementLikeToPostByPostId(postId, userId),
+          {
+            cache: "no-cache",
+          }
         )
       );
       incrementPromises.push(
-        postsMetricsRepository.incrementLikeOfANotLoggedUserToToPostByPostId(
-          postId
+        repositoryClient(
+          "postsMetricsRepository.incrementLikeToPostByPostId",
+          () =>
+            postsMetricsRepository.incrementLikeToPostByPostId(postId, userId),
+          {
+            cache: "no-cache",
+          }
+        )
+      );
+    } else {
+      decrementPromises.push(
+        repositoryClient(
+          "postsMetricsRepository.decrementLikeOfANotLoggedUserToPostByPostId",
+          () =>
+            postsMetricsRepository.decrementLikeOfANotLoggedUserToPostByPostId(
+              postId
+            ),
+          {
+            cache: "no-cache",
+          }
+        )
+      );
+      incrementPromises.push(
+        repositoryClient(
+          "postsMetricsRepository.decrementLikeOfANotLoggedUserToPostByPostId",
+          () =>
+            postsMetricsRepository.incrementLikeOfANotLoggedUserToToPostByPostId(
+              postId
+            ),
+          {
+            cache: "no-cache",
+          }
         )
       );
     }
@@ -97,7 +125,6 @@ export async function handlePostLikesAction(data: AddLikesToPostData) {
           () =>
             postLikeRepository.findPostLikeByUserIdAndPostId(userId, postId),
           {
-            cache: true,
             tags: [`post-likes-${userId}-${postId}`],
             params: `postId=${postId}&userId=${userId}`,
           }
@@ -113,9 +140,9 @@ export async function handlePostLikesAction(data: AddLikesToPostData) {
           () =>
             postsMetricsRepository.decrementLikeToPostByPostId(postId, userId),
           {
+            cache: "revalidate-tags",
             tags: [`post-likes-${userId}-${postId}`],
             params: `postId=${postId}&userId=${userId}`,
-            revalidateCachedTags: true,
           }
         );
 
