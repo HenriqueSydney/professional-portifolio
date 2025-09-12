@@ -4,21 +4,32 @@ import { prisma } from "@/lib/prisma";
 import { IPostMetricsRepository } from "../IPostMetricsRepository";
 
 export class PrismaPostMetricsRepository implements IPostMetricsRepository {
-  async findPostMetricsByPostId(id: string): Promise<PostMetrics | null> {
+  async findPostMetricsByPostId(postId: number): Promise<PostMetrics | null> {
     const postMetrics = await prisma.postMetrics.findUnique({
       where: {
-        id
-      }
-    })
+        postId,
+      },
+    });
 
-    return postMetrics
+    return postMetrics;
   }
-  async incrementLikeToPostByPostId(id: string, userId: string): Promise<void> {
+  async incrementLikeToPostByPostId(
+    postId: number,
+    userId: string
+  ): Promise<void> {
+    const metricsId = await prisma.postMetrics.findUnique({
+      where: {
+        postId,
+      },
+    });
+
+    if (!metricsId) return;
+
     await prisma.$transaction([
       prisma.postMetrics.upsert({
-        where: { id },
+        where: { id: metricsId.id },
         create: {
-          id,
+          postId: postId,
           numberOfLikes: 1, // se não existir, já começa com 1
         },
         update: {
@@ -30,13 +41,24 @@ export class PrismaPostMetricsRepository implements IPostMetricsRepository {
       prisma.postLikes.create({
         data: {
           userId,
-          postId: id
-        }
-      })
-    ])
+          postMetricsId: metricsId.id,
+        },
+      }),
+    ]);
   }
 
-  async decrementLikeToPostByPostId(id: string, userId: string): Promise<void> {
+  async decrementLikeToPostByPostId(
+    postId: number,
+    userId: string
+  ): Promise<void> {
+    const metricsId = await prisma.postMetrics.findUnique({
+      where: {
+        postId,
+      },
+    });
+
+    if (!metricsId) return;
+
     await prisma.$transaction([
       prisma.postMetrics.update({
         data: {
@@ -45,25 +67,27 @@ export class PrismaPostMetricsRepository implements IPostMetricsRepository {
           },
         },
         where: {
-          id
-        }
+          id: metricsId.id,
+        },
       }),
       prisma.postLikes.delete({
         where: {
-          userId_postId: {
+          userId_postMetricsId: {
             userId,
-            postId: id
-          }
-        }
-      })
-    ])
+            postMetricsId: metricsId.id,
+          },
+        },
+      }),
+    ]);
   }
 
-  async incrementLikeOfANotLoggedUserToToPostByPostId(id: string): Promise<void> {
+  async incrementLikeOfANotLoggedUserToToPostByPostId(
+    postId: number
+  ): Promise<void> {
     await prisma.postMetrics.upsert({
-      where: { id },
+      where: { postId },
       create: {
-        id,
+        postId,
         numberOfLikes: 1, // se não existir, já começa com 1
       },
       update: {
@@ -71,11 +95,12 @@ export class PrismaPostMetricsRepository implements IPostMetricsRepository {
           increment: 1, // se existir, incrementa
         },
       },
-    })
-
+    });
   }
 
-  async decrementLikeOfANotLoggedUserToPostByPostId(id: string): Promise<void> {
+  async decrementLikeOfANotLoggedUserToPostByPostId(
+    postId: number
+  ): Promise<void> {
     await prisma.postMetrics.update({
       data: {
         numberOfLikes: {
@@ -83,17 +108,16 @@ export class PrismaPostMetricsRepository implements IPostMetricsRepository {
         },
       },
       where: {
-        id
-      }
-    })
-
+        postId,
+      },
+    });
   }
 
-  async incrementViewsToPostByPostId(id: string): Promise<PostMetrics> {
+  async incrementViewsToPostByPostId(postId: number): Promise<PostMetrics> {
     const postMetrics = await prisma.postMetrics.upsert({
-      where: { id },
+      where: { postId },
       create: {
-        id,
+        postId,
         numberOfViews: 1, // se não existir, já começa com 1
       },
       update: {
@@ -101,11 +125,7 @@ export class PrismaPostMetricsRepository implements IPostMetricsRepository {
           increment: 1, // se existir, incrementa
         },
       },
-    })
-    return postMetrics
-
+    });
+    return postMetrics;
   }
-
-
-
 }

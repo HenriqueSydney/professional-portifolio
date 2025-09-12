@@ -1,102 +1,102 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { NextRequest, NextResponse } from 'next/server';
-
-import { getPostReadTime } from "@/services/notion/getPostReadTime";
+import { NextRequest, NextResponse } from "next/server";
+import { createHmac, timingSafeEqual } from "crypto";
 
 import { apiLogger } from "@/lib/logger";
-import { notion } from "@/lib/notion/notion";
-import { titleToSlug } from "@/util/titleToSlug";
+
+import { makeCreateAndUpdatePostUseCase } from "@/use-cases/factories/makeCreateAndUpdatePostUseCase";
+import { envVariables } from "@/env";
+import { makeCreateAndUpdateProfileInfoUseCase } from "@/use-cases/factories/makeCreateAndUpdateProfileInfoUseCase";
+import { ProfileInformationType } from "@/generated/prisma";
+
+// const DATABASE_IDS = {
+//   "26076eb72c6380c69043d529bf43cbb2": 'PROFILE_STATS',
+//   "26076eb72c6380729e1ac813aeac905e": 'SKILLS',
+//   "26076eb72c638048a967d8fa7f43e035": 'CERTIFICATIONS',
+//   "26276eb72c6380a4a6b7f2232c28d5d5": 'EXPERIENCE',
+// } as const;
+
+const PROFILE_TYPE = {
+  "26076eb72c6380c69043d529bf43cbb2": ProfileInformationType.STATS,
+  "26076eb72c6380729e1ac813aeac905e": ProfileInformationType.SKILLS,
+  "26076eb72c638048a967d8fa7f43e035": ProfileInformationType.CERTIFICATION,
+  "26276eb72c6380a4a6b7f2232c28d5d5": ProfileInformationType.EXPERIENCE,
+} as const;
+
+type ProfileDatabaseId = keyof typeof PROFILE_TYPE;
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
+  const rawBody = await req.text();
+  try {
+    const calculatedSignature = `sha256=${createHmac("sha256", envVariables.NOTION_WEBHOOK_SECRET).update(rawBody).digest("hex")}`;
+
+    const signature = req.headers.get("x-notion-signature");
+    if (!signature) {
+      return NextResponse.json({ error: "Missing signature" }, { status: 401 });
+    }
+    const isTrustedPayload = timingSafeEqual(
+      Buffer.from(calculatedSignature),
+      Buffer.from(signature)
+    );
+
+    if (!isTrustedPayload) {
+      return NextResponse.json({ error: "Not allowed" }, { status: 403 });
+    }
+  } catch (error) {
+    console.error(error);
+  }
 
   try {
+    const body = JSON.parse(rawBody);
+    const isEntityTypeEqualsPage = body.entity.type === "page";
+    const isPropertyUpdate = body.type === "page.properties_updated";
 
-    if (body.entity.type === "page" && ["page.created", "page.content_updated"].includes(body.type)) {
-      const pageId = body.entity.id;
+    const isPostUpdate =
+      isEntityTypeEqualsPage &&
+      ["page.created", "page.content_updated"].includes(body.type);
 
-      // 1. Obtem informações da página
-      const page = await notion.pages.retrieve({ page_id: pageId });
-      const coverUrl = (page as any).cover?.external?.url ?? null;
-      const title = (page as any).Title.title[0]?.plain_text ?? "Sem título"
+    const isDatabaseUpdate = isEntityTypeEqualsPage && isPropertyUpdate;
 
-      apiLogger.error({ title, pageId }, `Page creation or update received`)
+    const pageId = body.entity.id;
+    if (isDatabaseUpdate) {
+      const databaseId: string = body.data.parent.id.replaceAll("-", "");
+      const profileType = PROFILE_TYPE[databaseId as ProfileDatabaseId];
 
-      // 2. Extrai o tempo estimado de leitura
-      let [readTimeError, readTime] = await getPostReadTime(pageId);
-
-      if (readTimeError) readTime = 0
-
-      // 3. Gera excerpt automático (primeiras 30 palavras)
-      const blocks = await notion.blocks.children.list({ block_id: pageId });
-      const text = blocks.results
-        .map((block: any) =>
-          block[block.type]?.rich_text?.map((t: any) => t.plain_text).join(" ") ?? ""
-        )
-        .join(" ");
-      const excerpt = text.split(/\s+/).slice(0, 30).join(" ") + "...";
-      const update = {
-        page_id: pageId,
-        properties: {
-          Excerpt: {
-            rich_text: [
-              {
-                text: {
-                  content: excerpt,
-                },
-              },
-            ],
-          },
-          Slug: {
-            rich_text: [
-              {
-                text: {
-                  content: titleToSlug({
-                    title: (page as any).properties?.Title?.title[0]?.plain_text || "sem-titulo",
-                    options: { lowercase: true, strict: true, separator: "-" },
-                  }),
-                },
-              },
-            ],
-          },
-          "Read Time": {
-            number: readTime,
-          },
-          Published: {
-            checkbox: false,
-          },
-          Date: {
-            date: {
-              start: new Date().toISOString(),
-            },
-          },
-          Homepage: {
-            checkbox: false,
-          },
-          Cover: {
-            url: coverUrl,
-          },
-          Priority: {
-            number: 1,
-          },
-          Tags: {
-            multi_select: [],
-          },
-        },
+      if (!profileType) {
+        apiLogger.error({ databaseId: databaseId }, "Database not mapped");
+        return NextResponse.json(
+          { error: "Database not mapped" },
+          { status: 400 }
+        );
       }
 
-      // 4. Atualiza a própria página recém criada
-      await notion.pages.update(update);
+      const createAndUpdateProfileUseCase =
+        makeCreateAndUpdateProfileInfoUseCase();
 
-      apiLogger.error({ title, pageId }, `Page updated successfully`)
+      await createAndUpdateProfileUseCase.execute({ profileType });
+
+      apiLogger.info({ databaseId, profileType }, "Profile data updated");
+      return NextResponse.json({ ok: true }, { status: 200 });
     }
 
+    if (isPostUpdate) {
+      const createAndUpdatePost = makeCreateAndUpdatePostUseCase();
+      const post = await createAndUpdatePost.execute(pageId);
 
+      apiLogger.info(
+        { title: post.title, pageId },
+        `Page updated successfully`
+      );
+    }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true }, { status: 200 });
   } catch (error) {
-    apiLogger.error({ stackTrace: error }, 'Erro no webhook do Notion')
-    return NextResponse.json({ error: "Erro interno no webhook" });
+    console.log("Error", error);
+    apiLogger.error({ stackTrace: error }, "Erro no webhook do Notion");
+    return NextResponse.json(
+      { error: "Erro interno no webhook" },
+      { status: 500 }
+    );
   }
 }

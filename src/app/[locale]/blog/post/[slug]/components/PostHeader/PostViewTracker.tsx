@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { incrementPostViewAction } from "@/actions/posts/incrementPostViewAction";
 
 interface IPostViewTracker {
-  postId: string;
+  postId: number;
   numberOfViews: number;
 }
 

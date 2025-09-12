@@ -3,24 +3,10 @@
 import { SpanKind, SpanStatusCode, trace } from "@opentelemetry/api";
 import { makeRedisClient } from "./redis/makeRedisClient";
 import { apiLogger } from "./logger";
-
-export const OPERATION_TYPES = {
-  REPOSITORY: "repository",
-  NOTION: "notion",
-} as const;
-
-export type OperationType =
-  (typeof OPERATION_TYPES)[keyof typeof OPERATION_TYPES];
-
-export interface OperationWrapperOptions {
-  cache?: "force-cache" | "no-cache" | "revalidate-tags";
-  revalidate?: number | false;
-  tags?: string[];
-  params?: string;
-  revalidateCachedTags?: boolean;
-}
-
-type OperationWrapperResponse<T> = [Error, null] | [null, T];
+import type {
+  OperationWrapperOptions,
+  OperationWrapperResponse,
+} from "@/@types/OperationWrapperTypes";
 
 export async function operationWrapper<T>(
   operationType: "repository" | "notion",
@@ -143,12 +129,19 @@ export async function operationWrapper<T>(
 
         span.setAttribute("cache.hit", false);
         span.setStatus({ code: SpanStatusCode.OK });
+        apiLogger.debug(
+          `Error in operation Wrapper (${operationType}) (${operationName})`
+        );
 
         return [null, freshData as T] satisfies OperationWrapperResponse<T>;
       } catch (error: any) {
         span.setAttribute("cache.hit", false);
         span.recordException(error);
         span.setStatus({ code: SpanStatusCode.ERROR, message: error.message }); // ERROR
+        apiLogger.error(
+          { stackTrace: error, operationName, operationType },
+          "Error in operation Wrapper"
+        );
         return [error as Error, null] satisfies OperationWrapperResponse<T>;
       } finally {
         span.setAttribute("execution.ms", performance.now() - start);

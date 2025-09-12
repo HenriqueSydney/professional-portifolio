@@ -1,20 +1,23 @@
-import { Code } from "lucide-react"
+import { Code } from "lucide-react";
 
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card";
 
-import { Skills } from "@/services/notion/getSkills"
+import { Skills } from "@/services/notion/getSkillsFromNotion";
 
-import { IconMap } from "@/mapper/IconMapper"
+import { IconMap } from "@/mappers/IconMapper";
 
 interface ISkillContainer {
-    category: Skills
-    index: number
+  category: Skills;
+  index: number;
 }
 
 export function SkillContainer({ category, index }: ISkillContainer) {
-
-  const LucideIcon = IconMap[category.iconName]
-  const Icon = LucideIcon ? <LucideIcon className="h-6 w-6 text-primary" /> : <Code className="h-6 w-6 text-primary" />
+  const LucideIcon = IconMap[category.iconName];
+  const Icon = LucideIcon ? (
+    <LucideIcon className="h-6 w-6 text-primary" />
+  ) : (
+    <Code className="h-6 w-6 text-primary" />
+  );
   return (
     <Card
       key={category.category}
@@ -23,9 +26,7 @@ export function SkillContainer({ category, index }: ISkillContainer) {
     >
       <CardContent className="p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-primary/10 rounded-lg">
-            {Icon}
-          </div>
+          <div className="p-2 bg-primary/10 rounded-lg">{Icon}</div>
           <h3 className="text-xl font-semibold">{category.category}</h3>
         </div>
 
@@ -34,19 +35,20 @@ export function SkillContainer({ category, index }: ISkillContainer) {
             <div key={skill.id} className="space-y-2">
               <div className="flex justify-between items-center">
                 <span className="font-medium">{skill.label}</span>
-
               </div>
               <div className="w-full bg-muted rounded-full h-2 flex justify-between items-center">
                 <div
                   className="bg-primary h-2 rounded-full transition-all duration-1000 ease-out"
                   style={{ width: `${skill.level}%` }}
                 ></div>
-                <span className="text-sm text-muted-foreground">{skill.level}%</span>
+                <span className="text-sm text-muted-foreground">
+                  {skill.level}%
+                </span>
               </div>
             </div>
           ))}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

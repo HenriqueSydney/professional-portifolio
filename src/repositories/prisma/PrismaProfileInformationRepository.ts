@@ -3,29 +3,27 @@ import {
   ProfileInformation,
   ProfileInformationType,
 } from "@/generated/prisma";
-import { IProfileInformationRepository } from "../IProfileInformationRepository";
+import {
+  FindProfileInformationByProfileTypeResponse,
+  IProfileInformationRepository,
+} from "../IProfileInformationRepository";
 import { prisma } from "@/lib/prisma";
 
 export class PrismaProfileInformationRepository
   implements IProfileInformationRepository
 {
-  async create(
-    data: Prisma.ProfileInformationUncheckedCreateInput
+  async upsert(
+    data: Prisma.ProfileInformationUncheckedCreateInput & { id: number }
   ): Promise<ProfileInformation> {
-    const profileInformation = await prisma.profileInformation.create({
-      data,
-    });
-
-    return profileInformation;
-  }
-
-  async update(
-    data: Prisma.ProfileInformationUncheckedUpdateInput & { id: number }
-  ): Promise<ProfileInformation> {
-    const profileInformation = await prisma.profileInformation.update({
-      data,
+    const profileInformation = await prisma.profileInformation.upsert({
+      create: {
+        ...data,
+      },
+      update: {
+        ...data,
+      },
       where: {
-        id: data.id,
+        profileInformationType: data.profileInformationType,
       },
     });
 
@@ -33,9 +31,15 @@ export class PrismaProfileInformationRepository
   }
 
   async findProfileInformationByProfileType(
-    profileType: ProfileInformationType
-  ): Promise<ProfileInformation | null> {
+    profileType: ProfileInformationType,
+    locale: "pt" | "en"
+  ): Promise<FindProfileInformationByProfileTypeResponse | null> {
     const profileInformation = await prisma.profileInformation.findUnique({
+      select: {
+        id: true,
+        ptBr: locale === "pt",
+        en: locale === "en",
+      },
       where: {
         profileInformationType: profileType,
       },

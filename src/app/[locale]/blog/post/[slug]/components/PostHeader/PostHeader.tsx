@@ -1,32 +1,36 @@
-import { Calendar, Clock, User } from "lucide-react";
-
+import {
+  Calendar,
+  Clock,
+  MessageCircleOff,
+  MessageSquareCode,
+  User,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-import { BlogPostBySlug } from "@/services/notion/getBlogPostBySlug";
 
 import { ShareButton } from "../SocialAction/ShareButton";
 
 import { PostMetrics } from "./PostMetrics";
-
+import { BlogPostBySlug } from "@/mappers/postMapper";
+import { translationModelMapper } from "@/mappers/translationModelMapper";
+import { getLocale } from "next-intl/server";
 interface IPostHeader {
   blogPost: BlogPostBySlug;
 }
 
 export async function PostHeader({ blogPost }: IPostHeader) {
+  const locale = await getLocale();
   return (
     <section className="relative z-10 pb-8 bg-gradient-to-br from-primary/10 via-background to-accent/10">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-4 mb-4">
-            {blogPost.categories.map((category) => (
-              <Badge
-                key={category}
-                variant={category === "Todos" ? "default" : "outline"}
-                className="cursor-default bg-background hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-              >
-                {category}
-              </Badge>
-            ))}
+            <Badge
+              variant="outline"
+              className="cursor-default bg-background hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+            >
+              {blogPost.category}
+            </Badge>
+
             <div className="flex items-center gap-4 text-sm text-white/80 drop-shadow-md">
               <div className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
@@ -37,6 +41,19 @@ export async function PostHeader({ blogPost }: IPostHeader) {
                 {blogPost.readTime}
               </div>
               <PostMetrics postId={blogPost.id} />
+              {!blogPost.translatedModel && locale === "en" && (
+                <div className="flex items-center gap-1 text-destructive font-bold">
+                  <MessageCircleOff className="h-4 w-4" />
+                  No translation available
+                </div>
+              )}
+              {blogPost.translatedModel && (
+                <div className="flex items-center gap-1 text-primary font-bold">
+                  <MessageSquareCode className="h-4 w-4" />
+                  Translated with{" "}
+                  {translationModelMapper[blogPost.translatedModel]}
+                </div>
+              )}
             </div>
           </div>
 
@@ -45,7 +62,7 @@ export async function PostHeader({ blogPost }: IPostHeader) {
           </h1>
 
           <p className="text-xl text-white/80 drop-shadow-md mb-8 leading-relaxed ">
-            {blogPost.excerpt}
+            {`${blogPost.excerpt.substring(0, 247)}...`}
           </p>
 
           <div className="flex items-center justify-between">

@@ -7,7 +7,7 @@ import { repositoryClient } from "@/lib/repositoryClient";
 import { PostMetrics as PostMetricsModel } from "@/generated/prisma";
 
 interface IPostMetrics {
-  postId: string;
+  postId: number;
 }
 
 export async function PostMetrics({ postId }: IPostMetrics) {

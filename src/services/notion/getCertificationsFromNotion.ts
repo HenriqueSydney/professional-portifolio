@@ -59,7 +59,9 @@ type NotionDatabaseInfoOfCertifications = {
 
 type GetCertificationsResponse = [Error, null] | [null, Certifications];
 
-export async function getCertifications(): Promise<GetCertificationsResponse> {
+export async function getCertificationsFromNotion(
+  cacheTag: string[]
+): Promise<GetCertificationsResponse> {
   return await notionClient(
     "getCertifications",
     async () => {
@@ -99,7 +101,7 @@ export async function getCertifications(): Promise<GetCertificationsResponse> {
       return groupedCertifications;
     },
     {
-      tags: ["certifications"],
+      tags: cacheTag,
     }
   );
 }

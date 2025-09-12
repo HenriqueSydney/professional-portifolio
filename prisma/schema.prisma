@@ -116,18 +116,21 @@ enum PostStatus {
 model Posts {
   id         Int      @id @default(autoincrement()) ///Entity ID
   notionId   String   @unique @map("notion_id") ///Notion Post ID
-  slug       String   @unique /// Post Slug
+  title      String   @db.VarChar(200) /// Post Title
+  title_en   String?  @db.VarChar(200) /// Post Title
+  slug       String   @unique @db.VarChar(220) /// Post Slug
+  slug_en    String?  @unique @db.VarChar(220) /// Post Slug
   category   String   @db.VarChar(50) ///Post Category
   tags       String[] @default([]) ///Post Tags
   coverUrl   String   @map("cover_url") ///Post Cover Image URL
   excerpt_pt String   @map("excerpt_pt") @db.VarChar(500) ///Post Excerpt in Portuguese (varchar 500)
-  excerpt_en String   @map("excerpt_en") @db.VarChar(500) ///Post Excerpt in English (varchar 500)
+  excerpt_en String?  @map("excerpt_en") @db.VarChar(500) ///Post Excerpt in English (varchar 500)
   readTime   Int      @map("read_time") ///Post Read estimated time
   featured   Boolean ///If post is featured to be highlighted
-  Priority   Int      @db.SmallInt ///Post priority to be at top of posts
+  priority   Int      @db.SmallInt ///Post priority to be at top of posts
 
-  translatedModel TranslatedModel @map("translated_model") ///Translation model used to translate to english
-  ptBr            Json            @map("pt_br") ///Notion JSON in Portuguese
+  translatedModel TranslatedModel? @map("translated_model") ///Translation model used to translate to english
+  ptBr            Json             @map("pt_br") ///Notion JSON in Portuguese
   en              Json ///Notion JSON in English
 
   status      PostStatus @default(DRAFT) ///Status of the post DRAFT, PUBLISHED OR ARCHIVED
@@ -142,6 +145,7 @@ model Posts {
   @@index([featured])
   @@index([translatedModel])
   @@index([slug])
+  @@index([slug_en])
   @@index([status, publishedAt]) // Para listagem de posts publicados
   @@index([createdAt])
   @@map("posts")

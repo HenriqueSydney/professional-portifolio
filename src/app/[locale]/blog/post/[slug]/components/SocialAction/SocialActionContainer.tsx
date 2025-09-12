@@ -5,7 +5,7 @@ import { repositoryClient } from "@/lib/repositoryClient";
 import { PostMetrics } from "@/generated/prisma";
 
 interface ISocialActionContainer {
-  postId: string;
+  postId: number;
 }
 
 export async function SocialActionContainer({

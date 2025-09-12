@@ -4,7 +4,7 @@ import { PostLikes } from "@/generated/prisma";
 import { repositoryClient } from "@/lib/repositoryClient";
 import { makePostLikesRepository } from "@/repositories/factories/makePostLikesRepository";
 
-export async function getUserLikeOfPostAction(userId: string, postId: string) {
+export async function getUserLikeOfPostAction(userId: string, postId: number) {
   try {
     const postLikesRepository = makePostLikesRepository();
 

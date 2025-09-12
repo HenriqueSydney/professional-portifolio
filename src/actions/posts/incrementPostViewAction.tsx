@@ -9,7 +9,7 @@ import { repositoryClient } from "@/lib/repositoryClient";
 import { PostMetrics } from "@/generated/prisma";
 
 const postMetricsViewSchema = z.object({
-  postId: z.string(),
+  postId: z.number(),
 });
 
 type PostMetricsViewData = z.infer<typeof postMetricsViewSchema>;

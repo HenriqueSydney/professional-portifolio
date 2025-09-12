@@ -6,6 +6,7 @@ const envSchema = z.object({
     .default("development"),
   NOTION_API_KEY: z.string(),
   NOTION_DATABASE_ID: z.string(),
+  NOTION_WEBHOOK_SECRET: z.string(),
   SMTP_HOST: z.string(),
   SMTP_USER: z.string(),
   SMTP_PASSWORD: z.string(),

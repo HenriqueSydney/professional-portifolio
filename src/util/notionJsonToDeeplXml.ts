@@ -1,11 +1,19 @@
 import { escapeXml } from "./escapeXml";
 
-type Block = { type: string; text: string };
-type NotionDoc = { id: string; blocks: Block[] };
+type NotionDoc = { blocks: any[] };
 
 export function notionJsonToDeeplXml(doc: NotionDoc): string {
-  const parts = doc.blocks.map((block, i) => {
-    return `<${block.type} id="${i}">${escapeXml(block.text)}</${block.type}>`;
+  const parts: string[] = [];
+  doc.blocks.forEach((block, blockIndex) => {
+    const richTexts = block[block.type]?.rich_text ?? [];
+
+    richTexts.forEach((rt: any, rtIndex: number) => {
+      parts.push(
+        `<block type="${block.type}" block="${blockIndex}" rt="${rtIndex}">${escapeXml(
+          rt.plain_text
+        )}</block>`
+      );
+    });
   });
 
   return `<document>\n${parts.join("\n")}\n</document>`;

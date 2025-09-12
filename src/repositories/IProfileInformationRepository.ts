@@ -4,16 +4,19 @@ import {
   ProfileInformationType,
 } from "@/generated/prisma";
 
+export type FindProfileInformationByProfileTypeResponse = {
+  en?: Prisma.JsonValue;
+  id: number;
+  ptBr?: Prisma.JsonValue;
+};
+
 export interface IProfileInformationRepository {
-  create(
+  upsert(
     data: Prisma.ProfileInformationUncheckedCreateInput
   ): Promise<ProfileInformation>;
 
-  update(
-    data: Prisma.ProfileInformationUncheckedUpdateInput & { id: number }
-  ): Promise<ProfileInformation>;
-
   findProfileInformationByProfileType(
-    profileType: ProfileInformationType
-  ): Promise<ProfileInformation | null>;
+    profileType: ProfileInformationType,
+    locale: "pt" | "en"
+  ): Promise<FindProfileInformationByProfileTypeResponse | null>;
 }

@@ -31,7 +31,7 @@ export async function saveCommentAction(params: CommentData) {
 
     const [postError, post] = await repositoryClient<Posts | null>(
       "postCommentsRepository.findPostCommentById",
-      () => postsRepository.findPostByNotionId(postId),
+      () => postsRepository.findPostById(postId),
       {
         tags: [`post-${postId}`],
         params: `postId=${postId}`,

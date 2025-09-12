@@ -1,6 +1,7 @@
 "use server";
 
-import { operationWrapper, OperationWrapperOptions } from "./operationWrapper";
+import type { OperationWrapperOptions } from "@/@types/OperationWrapperTypes";
+import { operationWrapper } from "./operationWrapper";
 
 type RepositoryClientResponse<T> = [Error, null] | [null, T];
 
@@ -9,7 +10,7 @@ export async function repositoryClient<T>(
   callback: () => Promise<T>,
   options: OperationWrapperOptions = {}
 ): Promise<RepositoryClientResponse<T>> {
-  return operationWrapper(
+  return await operationWrapper(
     "repository",
     repositoryNameAndMethod,
     callback,

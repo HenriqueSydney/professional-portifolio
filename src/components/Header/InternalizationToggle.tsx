@@ -33,7 +33,7 @@ export function InternalizationToggle() {
 
   return (
     <div
-      className="relative bg-background border border-input rounded-full cursor-pointer select-none h-10 p-1"
+      className="hidden md:flex relative bg-background border border-input rounded-full cursor-pointer select-none h-10 p-1"
       onClick={handleToggle}
     >
       <div className="w-full h-full flex items-center justify-evenly">

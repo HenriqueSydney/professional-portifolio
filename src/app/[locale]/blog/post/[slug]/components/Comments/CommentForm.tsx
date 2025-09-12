@@ -18,7 +18,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 
 interface ICommentForm {
-  postId: string;
+  postId: number;
   handleToggleCommentForm: () => void;
 }
 

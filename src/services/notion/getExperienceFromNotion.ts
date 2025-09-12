@@ -66,17 +66,11 @@ type NotionDatabaseInfoOfSkills = {
   };
 };
 
-const CATEGORY_ORDER = [
-  "Linguagens & Frameworks",
-  "DevOps & Cloud",
-  "Bancos de Dados",
-  "Monitoramento & Observabilidade",
-  "CI/CD",
-];
-
 type GetExperienceResponse = [Error, null] | [null, Experience[]];
 
-export async function getExperience(): Promise<GetExperienceResponse> {
+export async function getExperienceFromNotion(
+  cacheTag: string[]
+): Promise<GetExperienceResponse> {
   return await notionClient(
     "getExperience",
     async () => {
@@ -104,7 +98,7 @@ export async function getExperience(): Promise<GetExperienceResponse> {
       return experiences;
     },
     {
-      tags: ["experience"],
+      tags: cacheTag,
     }
   );
 }

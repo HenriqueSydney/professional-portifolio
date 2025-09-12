@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { BlogPostCard } from "@/components/BlogPostCard";
 import { NewsLetterSubscriptionForm } from "@/components/NewsLetterSubscriptionForm";
 
-import { fetchBlogPosts } from "@/services/notion/fetchBlogPosts";
+import { fetchBlogPosts } from "@/services/blog/fetchBlogPosts";
 import { fetchBlogPostsCategories } from "@/services/notion/fetchBlogPostsCategories";
 
 import { BlogListPostsFilter } from "./components/BlogListPostsFilter";

@@ -8777,26 +8777,29 @@ export namespace Prisma {
   export type PostsAvgAggregateOutputType = {
     id: number | null
     readTime: number | null
-    Priority: number | null
+    priority: number | null
   }
 
   export type PostsSumAggregateOutputType = {
     id: number | null
     readTime: number | null
-    Priority: number | null
+    priority: number | null
   }
 
   export type PostsMinAggregateOutputType = {
     id: number | null
     notionId: string | null
+    title: string | null
+    title_en: string | null
     slug: string | null
+    slug_en: string | null
     category: string | null
     coverUrl: string | null
     excerpt_pt: string | null
     excerpt_en: string | null
     readTime: number | null
     featured: boolean | null
-    Priority: number | null
+    priority: number | null
     translatedModel: $Enums.TranslatedModel | null
     status: $Enums.PostStatus | null
     publishedAt: Date | null
@@ -8807,14 +8810,17 @@ export namespace Prisma {
   export type PostsMaxAggregateOutputType = {
     id: number | null
     notionId: string | null
+    title: string | null
+    title_en: string | null
     slug: string | null
+    slug_en: string | null
     category: string | null
     coverUrl: string | null
     excerpt_pt: string | null
     excerpt_en: string | null
     readTime: number | null
     featured: boolean | null
-    Priority: number | null
+    priority: number | null
     translatedModel: $Enums.TranslatedModel | null
     status: $Enums.PostStatus | null
     publishedAt: Date | null
@@ -8825,7 +8831,10 @@ export namespace Prisma {
   export type PostsCountAggregateOutputType = {
     id: number
     notionId: number
+    title: number
+    title_en: number
     slug: number
+    slug_en: number
     category: number
     tags: number
     coverUrl: number
@@ -8833,7 +8842,7 @@ export namespace Prisma {
     excerpt_en: number
     readTime: number
     featured: number
-    Priority: number
+    priority: number
     translatedModel: number
     ptBr: number
     en: number
@@ -8848,26 +8857,29 @@ export namespace Prisma {
   export type PostsAvgAggregateInputType = {
     id?: true
     readTime?: true
-    Priority?: true
+    priority?: true
   }
 
   export type PostsSumAggregateInputType = {
     id?: true
     readTime?: true
-    Priority?: true
+    priority?: true
   }
 
   export type PostsMinAggregateInputType = {
     id?: true
     notionId?: true
+    title?: true
+    title_en?: true
     slug?: true
+    slug_en?: true
     category?: true
     coverUrl?: true
     excerpt_pt?: true
     excerpt_en?: true
     readTime?: true
     featured?: true
-    Priority?: true
+    priority?: true
     translatedModel?: true
     status?: true
     publishedAt?: true
@@ -8878,14 +8890,17 @@ export namespace Prisma {
   export type PostsMaxAggregateInputType = {
     id?: true
     notionId?: true
+    title?: true
+    title_en?: true
     slug?: true
+    slug_en?: true
     category?: true
     coverUrl?: true
     excerpt_pt?: true
     excerpt_en?: true
     readTime?: true
     featured?: true
-    Priority?: true
+    priority?: true
     translatedModel?: true
     status?: true
     publishedAt?: true
@@ -8896,7 +8911,10 @@ export namespace Prisma {
   export type PostsCountAggregateInputType = {
     id?: true
     notionId?: true
+    title?: true
+    title_en?: true
     slug?: true
+    slug_en?: true
     category?: true
     tags?: true
     coverUrl?: true
@@ -8904,7 +8922,7 @@ export namespace Prisma {
     excerpt_en?: true
     readTime?: true
     featured?: true
-    Priority?: true
+    priority?: true
     translatedModel?: true
     ptBr?: true
     en?: true
@@ -9004,16 +9022,19 @@ export namespace Prisma {
   export type PostsGroupByOutputType = {
     id: number
     notionId: string
+    title: string
+    title_en: string | null
     slug: string
+    slug_en: string | null
     category: string
     tags: string[]
     coverUrl: string
     excerpt_pt: string
-    excerpt_en: string
+    excerpt_en: string | null
     readTime: number
     featured: boolean
-    Priority: number
-    translatedModel: $Enums.TranslatedModel
+    priority: number
+    translatedModel: $Enums.TranslatedModel | null
     ptBr: JsonValue
     en: JsonValue
     status: $Enums.PostStatus
@@ -9044,7 +9065,10 @@ export namespace Prisma {
   export type PostsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     notionId?: boolean
+    title?: boolean
+    title_en?: boolean
     slug?: boolean
+    slug_en?: boolean
     category?: boolean
     tags?: boolean
     coverUrl?: boolean
@@ -9052,7 +9076,7 @@ export namespace Prisma {
     excerpt_en?: boolean
     readTime?: boolean
     featured?: boolean
-    Priority?: boolean
+    priority?: boolean
     translatedModel?: boolean
     ptBr?: boolean
     en?: boolean
@@ -9068,7 +9092,10 @@ export namespace Prisma {
   export type PostsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     notionId?: boolean
+    title?: boolean
+    title_en?: boolean
     slug?: boolean
+    slug_en?: boolean
     category?: boolean
     tags?: boolean
     coverUrl?: boolean
@@ -9076,7 +9103,7 @@ export namespace Prisma {
     excerpt_en?: boolean
     readTime?: boolean
     featured?: boolean
-    Priority?: boolean
+    priority?: boolean
     translatedModel?: boolean
     ptBr?: boolean
     en?: boolean
@@ -9089,7 +9116,10 @@ export namespace Prisma {
   export type PostsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     notionId?: boolean
+    title?: boolean
+    title_en?: boolean
     slug?: boolean
+    slug_en?: boolean
     category?: boolean
     tags?: boolean
     coverUrl?: boolean
@@ -9097,7 +9127,7 @@ export namespace Prisma {
     excerpt_en?: boolean
     readTime?: boolean
     featured?: boolean
-    Priority?: boolean
+    priority?: boolean
     translatedModel?: boolean
     ptBr?: boolean
     en?: boolean
@@ -9110,7 +9140,10 @@ export namespace Prisma {
   export type PostsSelectScalar = {
     id?: boolean
     notionId?: boolean
+    title?: boolean
+    title_en?: boolean
     slug?: boolean
+    slug_en?: boolean
     category?: boolean
     tags?: boolean
     coverUrl?: boolean
@@ -9118,7 +9151,7 @@ export namespace Prisma {
     excerpt_en?: boolean
     readTime?: boolean
     featured?: boolean
-    Priority?: boolean
+    priority?: boolean
     translatedModel?: boolean
     ptBr?: boolean
     en?: boolean
@@ -9128,7 +9161,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type PostsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "notionId" | "slug" | "category" | "tags" | "coverUrl" | "excerpt_pt" | "excerpt_en" | "readTime" | "featured" | "Priority" | "translatedModel" | "ptBr" | "en" | "status" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["posts"]>
+  export type PostsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "notionId" | "title" | "title_en" | "slug" | "slug_en" | "category" | "tags" | "coverUrl" | "excerpt_pt" | "excerpt_en" | "readTime" | "featured" | "priority" | "translatedModel" | "ptBr" | "en" | "status" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["posts"]>
   export type PostsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     PostMetrics?: boolean | Posts$PostMetricsArgs<ExtArgs>
     PostComments?: boolean | Posts$PostCommentsArgs<ExtArgs>
@@ -9153,9 +9186,21 @@ export namespace Prisma {
        */
       notionId: string
       /**
+       * Post Title
+       */
+      title: string
+      /**
+       * Post Title
+       */
+      title_en: string | null
+      /**
        * Post Slug
        */
       slug: string
+      /**
+       * Post Slug
+       */
+      slug_en: string | null
       /**
        * Post Category
        */
@@ -9175,7 +9220,7 @@ export namespace Prisma {
       /**
        * Post Excerpt in English (varchar 500)
        */
-      excerpt_en: string
+      excerpt_en: string | null
       /**
        * Post Read estimated time
        */
@@ -9187,11 +9232,11 @@ export namespace Prisma {
       /**
        * Post priority to be at top of posts
        */
-      Priority: number
+      priority: number
       /**
        * Translation model used to translate to english
        */
-      translatedModel: $Enums.TranslatedModel
+      translatedModel: $Enums.TranslatedModel | null
       /**
        * Notion JSON in Portuguese
        */
@@ -9643,7 +9688,10 @@ export namespace Prisma {
   interface PostsFieldRefs {
     readonly id: FieldRef<"Posts", 'Int'>
     readonly notionId: FieldRef<"Posts", 'String'>
+    readonly title: FieldRef<"Posts", 'String'>
+    readonly title_en: FieldRef<"Posts", 'String'>
     readonly slug: FieldRef<"Posts", 'String'>
+    readonly slug_en: FieldRef<"Posts", 'String'>
     readonly category: FieldRef<"Posts", 'String'>
     readonly tags: FieldRef<"Posts", 'String[]'>
     readonly coverUrl: FieldRef<"Posts", 'String'>
@@ -9651,7 +9699,7 @@ export namespace Prisma {
     readonly excerpt_en: FieldRef<"Posts", 'String'>
     readonly readTime: FieldRef<"Posts", 'Int'>
     readonly featured: FieldRef<"Posts", 'Boolean'>
-    readonly Priority: FieldRef<"Posts", 'Int'>
+    readonly priority: FieldRef<"Posts", 'Int'>
     readonly translatedModel: FieldRef<"Posts", 'TranslatedModel'>
     readonly ptBr: FieldRef<"Posts", 'Json'>
     readonly en: FieldRef<"Posts", 'Json'>
@@ -15729,7 +15777,10 @@ export namespace Prisma {
   export const PostsScalarFieldEnum: {
     id: 'id',
     notionId: 'notionId',
+    title: 'title',
+    title_en: 'title_en',
     slug: 'slug',
+    slug_en: 'slug_en',
     category: 'category',
     tags: 'tags',
     coverUrl: 'coverUrl',
@@ -15737,7 +15788,7 @@ export namespace Prisma {
     excerpt_en: 'excerpt_en',
     readTime: 'readTime',
     featured: 'featured',
-    Priority: 'Priority',
+    priority: 'priority',
     translatedModel: 'translatedModel',
     ptBr: 'ptBr',
     en: 'en',
@@ -16407,16 +16458,19 @@ export namespace Prisma {
     NOT?: PostsWhereInput | PostsWhereInput[]
     id?: IntFilter<"Posts"> | number
     notionId?: StringFilter<"Posts"> | string
+    title?: StringFilter<"Posts"> | string
+    title_en?: StringNullableFilter<"Posts"> | string | null
     slug?: StringFilter<"Posts"> | string
+    slug_en?: StringNullableFilter<"Posts"> | string | null
     category?: StringFilter<"Posts"> | string
     tags?: StringNullableListFilter<"Posts">
     coverUrl?: StringFilter<"Posts"> | string
     excerpt_pt?: StringFilter<"Posts"> | string
-    excerpt_en?: StringFilter<"Posts"> | string
+    excerpt_en?: StringNullableFilter<"Posts"> | string | null
     readTime?: IntFilter<"Posts"> | number
     featured?: BoolFilter<"Posts"> | boolean
-    Priority?: IntFilter<"Posts"> | number
-    translatedModel?: EnumTranslatedModelFilter<"Posts"> | $Enums.TranslatedModel
+    priority?: IntFilter<"Posts"> | number
+    translatedModel?: EnumTranslatedModelNullableFilter<"Posts"> | $Enums.TranslatedModel | null
     ptBr?: JsonFilter<"Posts">
     en?: JsonFilter<"Posts">
     status?: EnumPostStatusFilter<"Posts"> | $Enums.PostStatus
@@ -16430,16 +16484,19 @@ export namespace Prisma {
   export type PostsOrderByWithRelationInput = {
     id?: SortOrder
     notionId?: SortOrder
+    title?: SortOrder
+    title_en?: SortOrderInput | SortOrder
     slug?: SortOrder
+    slug_en?: SortOrderInput | SortOrder
     category?: SortOrder
     tags?: SortOrder
     coverUrl?: SortOrder
     excerpt_pt?: SortOrder
-    excerpt_en?: SortOrder
+    excerpt_en?: SortOrderInput | SortOrder
     readTime?: SortOrder
     featured?: SortOrder
-    Priority?: SortOrder
-    translatedModel?: SortOrder
+    priority?: SortOrder
+    translatedModel?: SortOrderInput | SortOrder
     ptBr?: SortOrder
     en?: SortOrder
     status?: SortOrder
@@ -16454,18 +16511,21 @@ export namespace Prisma {
     id?: number
     notionId?: string
     slug?: string
+    slug_en?: string
     AND?: PostsWhereInput | PostsWhereInput[]
     OR?: PostsWhereInput[]
     NOT?: PostsWhereInput | PostsWhereInput[]
+    title?: StringFilter<"Posts"> | string
+    title_en?: StringNullableFilter<"Posts"> | string | null
     category?: StringFilter<"Posts"> | string
     tags?: StringNullableListFilter<"Posts">
     coverUrl?: StringFilter<"Posts"> | string
     excerpt_pt?: StringFilter<"Posts"> | string
-    excerpt_en?: StringFilter<"Posts"> | string
+    excerpt_en?: StringNullableFilter<"Posts"> | string | null
     readTime?: IntFilter<"Posts"> | number
     featured?: BoolFilter<"Posts"> | boolean
-    Priority?: IntFilter<"Posts"> | number
-    translatedModel?: EnumTranslatedModelFilter<"Posts"> | $Enums.TranslatedModel
+    priority?: IntFilter<"Posts"> | number
+    translatedModel?: EnumTranslatedModelNullableFilter<"Posts"> | $Enums.TranslatedModel | null
     ptBr?: JsonFilter<"Posts">
     en?: JsonFilter<"Posts">
     status?: EnumPostStatusFilter<"Posts"> | $Enums.PostStatus
@@ -16474,21 +16534,24 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Posts"> | Date | string
     PostMetrics?: XOR<PostMetricsNullableScalarRelationFilter, PostMetricsWhereInput> | null
     PostComments?: PostCommentsListRelationFilter
-  }, "id" | "notionId" | "slug">
+  }, "id" | "notionId" | "slug" | "slug_en">
 
   export type PostsOrderByWithAggregationInput = {
     id?: SortOrder
     notionId?: SortOrder
+    title?: SortOrder
+    title_en?: SortOrderInput | SortOrder
     slug?: SortOrder
+    slug_en?: SortOrderInput | SortOrder
     category?: SortOrder
     tags?: SortOrder
     coverUrl?: SortOrder
     excerpt_pt?: SortOrder
-    excerpt_en?: SortOrder
+    excerpt_en?: SortOrderInput | SortOrder
     readTime?: SortOrder
     featured?: SortOrder
-    Priority?: SortOrder
-    translatedModel?: SortOrder
+    priority?: SortOrder
+    translatedModel?: SortOrderInput | SortOrder
     ptBr?: SortOrder
     en?: SortOrder
     status?: SortOrder
@@ -16508,16 +16571,19 @@ export namespace Prisma {
     NOT?: PostsScalarWhereWithAggregatesInput | PostsScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Posts"> | number
     notionId?: StringWithAggregatesFilter<"Posts"> | string
+    title?: StringWithAggregatesFilter<"Posts"> | string
+    title_en?: StringNullableWithAggregatesFilter<"Posts"> | string | null
     slug?: StringWithAggregatesFilter<"Posts"> | string
+    slug_en?: StringNullableWithAggregatesFilter<"Posts"> | string | null
     category?: StringWithAggregatesFilter<"Posts"> | string
     tags?: StringNullableListFilter<"Posts">
     coverUrl?: StringWithAggregatesFilter<"Posts"> | string
     excerpt_pt?: StringWithAggregatesFilter<"Posts"> | string
-    excerpt_en?: StringWithAggregatesFilter<"Posts"> | string
+    excerpt_en?: StringNullableWithAggregatesFilter<"Posts"> | string | null
     readTime?: IntWithAggregatesFilter<"Posts"> | number
     featured?: BoolWithAggregatesFilter<"Posts"> | boolean
-    Priority?: IntWithAggregatesFilter<"Posts"> | number
-    translatedModel?: EnumTranslatedModelWithAggregatesFilter<"Posts"> | $Enums.TranslatedModel
+    priority?: IntWithAggregatesFilter<"Posts"> | number
+    translatedModel?: EnumTranslatedModelNullableWithAggregatesFilter<"Posts"> | $Enums.TranslatedModel | null
     ptBr?: JsonWithAggregatesFilter<"Posts">
     en?: JsonWithAggregatesFilter<"Posts">
     status?: EnumPostStatusWithAggregatesFilter<"Posts"> | $Enums.PostStatus
@@ -17264,16 +17330,19 @@ export namespace Prisma {
 
   export type PostsCreateInput = {
     notionId: string
+    title: string
+    title_en?: string | null
     slug: string
+    slug_en?: string | null
     category: string
     tags?: PostsCreatetagsInput | string[]
     coverUrl: string
     excerpt_pt: string
-    excerpt_en: string
+    excerpt_en?: string | null
     readTime: number
     featured: boolean
-    Priority: number
-    translatedModel: $Enums.TranslatedModel
+    priority: number
+    translatedModel?: $Enums.TranslatedModel | null
     ptBr: JsonNullValueInput | InputJsonValue
     en: JsonNullValueInput | InputJsonValue
     status?: $Enums.PostStatus
@@ -17287,16 +17356,19 @@ export namespace Prisma {
   export type PostsUncheckedCreateInput = {
     id?: number
     notionId: string
+    title: string
+    title_en?: string | null
     slug: string
+    slug_en?: string | null
     category: string
     tags?: PostsCreatetagsInput | string[]
     coverUrl: string
     excerpt_pt: string
-    excerpt_en: string
+    excerpt_en?: string | null
     readTime: number
     featured: boolean
-    Priority: number
-    translatedModel: $Enums.TranslatedModel
+    priority: number
+    translatedModel?: $Enums.TranslatedModel | null
     ptBr: JsonNullValueInput | InputJsonValue
     en: JsonNullValueInput | InputJsonValue
     status?: $Enums.PostStatus
@@ -17309,16 +17381,19 @@ export namespace Prisma {
 
   export type PostsUpdateInput = {
     notionId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    title_en?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
+    slug_en?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     tags?: PostsUpdatetagsInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
     excerpt_pt?: StringFieldUpdateOperationsInput | string
-    excerpt_en?: StringFieldUpdateOperationsInput | string
+    excerpt_en?: NullableStringFieldUpdateOperationsInput | string | null
     readTime?: IntFieldUpdateOperationsInput | number
     featured?: BoolFieldUpdateOperationsInput | boolean
-    Priority?: IntFieldUpdateOperationsInput | number
-    translatedModel?: EnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel
+    priority?: IntFieldUpdateOperationsInput | number
+    translatedModel?: NullableEnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel | null
     ptBr?: JsonNullValueInput | InputJsonValue
     en?: JsonNullValueInput | InputJsonValue
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -17332,16 +17407,19 @@ export namespace Prisma {
   export type PostsUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     notionId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    title_en?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
+    slug_en?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     tags?: PostsUpdatetagsInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
     excerpt_pt?: StringFieldUpdateOperationsInput | string
-    excerpt_en?: StringFieldUpdateOperationsInput | string
+    excerpt_en?: NullableStringFieldUpdateOperationsInput | string | null
     readTime?: IntFieldUpdateOperationsInput | number
     featured?: BoolFieldUpdateOperationsInput | boolean
-    Priority?: IntFieldUpdateOperationsInput | number
-    translatedModel?: EnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel
+    priority?: IntFieldUpdateOperationsInput | number
+    translatedModel?: NullableEnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel | null
     ptBr?: JsonNullValueInput | InputJsonValue
     en?: JsonNullValueInput | InputJsonValue
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -17355,16 +17433,19 @@ export namespace Prisma {
   export type PostsCreateManyInput = {
     id?: number
     notionId: string
+    title: string
+    title_en?: string | null
     slug: string
+    slug_en?: string | null
     category: string
     tags?: PostsCreatetagsInput | string[]
     coverUrl: string
     excerpt_pt: string
-    excerpt_en: string
+    excerpt_en?: string | null
     readTime: number
     featured: boolean
-    Priority: number
-    translatedModel: $Enums.TranslatedModel
+    priority: number
+    translatedModel?: $Enums.TranslatedModel | null
     ptBr: JsonNullValueInput | InputJsonValue
     en: JsonNullValueInput | InputJsonValue
     status?: $Enums.PostStatus
@@ -17375,16 +17456,19 @@ export namespace Prisma {
 
   export type PostsUpdateManyMutationInput = {
     notionId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    title_en?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
+    slug_en?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     tags?: PostsUpdatetagsInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
     excerpt_pt?: StringFieldUpdateOperationsInput | string
-    excerpt_en?: StringFieldUpdateOperationsInput | string
+    excerpt_en?: NullableStringFieldUpdateOperationsInput | string | null
     readTime?: IntFieldUpdateOperationsInput | number
     featured?: BoolFieldUpdateOperationsInput | boolean
-    Priority?: IntFieldUpdateOperationsInput | number
-    translatedModel?: EnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel
+    priority?: IntFieldUpdateOperationsInput | number
+    translatedModel?: NullableEnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel | null
     ptBr?: JsonNullValueInput | InputJsonValue
     en?: JsonNullValueInput | InputJsonValue
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -17396,16 +17480,19 @@ export namespace Prisma {
   export type PostsUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     notionId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    title_en?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
+    slug_en?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     tags?: PostsUpdatetagsInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
     excerpt_pt?: StringFieldUpdateOperationsInput | string
-    excerpt_en?: StringFieldUpdateOperationsInput | string
+    excerpt_en?: NullableStringFieldUpdateOperationsInput | string | null
     readTime?: IntFieldUpdateOperationsInput | number
     featured?: BoolFieldUpdateOperationsInput | boolean
-    Priority?: IntFieldUpdateOperationsInput | number
-    translatedModel?: EnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel
+    priority?: IntFieldUpdateOperationsInput | number
+    translatedModel?: NullableEnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel | null
     ptBr?: JsonNullValueInput | InputJsonValue
     en?: JsonNullValueInput | InputJsonValue
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -18168,11 +18255,11 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
-  export type EnumTranslatedModelFilter<$PrismaModel = never> = {
-    equals?: $Enums.TranslatedModel | EnumTranslatedModelFieldRefInput<$PrismaModel>
-    in?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel>
-    not?: NestedEnumTranslatedModelFilter<$PrismaModel> | $Enums.TranslatedModel
+  export type EnumTranslatedModelNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.TranslatedModel | EnumTranslatedModelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTranslatedModelNullableFilter<$PrismaModel> | $Enums.TranslatedModel | null
   }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -18213,7 +18300,10 @@ export namespace Prisma {
   export type PostsCountOrderByAggregateInput = {
     id?: SortOrder
     notionId?: SortOrder
+    title?: SortOrder
+    title_en?: SortOrder
     slug?: SortOrder
+    slug_en?: SortOrder
     category?: SortOrder
     tags?: SortOrder
     coverUrl?: SortOrder
@@ -18221,7 +18311,7 @@ export namespace Prisma {
     excerpt_en?: SortOrder
     readTime?: SortOrder
     featured?: SortOrder
-    Priority?: SortOrder
+    priority?: SortOrder
     translatedModel?: SortOrder
     ptBr?: SortOrder
     en?: SortOrder
@@ -18234,20 +18324,23 @@ export namespace Prisma {
   export type PostsAvgOrderByAggregateInput = {
     id?: SortOrder
     readTime?: SortOrder
-    Priority?: SortOrder
+    priority?: SortOrder
   }
 
   export type PostsMaxOrderByAggregateInput = {
     id?: SortOrder
     notionId?: SortOrder
+    title?: SortOrder
+    title_en?: SortOrder
     slug?: SortOrder
+    slug_en?: SortOrder
     category?: SortOrder
     coverUrl?: SortOrder
     excerpt_pt?: SortOrder
     excerpt_en?: SortOrder
     readTime?: SortOrder
     featured?: SortOrder
-    Priority?: SortOrder
+    priority?: SortOrder
     translatedModel?: SortOrder
     status?: SortOrder
     publishedAt?: SortOrder
@@ -18258,14 +18351,17 @@ export namespace Prisma {
   export type PostsMinOrderByAggregateInput = {
     id?: SortOrder
     notionId?: SortOrder
+    title?: SortOrder
+    title_en?: SortOrder
     slug?: SortOrder
+    slug_en?: SortOrder
     category?: SortOrder
     coverUrl?: SortOrder
     excerpt_pt?: SortOrder
     excerpt_en?: SortOrder
     readTime?: SortOrder
     featured?: SortOrder
-    Priority?: SortOrder
+    priority?: SortOrder
     translatedModel?: SortOrder
     status?: SortOrder
     publishedAt?: SortOrder
@@ -18276,17 +18372,17 @@ export namespace Prisma {
   export type PostsSumOrderByAggregateInput = {
     id?: SortOrder
     readTime?: SortOrder
-    Priority?: SortOrder
+    priority?: SortOrder
   }
 
-  export type EnumTranslatedModelWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TranslatedModel | EnumTranslatedModelFieldRefInput<$PrismaModel>
-    in?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel>
-    not?: NestedEnumTranslatedModelWithAggregatesFilter<$PrismaModel> | $Enums.TranslatedModel
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTranslatedModelFilter<$PrismaModel>
-    _max?: NestedEnumTranslatedModelFilter<$PrismaModel>
+  export type EnumTranslatedModelNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TranslatedModel | EnumTranslatedModelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTranslatedModelNullableWithAggregatesFilter<$PrismaModel> | $Enums.TranslatedModel | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumTranslatedModelNullableFilter<$PrismaModel>
+    _max?: NestedEnumTranslatedModelNullableFilter<$PrismaModel>
   }
   export type JsonWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -18895,8 +18991,8 @@ export namespace Prisma {
     push?: string | string[]
   }
 
-  export type EnumTranslatedModelFieldUpdateOperationsInput = {
-    set?: $Enums.TranslatedModel
+  export type NullableEnumTranslatedModelFieldUpdateOperationsInput = {
+    set?: $Enums.TranslatedModel | null
   }
 
   export type EnumPostStatusFieldUpdateOperationsInput = {
@@ -19355,11 +19451,11 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedEnumTranslatedModelFilter<$PrismaModel = never> = {
-    equals?: $Enums.TranslatedModel | EnumTranslatedModelFieldRefInput<$PrismaModel>
-    in?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel>
-    not?: NestedEnumTranslatedModelFilter<$PrismaModel> | $Enums.TranslatedModel
+  export type NestedEnumTranslatedModelNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.TranslatedModel | EnumTranslatedModelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTranslatedModelNullableFilter<$PrismaModel> | $Enums.TranslatedModel | null
   }
 
   export type NestedEnumPostStatusFilter<$PrismaModel = never> = {
@@ -19369,14 +19465,14 @@ export namespace Prisma {
     not?: NestedEnumPostStatusFilter<$PrismaModel> | $Enums.PostStatus
   }
 
-  export type NestedEnumTranslatedModelWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TranslatedModel | EnumTranslatedModelFieldRefInput<$PrismaModel>
-    in?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel>
-    not?: NestedEnumTranslatedModelWithAggregatesFilter<$PrismaModel> | $Enums.TranslatedModel
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTranslatedModelFilter<$PrismaModel>
-    _max?: NestedEnumTranslatedModelFilter<$PrismaModel>
+  export type NestedEnumTranslatedModelNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TranslatedModel | EnumTranslatedModelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TranslatedModel[] | ListEnumTranslatedModelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTranslatedModelNullableWithAggregatesFilter<$PrismaModel> | $Enums.TranslatedModel | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumTranslatedModelNullableFilter<$PrismaModel>
+    _max?: NestedEnumTranslatedModelNullableFilter<$PrismaModel>
   }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -20096,16 +20192,19 @@ export namespace Prisma {
 
   export type PostsCreateWithoutPostMetricsInput = {
     notionId: string
+    title: string
+    title_en?: string | null
     slug: string
+    slug_en?: string | null
     category: string
     tags?: PostsCreatetagsInput | string[]
     coverUrl: string
     excerpt_pt: string
-    excerpt_en: string
+    excerpt_en?: string | null
     readTime: number
     featured: boolean
-    Priority: number
-    translatedModel: $Enums.TranslatedModel
+    priority: number
+    translatedModel?: $Enums.TranslatedModel | null
     ptBr: JsonNullValueInput | InputJsonValue
     en: JsonNullValueInput | InputJsonValue
     status?: $Enums.PostStatus
@@ -20118,16 +20217,19 @@ export namespace Prisma {
   export type PostsUncheckedCreateWithoutPostMetricsInput = {
     id?: number
     notionId: string
+    title: string
+    title_en?: string | null
     slug: string
+    slug_en?: string | null
     category: string
     tags?: PostsCreatetagsInput | string[]
     coverUrl: string
     excerpt_pt: string
-    excerpt_en: string
+    excerpt_en?: string | null
     readTime: number
     featured: boolean
-    Priority: number
-    translatedModel: $Enums.TranslatedModel
+    priority: number
+    translatedModel?: $Enums.TranslatedModel | null
     ptBr: JsonNullValueInput | InputJsonValue
     en: JsonNullValueInput | InputJsonValue
     status?: $Enums.PostStatus
@@ -20175,16 +20277,19 @@ export namespace Prisma {
 
   export type PostsUpdateWithoutPostMetricsInput = {
     notionId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    title_en?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
+    slug_en?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     tags?: PostsUpdatetagsInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
     excerpt_pt?: StringFieldUpdateOperationsInput | string
-    excerpt_en?: StringFieldUpdateOperationsInput | string
+    excerpt_en?: NullableStringFieldUpdateOperationsInput | string | null
     readTime?: IntFieldUpdateOperationsInput | number
     featured?: BoolFieldUpdateOperationsInput | boolean
-    Priority?: IntFieldUpdateOperationsInput | number
-    translatedModel?: EnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel
+    priority?: IntFieldUpdateOperationsInput | number
+    translatedModel?: NullableEnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel | null
     ptBr?: JsonNullValueInput | InputJsonValue
     en?: JsonNullValueInput | InputJsonValue
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -20197,16 +20302,19 @@ export namespace Prisma {
   export type PostsUncheckedUpdateWithoutPostMetricsInput = {
     id?: IntFieldUpdateOperationsInput | number
     notionId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    title_en?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
+    slug_en?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     tags?: PostsUpdatetagsInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
     excerpt_pt?: StringFieldUpdateOperationsInput | string
-    excerpt_en?: StringFieldUpdateOperationsInput | string
+    excerpt_en?: NullableStringFieldUpdateOperationsInput | string | null
     readTime?: IntFieldUpdateOperationsInput | number
     featured?: BoolFieldUpdateOperationsInput | boolean
-    Priority?: IntFieldUpdateOperationsInput | number
-    translatedModel?: EnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel
+    priority?: IntFieldUpdateOperationsInput | number
+    translatedModel?: NullableEnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel | null
     ptBr?: JsonNullValueInput | InputJsonValue
     en?: JsonNullValueInput | InputJsonValue
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -20397,16 +20505,19 @@ export namespace Prisma {
 
   export type PostsCreateWithoutPostCommentsInput = {
     notionId: string
+    title: string
+    title_en?: string | null
     slug: string
+    slug_en?: string | null
     category: string
     tags?: PostsCreatetagsInput | string[]
     coverUrl: string
     excerpt_pt: string
-    excerpt_en: string
+    excerpt_en?: string | null
     readTime: number
     featured: boolean
-    Priority: number
-    translatedModel: $Enums.TranslatedModel
+    priority: number
+    translatedModel?: $Enums.TranslatedModel | null
     ptBr: JsonNullValueInput | InputJsonValue
     en: JsonNullValueInput | InputJsonValue
     status?: $Enums.PostStatus
@@ -20419,16 +20530,19 @@ export namespace Prisma {
   export type PostsUncheckedCreateWithoutPostCommentsInput = {
     id?: number
     notionId: string
+    title: string
+    title_en?: string | null
     slug: string
+    slug_en?: string | null
     category: string
     tags?: PostsCreatetagsInput | string[]
     coverUrl: string
     excerpt_pt: string
-    excerpt_en: string
+    excerpt_en?: string | null
     readTime: number
     featured: boolean
-    Priority: number
-    translatedModel: $Enums.TranslatedModel
+    priority: number
+    translatedModel?: $Enums.TranslatedModel | null
     ptBr: JsonNullValueInput | InputJsonValue
     en: JsonNullValueInput | InputJsonValue
     status?: $Enums.PostStatus
@@ -20519,16 +20633,19 @@ export namespace Prisma {
 
   export type PostsUpdateWithoutPostCommentsInput = {
     notionId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    title_en?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
+    slug_en?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     tags?: PostsUpdatetagsInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
     excerpt_pt?: StringFieldUpdateOperationsInput | string
-    excerpt_en?: StringFieldUpdateOperationsInput | string
+    excerpt_en?: NullableStringFieldUpdateOperationsInput | string | null
     readTime?: IntFieldUpdateOperationsInput | number
     featured?: BoolFieldUpdateOperationsInput | boolean
-    Priority?: IntFieldUpdateOperationsInput | number
-    translatedModel?: EnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel
+    priority?: IntFieldUpdateOperationsInput | number
+    translatedModel?: NullableEnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel | null
     ptBr?: JsonNullValueInput | InputJsonValue
     en?: JsonNullValueInput | InputJsonValue
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -20541,16 +20658,19 @@ export namespace Prisma {
   export type PostsUncheckedUpdateWithoutPostCommentsInput = {
     id?: IntFieldUpdateOperationsInput | number
     notionId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    title_en?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
+    slug_en?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
     tags?: PostsUpdatetagsInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
     excerpt_pt?: StringFieldUpdateOperationsInput | string
-    excerpt_en?: StringFieldUpdateOperationsInput | string
+    excerpt_en?: NullableStringFieldUpdateOperationsInput | string | null
     readTime?: IntFieldUpdateOperationsInput | number
     featured?: BoolFieldUpdateOperationsInput | boolean
-    Priority?: IntFieldUpdateOperationsInput | number
-    translatedModel?: EnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel
+    priority?: IntFieldUpdateOperationsInput | number
+    translatedModel?: NullableEnumTranslatedModelFieldUpdateOperationsInput | $Enums.TranslatedModel | null
     ptBr?: JsonNullValueInput | InputJsonValue
     en?: JsonNullValueInput | InputJsonValue
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus

@@ -52,9 +52,11 @@ const CATEGORY_ORDER = [
   "CI/CD",
 ];
 
-type GetProfileStatsResponse = [Error, null] | [null, Skills[]];
+type GetProfileSkillsResponse = [Error, null] | [null, Skills[]];
 
-export async function getSkills(): Promise<GetProfileStatsResponse> {
+export async function getSkillsFromNotion(
+  cacheTag: string[]
+): Promise<GetProfileSkillsResponse> {
   return await notionClient(
     "getSkills",
     async () => {
@@ -103,7 +105,6 @@ export async function getSkills(): Promise<GetProfileStatsResponse> {
           const indexA = CATEGORY_ORDER.indexOf(a.category);
           const indexB = CATEGORY_ORDER.indexOf(b.category);
 
-          // Se categoria não está na lista, coloca no final
           if (indexA === -1) return 1;
           if (indexB === -1) return -1;
 
@@ -113,7 +114,7 @@ export async function getSkills(): Promise<GetProfileStatsResponse> {
       return groupedStacks;
     },
     {
-      tags: ["skills"],
+      tags: cacheTag,
     }
   );
 }

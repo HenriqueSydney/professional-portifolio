@@ -44,7 +44,9 @@ type NotionDatabaseInfoOfProfileStats = {
 
 type GetProfileStatsResponse = [Error, null] | [null, ProfileStats[]];
 
-export async function getProfileStats(): Promise<GetProfileStatsResponse> {
+export async function getProfileStatsFromNotion(
+  cacheTag: string[]
+): Promise<GetProfileStatsResponse> {
   return await notionClient(
     "getProfileStats",
     async () => {
@@ -66,7 +68,7 @@ export async function getProfileStats(): Promise<GetProfileStatsResponse> {
       return stats;
     },
     {
-      tags: ["profile-stats"],
+      tags: cacheTag,
     }
   );
 }

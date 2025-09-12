@@ -4,8 +4,8 @@ import { apiLogger } from "@/lib/logger";
 
 type TranslateTextWithDeeplParams = {
   content: string;
-  tagHandling: "xml" | "xml" | "xml";
-  targetLang: string;
+  tagHandling?: "xml" | "xml" | "xml";
+  targetLang?: string;
 };
 
 type TranslateTextWithDeeplSuccessResponse = {
@@ -21,8 +21,7 @@ export async function translateTextWithDeepl({
   targetLang = "EN",
 }: TranslateTextWithDeeplParams): Promise<string | null> {
   const body = {
-    auth_key: envVariables.DEEPL_API_KEY,
-    text: content,
+    text: [content],
     target_lang: targetLang,
     tag_handling: tagHandling,
   };
@@ -30,10 +29,14 @@ export async function translateTextWithDeepl({
   try {
     const [responseError, responseSuccess] =
       await httpClient<TranslateTextWithDeeplSuccessResponse>(
-        envVariables.DEEPL_API_URL,
+        `${envVariables.DEEPL_API_URL}translate`,
         {
           method: "POST",
           body: JSON.stringify(body),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `DeepL-Auth-Key ${envVariables.DEEPL_API_KEY}`,
+          },
         }
       );
 
@@ -43,6 +46,7 @@ export async function translateTextWithDeepl({
 
     return responseSuccess.translations[0].text;
   } catch (error) {
+    console.log(error);
     apiLogger.error({ stack: error }, "Translation DEEPL error");
     return null;
   }

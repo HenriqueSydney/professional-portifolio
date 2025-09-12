@@ -1,4 +1,3 @@
-
 import { About } from "@/app/[locale]/(home)/components/About";
 import { Blog } from "@/app/[locale]/(home)/components/Blog";
 import { Contact } from "@/app/[locale]/(home)/components/contact/Contact";
@@ -10,8 +9,6 @@ import { Certifications } from "./components/Certifications/Certifications";
 import { Experience } from "./components/Experience";
 
 export default async function Home() {
-
-
   return (
     <main>
       <Hero />
@@ -21,7 +18,7 @@ export default async function Home() {
       <Skills />
       <Experience />
       <Blog />
-      <Contact />
+      {/* <Contact /> */}
     </main>
   );
 }

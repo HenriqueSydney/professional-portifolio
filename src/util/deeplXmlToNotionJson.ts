@@ -1,27 +1,31 @@
 import { unescapeXml } from "./unescapeXml";
 
-type Block = { type: string; text: string };
-type NotionDoc = { id: string; blocks: Block[] };
+type NotionDoc = { blocks: any[] };
 
 export function deeplXmlToNotionJson(
   original: NotionDoc,
   translatedXml: string
 ): NotionDoc {
-  // regex simples para pegar cada tag
-  const regex = /<(\w+)\s+id="(\d+)">([\s\S]*?)<\/\1>/g;
+  const regex =
+    /<block\s+type="([^"]+)"\s+block="(\d+)"\s+rt="(\d+)">([\s\S]*?)<\/block>/g;
 
-  const translatedBlocks: Block[] = [];
+  const updated = JSON.parse(JSON.stringify(original)); // clone
+
   let match;
-
   while ((match = regex.exec(translatedXml)) !== null) {
-    const [, type, id, text] = match;
-    const index = parseInt(id, 10);
+    const [, type, blockIndex, rtIndex, text] = match;
+    const bi = parseInt(blockIndex, 10);
+    const ri = parseInt(rtIndex, 10);
 
-    translatedBlocks[index] = {
-      type,
-      text: unescapeXml(text.trim()),
-    };
+    if (updated.blocks[bi]?.[type]?.rich_text?.[ri]) {
+      updated.blocks[bi][type].rich_text[ri].text.content = unescapeXml(
+        text.trim()
+      );
+      updated.blocks[bi][type].rich_text[ri].plain_text = unescapeXml(
+        text.trim()
+      );
+    }
   }
 
-  return { ...original, blocks: translatedBlocks };
+  return updated;
 }

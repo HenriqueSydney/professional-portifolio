@@ -2,15 +2,9 @@
 
 import { envVariables } from "@/env";
 
-import { isFullPage } from "@notionhq/client";
-import { getLocale } from "next-intl/server";
-
-import { NotionDatabaseInfoOfPosts } from "@/@types/NotionDatabaseInfoOfPosts";
-
-import { date } from "@/lib/dayjs";
 import { notion } from "@/lib/notion/notion";
 import { notionClient } from "@/lib/notion/notionClient";
-import { formatMinutesToHour } from "@/util/formatMinutesToHour";
+import { BlogPost, postsMapper } from "../../mappers/postsMapper";
 
 type GetBlogPostsParams = {
   firstPageOnly?: boolean;
@@ -27,18 +21,6 @@ type GetBlogPostsParams = {
   query?: string;
 };
 
-export type BlogPost = {
-  id: string;
-  slug: string;
-  title: string;
-  excerpt: string;
-  category: string;
-  tags: string[];
-  readTime: string;
-  date: string;
-  featured: boolean;
-};
-
 export type FetchBlogPostsData = {
   hasMore: boolean | null;
   nextCursor: string | null;
@@ -47,19 +29,18 @@ export type FetchBlogPostsData = {
 
 type FetchBlogPostsResponse = [Error, null] | [null, FetchBlogPostsData];
 
-export async function fetchBlogPosts(
-  data: GetBlogPostsParams
+export async function fetchBlogPostsFromNotion(
+  filters: GetBlogPostsParams,
+  locale: "pt" | "en",
+  tags: string[]
 ): Promise<FetchBlogPostsResponse> {
-  const { firstPageOnly, numberOfPostsPerPage, nextCursor, category, query } =
-    data;
-
-  const tags = [
-    firstPageOnly && `firstPage:${firstPageOnly}`,
-    nextCursor && `cursor:${nextCursor}`,
-    category && `category:${category}`,
-    numberOfPostsPerPage && `limit:${numberOfPostsPerPage}`,
-    query && `query:${query}`,
-  ].filter((t): t is string => Boolean(t));
+  const {
+    firstPageOnly,
+    numberOfPostsPerPage = 6,
+    nextCursor,
+    category,
+    query,
+  } = filters;
 
   return await notionClient(
     "fetchBlogPosts",
@@ -140,40 +121,12 @@ export async function fetchBlogPosts(
         page_size: numberOfPostsPerPage,
       };
 
-      const [locale, posts] = await Promise.all([
-        getLocale(),
-        notion.databases.query({
-          ...queryBase,
-          start_cursor: nextCursor,
-        }),
-      ]);
+      const posts = await notion.databases.query({
+        ...queryBase,
+        start_cursor: nextCursor,
+      });
 
-      const dateFormat = locale === "pt" ? "DD MMM YYYY" : "MMM DD YYYY";
-
-      const blogPosts: BlogPost[] = posts.results
-        .filter(isFullPage)
-        .map((post) => {
-          const props =
-            post.properties as unknown as NotionDatabaseInfoOfPosts["properties"];
-
-          return {
-            id: post.id,
-            slug: props.Slug.rich_text[0]?.plain_text ?? "",
-            title: props.Title.title[0]?.plain_text ?? "Sem título",
-            excerpt: props.Excerpt.rich_text[0]?.plain_text ?? "",
-            category: props.Category.select?.name ?? "",
-            tags: props.Tags.multi_select.length
-              ? props.Tags.multi_select.map((tag) => tag.name)
-              : ["Sem categoria"],
-            readTime: formatMinutesToHour(
-              Number(props["Read Time"]?.number ?? 0)
-            ),
-            date: props.Date.date?.start
-              ? date(props.Date.date.start).format(dateFormat)
-              : "",
-            featured: props.Homepage.checkbox,
-          };
-        });
+      const blogPosts = postsMapper(locale, posts, "notion");
 
       const data = {
         hasMore: posts.has_more,
