@@ -45,7 +45,6 @@ export async function Blog() {
           </p>
         </div>
 
-        {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-2 mb-12 animate-slide-up">
           {categories &&
             categories.map((category) => (

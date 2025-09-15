@@ -5,7 +5,7 @@ import { useLocale } from "next-intl";
 import { useEffect, useState } from "react";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/tailwindClassMerge";
 
 export function InternalizationToggle() {
   const [currentLocale, setCurrentLocale] = useState("pt");

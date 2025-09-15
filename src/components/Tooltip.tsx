@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 import {
   Tooltip as ShadnTooltip,
@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/tailwindClassMerge";
 
 interface TooltipProps {
   children: ReactNode;

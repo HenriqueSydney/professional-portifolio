@@ -1,44 +1,42 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import React from "react"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React from "react";
 
-import { useNavLinks } from "@/hooks/use-nav-links"
-import { useVisibleAnchor } from "@/hooks/use-visible-anchor"
-import { cn } from "@/lib/utils"
-
+import { useNavLinks } from "@/hooks/use-nav-links";
+import { useVisibleAnchor } from "@/hooks/use-visible-anchor";
+import { cn } from "@/lib/tailwindClassMerge";
 
 interface NavLinksProps {
-    variant?: "desktop" | "mobile" | "footer" | "notFoundPage"
-    setIsMobileMenuOpen?: (open: boolean) => void
+  variant?: "desktop" | "mobile" | "footer" | "notFoundPage";
+  setIsMobileMenuOpen?: (open: boolean) => void;
 }
 
 export function NavLinks({
   variant = "desktop",
-  setIsMobileMenuOpen
+  setIsMobileMenuOpen,
 }: NavLinksProps) {
   const pathName = usePathname();
 
-  const navItems = useNavLinks()
+  const navItems = useNavLinks();
 
-  const anchorIds = navItems.map(item => {
-    if (item.href.startsWith('#')) return item.href
+  const anchorIds = navItems.map((item) => {
+    if (item.href.startsWith("#")) return item.href;
 
-    return `#${item.href}`
-
+    return `#${item.href}`;
   });
 
   // Hook para detectar qual âncora está visível
   const anchorVisible = useVisibleAnchor(anchorIds, {
     threshold: 0.1, // Reduza o threshold
-    rootMargin: '-100px 0px -40% 0px' // Menos agressivo no bottom
+    rootMargin: "-100px 0px -40% 0px", // Menos agressivo no bottom
   });
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: 'start' });
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     if (setIsMobileMenuOpen) {
       setIsMobileMenuOpen(false);
@@ -46,21 +44,25 @@ export function NavLinks({
   };
 
   const baseClasses = {
-    mobile: "text-left text-foreground hover:text-primary transition-colors duration-200 py-2",
-    desktop: "text-header-nav-links transition-colors duration-200 relative group font-bold",
-    footer: "text-muted-foreground hover:text-primary transition-colors duration-200 relative group ",
-    notFoundPage: "text-foreground hover:text-primary transition-colors duration-200 relative group font-bold  ",
-  } as const
+    mobile:
+      "text-left text-foreground hover:text-primary transition-colors duration-200 py-2",
+    desktop:
+      "text-header-nav-links transition-colors duration-200 relative group font-bold",
+    footer:
+      "text-muted-foreground hover:text-primary transition-colors duration-200 relative group ",
+    notFoundPage:
+      "text-foreground hover:text-primary transition-colors duration-200 relative group font-bold  ",
+  } as const;
 
-  const totalOfItems = navItems.length
+  const totalOfItems = navItems.length;
 
   return (
     <>
       {navItems.map((item, i) => {
         const isActive =
-                    item.type === "anchor" && variant !== 'footer'
-                      ? anchorVisible === item.href
-                      : anchorVisible === `#${item.href}` || pathName === `/${item.href}`
+          item.type === "anchor" && variant !== "footer"
+            ? anchorVisible === item.href
+            : anchorVisible === `#${item.href}` || pathName === `/${item.href}`;
 
         if (item.type === "anchor") {
           return (
@@ -79,9 +81,11 @@ export function NavLinks({
                   />
                 )}
               </button>
-              {totalOfItems != (i + 1) && variant === 'notFoundPage' && <span>|</span>}
+              {totalOfItems != i + 1 && variant === "notFoundPage" && (
+                <span>|</span>
+              )}
             </React.Fragment>
-          )
+          );
         }
 
         return (
@@ -101,10 +105,12 @@ export function NavLinks({
                 )}
               </button>
             </Link>
-            {totalOfItems != (i + 1) && variant === 'notFoundPage' && <span>|</span>}
+            {totalOfItems != i + 1 && variant === "notFoundPage" && (
+              <span>|</span>
+            )}
           </React.Fragment>
-        )
+        );
       })}
     </>
-  )
+  );
 }
