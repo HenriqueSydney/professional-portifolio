@@ -289,7 +289,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/henriquelima/Área de trabalho/Projetos/Pessoal/professional-portfolio/src/generated/prisma",
+      "value": "C:\\Users\\henri\\OneDrive\\Desktop\\Projetos\\professional-portifolio\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -298,12 +298,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/henriquelima/Área de trabalho/Projetos/Pessoal/professional-portfolio/prisma/schema.prisma",
+    "sourceFilePath": "C:\\Users\\henri\\OneDrive\\Desktop\\Projetos\\professional-portifolio\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

@@ -28,7 +28,7 @@ export function BlogPostCard({
   const locale = useLocale();
   return (
     <Card
-      className="flex flex-col h-full group hover:shadow-glow transition-all duration-300 hover:scale-105 animate-slide-up "
+      className="flex flex-col h-full group hover:shadow-glow transition-all duration-300 hover:scale-105 animate-slide-up post-card"
       style={{ animationDelay: `${positionInList * transitionTimeFactor}s` }}
     >
       <CardHeader>

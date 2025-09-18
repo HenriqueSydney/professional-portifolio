@@ -13,10 +13,8 @@ import { renderNotionBlock } from "@/util/renderNotionBlock";
 
 import { CommentsContainer } from "./components/Comments/CommentsContainer";
 import { PostHeader } from "./components/PostHeader/PostHeader";
-import { RelatedPostsContainer } from "./components/RelatedPostsContainer";
 import { SocialActionContainer } from "./components/SocialAction/SocialActionContainer";
 import { TableOfContents } from "./components/TableOfContents";
-import { checkDeeplUsage } from "@/services/internacionalization/checkDeeplUsage";
 
 export default async function post({
   params,
