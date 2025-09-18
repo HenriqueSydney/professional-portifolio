@@ -28,7 +28,7 @@ export function PostViewTracker({ postId, numberOfViews }: IPostViewTracker) {
   }, [postId]);
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1" data-testid="post-views">
       <BookOpen className="h-4 w-4" />
       {currentNumberOfViews} {t("postViews")}
     </div>

@@ -22,6 +22,7 @@ export default defineConfig({
       "**/components/ui/**",
       "**/generated/**",
       "**/i18n/**",
+      "**/*.e2e.{test,spec}.?(c|m)[jt]s?(x)",
     ],
     coverage: {
       exclude: [

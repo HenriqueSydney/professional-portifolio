@@ -9,6 +9,7 @@ import { fetchBlogPostsCategories } from "@/services/notion/fetchBlogPostsCatego
 
 import { BlogListPostsFilter } from "./components/BlogListPostsFilter";
 import { BlogPostsList } from "./components/BlogPostsList";
+import { Suspense } from "react";
 
 type BlogPosts = {
   searchParams: Promise<{
@@ -87,7 +88,9 @@ export default async function BlogPosts({ searchParams }: BlogPosts) {
               {t("description")}
             </p>
 
-            <BlogListPostsFilter categories={categories} />
+            <Suspense fallback={<div>Loading blog...</div>}>
+              <BlogListPostsFilter categories={categories} />
+            </Suspense>
           </div>
         </div>
       </section>
@@ -116,11 +119,13 @@ export default async function BlogPosts({ searchParams }: BlogPosts) {
             </div>
           )}
 
-          <BlogPostsList
-            hasMorePosts={blogPostsSuccess?.hasMore ?? false}
-            postsNextCursor={blogPostsSuccess?.nextCursor}
-            posts={posts}
-          />
+          <Suspense fallback={<div>Loading Blog List...</div>}>
+            <BlogPostsList
+              hasMorePosts={blogPostsSuccess?.hasMore ?? false}
+              postsNextCursor={blogPostsSuccess?.nextCursor}
+              posts={posts}
+            />
+          </Suspense>
 
           <NewsLetterSubscriptionForm />
         </div>

@@ -2,7 +2,7 @@
 
 import { Menu, X } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -54,7 +54,9 @@ export function Header() {
             {!session && <LoginDialog />}
             {session && <UserMenu session={session} />}
             <ThemeToggle />
-            <InternalizationToggle />
+            <Suspense fallback={<></>}>
+              <InternalizationToggle />
+            </Suspense>
 
             {/* Mobile Menu Button */}
             <Button

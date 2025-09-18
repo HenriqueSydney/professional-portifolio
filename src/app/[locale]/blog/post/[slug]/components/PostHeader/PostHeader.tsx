@@ -31,7 +31,10 @@ export async function PostHeader({ blogPost }: IPostHeader) {
               {blogPost.category}
             </Badge>
 
-            <div className="flex items-center gap-4 text-sm text-white/80 drop-shadow-md">
+            <div
+              className="flex items-center gap-4 text-sm text-white/80 drop-shadow-md"
+              data-testid="post-publication-date"
+            >
               <div className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
                 {blogPost.date}
@@ -57,7 +60,10 @@ export async function PostHeader({ blogPost }: IPostHeader) {
             </div>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white drop-shadow-lg ">
+          <h1
+            className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white drop-shadow-lg"
+            data-testid="post-title"
+          >
             {blogPost.title}
           </h1>
 
@@ -85,7 +91,10 @@ export async function PostHeader({ blogPost }: IPostHeader) {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 mt-6">
+          <div
+            className="flex flex-wrap gap-2 mt-6"
+            data-testid="post-tags-container"
+          >
             {blogPost.tags.map((tag, index) => (
               <Badge
                 key={index}

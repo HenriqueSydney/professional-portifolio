@@ -28,11 +28,17 @@ export async function PostMetrics({ postId }: IPostMetrics) {
         numberOfViews={postMetrics?.numberOfViews ?? 0}
       />
 
-      <div className="flex items-center gap-1 text-white/80 drop-shadow-md">
+      <div
+        className="flex items-center gap-1 text-white/80 drop-shadow-md"
+        data-testid="post-likes"
+      >
         <Heart className="w-4 h-4" />
         {postMetrics?.numberOfLikes ?? 0}
       </div>
-      <div className="flex items-center gap-1 text-white/80 drop-shadow-md">
+      <div
+        className="flex items-center gap-1 text-white/80 drop-shadow-md"
+        data-testid="post-comments-total"
+      >
         <MessageCircle className="w-4 h-4" />
         {postMetrics?.totalOfComments ?? 0}
       </div>

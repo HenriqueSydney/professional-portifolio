@@ -7,9 +7,10 @@ import { useCallback, useEffect, useState } from "react";
 
 import { BlogPostCard } from "@/components/BlogPostCard";
 
-import { BlogPost, fetchBlogPosts } from "@/services/blog/fetchBlogPosts";
+import { fetchBlogPosts } from "@/services/blog/fetchBlogPosts";
 
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
+import { BlogPost } from "@/mappers/postsMapper";
 
 interface IBlogPosts {
   posts: BlogPost[];

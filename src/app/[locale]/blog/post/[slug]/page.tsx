@@ -65,6 +65,7 @@ export default async function post({
               <CardContent
                 id="blog_content"
                 className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-code:text-primary prose-pre:bg-muted prose-pre:border"
+                data-testid="post-content"
               >
                 {blogPost?.content
                   ? renderNotionBlock(blogPost.content)

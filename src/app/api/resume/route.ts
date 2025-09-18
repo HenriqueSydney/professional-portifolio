@@ -1,15 +1,14 @@
 // app/api/resume/download/route.ts
 import { NextRequest } from "next/server";
 
-import { getCertifications } from "@/services/notion/getCertificationsFromNotion";
-import { getExperience } from "@/services/notion/getExperienceFromNotion";
-import { getProfileStats } from "@/services/notion/getProfileStatsFromNotion";
-import { getSkills } from "@/services/notion/getSkillsFromNotion";
-
 // import { analytics } from '@/lib/analytics';
 import { getResumeData } from "@/data/resumeData";
 import { apiLogger } from "@/lib/logger";
 import { generateResumePDF } from "@/lib/pdf-generator";
+import { getProfileStats } from "@/services/profileInformation/getProfileStats";
+import { getSkills } from "@/services/profileInformation/getSkills";
+import { getExperience } from "@/services/profileInformation/getExperience";
+import { getCertifications } from "@/services/profileInformation/getCertifications";
 
 export async function GET(request: NextRequest) {
   try {
