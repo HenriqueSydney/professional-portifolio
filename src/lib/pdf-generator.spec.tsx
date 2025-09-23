@@ -1,6 +1,5 @@
 import { vi, describe, it, expect } from "vitest";
-import { ResumeData } from "@/@types/Resume";
-import { generateResumePDF } from "./pdf-generator";
+import { generateResumePDF, IResumeDocument } from "./pdf-generator";
 import { randomUUID } from "node:crypto";
 
 // Mock do @react-pdf/renderer
@@ -18,8 +17,19 @@ vi.mock("@react-pdf/renderer", async () => {
 
 describe("generateResumePDF", () => {
   it("should generate a PDF buffer from resume data", async () => {
-    const mockData = {
-      basicProfile: { personalInfo: { name: "Henrique" } } as ResumeData,
+    const mockData: IResumeDocument = {
+      basicInfo: {
+        address: "",
+        age: "",
+        email: "",
+        excerpt: "",
+        name: "",
+        phoneNumber: "",
+        profession: "",
+        id: "",
+      },
+      graduations: [],
+      projects: [],
       profileStats: [],
       skills: [],
       certifications: { id: randomUUID(), certifications: [], courses: [] },

@@ -72,7 +72,7 @@ export async function getExperienceFromNotion(
   cacheTag: string[]
 ): Promise<GetExperienceResponse> {
   return await notionClient(
-    "getExperience",
+    "getExperienceFromNotion",
     async () => {
       const response = await notion.databases.query({
         database_id: "26276eb72c6380a4a6b7f2232c28d5d5",
@@ -98,6 +98,7 @@ export async function getExperienceFromNotion(
       return experiences;
     },
     {
+      cache: "no-cache",
       tags: cacheTag,
     }
   );

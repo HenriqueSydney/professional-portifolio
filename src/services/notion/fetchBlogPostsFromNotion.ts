@@ -43,7 +43,7 @@ export async function fetchBlogPostsFromNotion(
   } = filters;
 
   return await notionClient(
-    "fetchBlogPosts",
+    "fetchBlogPostsFromNotion",
     async () => {
       const filters: any[] = [
         {

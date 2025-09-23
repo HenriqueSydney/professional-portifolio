@@ -1,39 +1,58 @@
-// app/api/resume/download/route.ts
 import { NextRequest } from "next/server";
 
-// import { analytics } from '@/lib/analytics';
-import { getResumeData } from "@/data/resumeData";
 import { apiLogger } from "@/lib/logger";
 import { generateResumePDF } from "@/lib/pdf-generator";
 import { getProfileStats } from "@/services/profileInformation/getProfileStats";
 import { getSkills } from "@/services/profileInformation/getSkills";
 import { getExperience } from "@/services/profileInformation/getExperience";
 import { getCertifications } from "@/services/profileInformation/getCertifications";
+import { getGraduations } from "@/services/profileInformation/getGraduations";
+import { getBasicInfo } from "@/services/profileInformation/getBasicInfo";
+import { getProjects } from "@/services/profileInformation/getProjects";
 
 export async function GET(request: NextRequest) {
   try {
     const start = performance.now();
     apiLogger.debug({ request }, "Resume download request");
 
-    const [profileStats, skills, experiences, certifications, basicProfile] =
-      await Promise.all([
-        getProfileStats(),
-        getSkills(),
-        getExperience(),
-        getCertifications(),
-        getResumeData(),
-      ]);
+    const [
+      basicInfo,
+      profileStats,
+      skills,
+      experiences,
+      certifications,
+      graduations,
+      projects,
+    ] = await Promise.all([
+      getBasicInfo(),
+      getProfileStats(),
+      getSkills(),
+      getExperience(),
+      getCertifications(),
+      getGraduations(),
+      getProjects(),
+    ]);
 
-    if (profileStats[0] || skills[0] || experiences[0] || certifications[0]) {
+    if (
+      profileStats[0] ||
+      skills[0] ||
+      experiences[0] ||
+      certifications[0] ||
+      graduations[0] ||
+      basicInfo[0] ||
+      projects[0]
+    ) {
       throw new Error("Não localizado");
     }
 
     const pdfBuffer = await generateResumePDF({
-      basicProfile,
+      basicInfo: basicInfo[1],
       profileStats: profileStats[1],
       skills: skills[1],
       experience: experiences[1],
       certifications: certifications[1],
+      graduations: graduations[1],
+      projects: projects[1],
     });
 
     const pdfData = new Uint8Array(pdfBuffer);
@@ -43,7 +62,8 @@ export async function GET(request: NextRequest) {
     return new Response(pdfData, {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": 'attachment; filename="joao-silva-resume.pdf"',
+        "Content-Disposition":
+          'attachment; filename="henrique-lima-resume.pdf"',
         "Cache-Control": "public, max-age=3600", // Cache de 1 hora
       },
     });

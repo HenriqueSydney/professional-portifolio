@@ -1,14 +1,13 @@
-
-import { SpanStatusCode, trace } from '@opentelemetry/api';
+import { SpanStatusCode, trace } from "@opentelemetry/api";
 import { htmlToText } from "html-to-text";
 
-import Mailer from '@/lib/mailer/mailer-factory'
+import Mailer from "@/lib/mailer/mailer-factory";
 
 type SendEmail = {
-    to: string
-    subject: string
-    html: string
-}
+  to: string;
+  subject: string;
+  html: string;
+};
 
 export async function sendEmail({ to, subject, html }: SendEmail) {
   const tracer = trace.getTracer("mailer");
@@ -21,11 +20,25 @@ export async function sendEmail({ to, subject, html }: SendEmail) {
     try {
       const text = htmlToText(html, {
         wordwrap: 130,
-        selectors: [{ selector: "a", options: { hideLinkHrefIfSameAsText: true } }],
+        selectors: [
+          { selector: "a", options: { hideLinkHrefIfSameAsText: true } },
+        ],
       });
 
       const mailer = Mailer.getInstance();
-      const response = await mailer.sendMail({ to, subject, html, text });
+      const response = await mailer.sendMail({
+        to,
+        subject,
+        html,
+        text,
+        attachments: [
+          {
+            filename: "Logo.png",
+            path: "./public/Logo.png",
+            cid: "logo",
+          },
+        ],
+      });
 
       span.setStatus({ code: SpanStatusCode.OK });
       span.setAttribute("email.messageId", JSON.stringify(response.messageId));

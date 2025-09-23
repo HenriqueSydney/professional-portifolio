@@ -27,6 +27,9 @@ export function NewsLetterSubscriptionFormLoggedUser({
   const { toast } = useToast();
   const appointmentFormCheckout = useForm<NewsLetterSubscriptionFormData>({
     resolver: zodResolver(newsLetterSubscriptionFormSchema),
+    defaultValues: {
+      email,
+    },
   });
 
   const {

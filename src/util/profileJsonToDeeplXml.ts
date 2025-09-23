@@ -3,12 +3,18 @@ import { escapeXml } from "./escapeXml";
 import { Experience } from "@/services/notion/getExperienceFromNotion";
 import { Certifications } from "@/services/notion/getCertificationsFromNotion";
 import { Skills } from "@/services/notion/getSkillsFromNotion";
+import { Graduation } from "@/services/notion/getGraduationFromNotion";
+import { BasicInfo } from "@/services/notion/getBasicInfoFromNotion";
+import { Projects } from "@/services/notion/getProjectsFromNotion";
 
 export type ProfileData =
   | ProfileStats[]
   | Experience[]
   | Certifications
-  | Skills[];
+  | Skills[]
+  | Graduation[]
+  | BasicInfo
+  | Projects[];
 
 export function profileJsonToDeeplXml(data: ProfileData, type: string): string {
   const parts: string[] = [];

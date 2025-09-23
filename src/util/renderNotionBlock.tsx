@@ -163,7 +163,7 @@ const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
     <h1
       key={block.id}
       id={`id_${normalizeId(block.id)}`}
-      className="text-3xl md:text-4xl font-bold mb-3 mt-6"
+      className="text-3xl md:text-4xl font-bold mb-1 mt-3 md:mb-3 md:mt-6"
     >
       {block.heading_1.rich_text.map((text: any, i: number) => (
         <React.Fragment key={i}>{text.plain_text}</React.Fragment>
@@ -175,7 +175,7 @@ const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
     <h2
       key={block.id}
       id={`id_${normalizeId(block.id)}`}
-      className="text-xl md:text-2xl font-bold mb-3 mt-6"
+      className="text-xl md:text-2xl font-bold mb-1 mt-3 md:mb-3 md:mt-6"
     >
       {block.heading_2.rich_text.map((text: any, i: number) => (
         <React.Fragment key={i}>{text.plain_text}</React.Fragment>
@@ -187,7 +187,7 @@ const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
     <h3
       key={block.id}
       id={`id_${normalizeId(block.id)}`}
-      className="text-lg md:text-xl font-bold mb-3 mt-6"
+      className="text-lg md:text-xl font-bold mb-1 mt-3 md:mb-3 md:mt-6"
     >
       {block.heading_3.rich_text.map((text: any, i: number) =>
         renderRichText(text, i)

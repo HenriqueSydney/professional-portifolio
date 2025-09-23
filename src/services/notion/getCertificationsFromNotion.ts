@@ -63,7 +63,7 @@ export async function getCertificationsFromNotion(
   cacheTag: string[]
 ): Promise<GetCertificationsResponse> {
   return await notionClient(
-    "getCertifications",
+    "getCertificationsFromNotion",
     async () => {
       const response = await notion.databases.query({
         database_id: "26076eb72c638048a967d8fa7f43e035",

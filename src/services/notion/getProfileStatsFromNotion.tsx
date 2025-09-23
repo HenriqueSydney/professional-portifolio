@@ -48,7 +48,7 @@ export async function getProfileStatsFromNotion(
   cacheTag: string[]
 ): Promise<GetProfileStatsResponse> {
   return await notionClient(
-    "getProfileStats",
+    "getProfileStatsFromNotion",
     async () => {
       const response = await notion.databases.query({
         database_id: "26076eb72c6380c69043d529bf43cbb2",

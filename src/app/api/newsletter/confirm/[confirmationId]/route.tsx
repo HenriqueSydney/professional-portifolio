@@ -8,6 +8,7 @@ import { sendEmail } from "@/lib/mailer/sendEmail";
 import { makeNewsletterSubscriptionsRepository } from "@/repositories/factories/makeNewsletterSubscriptionsRepository";
 import { NewsLetterSubscriptions } from "@/generated/prisma";
 import { repositoryClient } from "@/lib/repositoryClient";
+import { envVariables } from "@/env";
 
 const confirmationEmailApiSchema = z.object({
   confirmationId: z.uuid({ version: "v4" }),
@@ -18,8 +19,8 @@ export async function GET(
   { params }: { params: Promise<{ confirmationId: string }> }
 ) {
   try {
-    const { confirmationId } =
-      await confirmationEmailApiSchema.parseAsync(params);
+    const { confirmationId } = confirmationEmailApiSchema.parse(await params);
+
     const newsLetterSubscriptionRepository =
       makeNewsletterSubscriptionsRepository();
 
@@ -63,16 +64,18 @@ export async function GET(
       to: subscription.email,
       html,
       subject:
-        "[HenriqueLima.Dev] Seja bem vindo! Confirme sua inscrição e começe a diversos conteúdos do mundo de Desenvolvimento e DevOps",
+        "[HenriqueLima.Dev] Seja bem vindo! Sua inscrição foi confirmada!",
     });
 
-    return Response.redirect("/newsletter/confirmed");
+    return Response.redirect(`${envVariables.BASE_URL}/newsletter/confirmed`);
   } catch (error) {
     let errorMessage = "Erro inexperado";
     if (error instanceof AppError) {
       errorMessage = error.message;
     }
 
-    return Response.redirect(`/newsletter/error/${error}`);
+    return Response.redirect(
+      `${envVariables.BASE_URL}/newsletter/error?error=${error}`
+    );
   }
 }

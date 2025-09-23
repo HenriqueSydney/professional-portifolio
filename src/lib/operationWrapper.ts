@@ -138,6 +138,7 @@ export async function operationWrapper<T>(
         span.setAttribute("cache.hit", false);
         span.recordException(error);
         span.setStatus({ code: SpanStatusCode.ERROR, message: error.message }); // ERROR
+        console.log(error);
         apiLogger.error(
           { stackTrace: error, operationName, operationType },
           "Error in operation Wrapper"

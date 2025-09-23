@@ -98,6 +98,7 @@ export function SocialActions({ numberOfLikes, postId }: ISocialActions) {
               variant="outline"
               className="gap-2 hover:bg-primary hover:text-primary-foreground hover:shadow-glow transition-all duration-300 hover:scale-105"
               onClick={handleToggleCommentBox}
+              data-testid="comment-button"
             >
               <MessageSquareMore className="w-4 h-4" />
               {t("commentButton")}

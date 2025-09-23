@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "highlight.js/styles/github-dark.css";
 
-
 @layer base {
   :root {
     /* Light Theme - Green Tones */
@@ -38,16 +37,23 @@
     --radius: 0.75rem;
 
     /* Custom Portfolio Colors - Light */
-    --hero-gradient: linear-gradient(135deg, hsl(142, 70%, 45%), hsl(145, 65%, 55%));
+    --hero-gradient: linear-gradient(
+      135deg,
+      hsl(142, 70%, 45%),
+      hsl(145, 65%, 55%)
+    );
     --card-hover: 140 25% 92%;
-    --text-gradient: linear-gradient(135deg, hsl(142, 70%, 35%), hsl(145, 65%, 45%));
+    --text-gradient: linear-gradient(
+      135deg,
+      hsl(142, 70%, 35%),
+      hsl(145, 65%, 45%)
+    );
     --skill-bg: 140 20% 90%;
     --shadow-color: 142 70% 45%;
     --glow-color: 145 65% 55%;
 
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
 
     /* Sidebar */
     --sidebar-background: 0 0% 98%;
@@ -93,9 +99,17 @@
     --ring: 270 85% 65%;
 
     /* Custom Portfolio Colors - Dark */
-    --hero-gradient: linear-gradient(135deg, hsl(270, 85%, 65%), hsl(280, 80%, 70%));
+    --hero-gradient: linear-gradient(
+      135deg,
+      hsl(270, 85%, 65%),
+      hsl(280, 80%, 70%)
+    );
     --card-hover: 260 20% 16%;
-    --text-gradient: linear-gradient(135deg, hsl(270, 85%, 75%), hsl(280, 80%, 80%));
+    --text-gradient: linear-gradient(
+      135deg,
+      hsl(270, 85%, 75%),
+      hsl(280, 80%, 80%)
+    );
     --skill-bg: 260 15% 14%;
     --shadow-color: 270 85% 65%;
     --glow-color: 280 80% 70%;
@@ -117,7 +131,7 @@
 }
 
 [id] {
-  scroll-margin-top: 50px;
+  scroll-margin-top: 100px;
   /* substitua pelo tamanho do header */
 }
 
@@ -151,7 +165,11 @@
 
   .via-primary {
     --tw-gradient-via: hsl(var(--primary));
-    --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+    --tw-gradient-via-stops:
+      var(--tw-gradient-position),
+      var(--tw-gradient-from) var(--tw-gradient-from-position),
+      var(--tw-gradient-via) var(--tw-gradient-via-position),
+      var(--tw-gradient-to) var(--tw-gradient-to-position);
     --tw-gradient-stops: var(--tw-gradient-via-stops);
   }
 
@@ -235,7 +253,9 @@
   .shadow-glow {
     --tw-shadow: 0 0 20px hsl(var(--glow-color) / 0.3);
     --tw-shadow-colored: 0 0 20px var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    box-shadow:
+      var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+      var(--tw-shadow);
   }
 
   .shadow-glow-lg {
@@ -245,15 +265,17 @@
   .hover\:shadow-glow:hover {
     --tw-shadow: 0 0 20px hsl(var(--glow-color) / 0.3);
     --tw-shadow-colored: 0 0 20px var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    box-shadow:
+      var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+      var(--tw-shadow);
   }
 
   .hover\:destructive-glow:hover {
     --tw-shadow-color: hsl(var(--destructive));
     --tw-shadow: 0 0 20px hsl(var(--tw-shadow-color) / 0.3);
     --tw-shadow-colored: 0 0 20px var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
-      var(--tw-ring-shadow, 0 0 #0000),
+    box-shadow:
+      var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
       var(--tw-shadow);
   }
 
@@ -570,7 +592,6 @@
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0px);
@@ -995,7 +1016,6 @@
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0px);
@@ -1005,8 +1025,6 @@
     transform: translateY(-10px);
   }
 }
-
-
 
 .logo {
   height: 6em;

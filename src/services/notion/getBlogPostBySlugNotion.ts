@@ -15,7 +15,7 @@ export async function getBlogPostBySlugFromNotion(
   cacheTags: string[]
 ): Promise<FetchBlogPostsBySlugResponse> {
   return await notionClient(
-    "getBlogPostBySlug",
+    "getBlogPostBySlugFromNotion",
     async () => {
       const filters = [
         {

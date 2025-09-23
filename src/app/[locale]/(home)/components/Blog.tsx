@@ -30,7 +30,7 @@ export async function Blog() {
   const [__, blogPostsSuccess] = blogPosts;
 
   return (
-    <section id="blog" className="py-15 bg-muted/30">
+    <section id="blog" className="bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">

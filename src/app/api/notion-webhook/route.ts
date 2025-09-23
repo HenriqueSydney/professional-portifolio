@@ -8,23 +8,9 @@ import { apiLogger } from "@/lib/logger";
 import { makeCreateAndUpdatePostUseCase } from "@/use-cases/factories/makeCreateAndUpdatePostUseCase";
 import { envVariables } from "@/env";
 import { makeCreateAndUpdateProfileInfoUseCase } from "@/use-cases/factories/makeCreateAndUpdateProfileInfoUseCase";
-import { ProfileInformationType } from "@/generated/prisma";
+import { PROFILE_TYPE_BY_DATABASEID } from "@/mappers/ProfileDatabaseMapper";
 
-// const DATABASE_IDS = {
-//   "26076eb72c6380c69043d529bf43cbb2": 'PROFILE_STATS',
-//   "26076eb72c6380729e1ac813aeac905e": 'SKILLS',
-//   "26076eb72c638048a967d8fa7f43e035": 'CERTIFICATIONS',
-//   "26276eb72c6380a4a6b7f2232c28d5d5": 'EXPERIENCE',
-// } as const;
-
-const PROFILE_TYPE = {
-  "26076eb72c6380c69043d529bf43cbb2": ProfileInformationType.STATS,
-  "26076eb72c6380729e1ac813aeac905e": ProfileInformationType.SKILLS,
-  "26076eb72c638048a967d8fa7f43e035": ProfileInformationType.CERTIFICATION,
-  "26276eb72c6380a4a6b7f2232c28d5d5": ProfileInformationType.EXPERIENCE,
-} as const;
-
-type ProfileDatabaseId = keyof typeof PROFILE_TYPE;
+type ProfileDatabaseId = keyof typeof PROFILE_TYPE_BY_DATABASEID;
 
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
@@ -61,7 +47,8 @@ export async function POST(req: NextRequest) {
     const pageId = body.entity.id;
     if (isDatabaseUpdate) {
       const databaseId: string = body.data.parent.id.replaceAll("-", "");
-      const profileType = PROFILE_TYPE[databaseId as ProfileDatabaseId];
+      const profileType =
+        PROFILE_TYPE_BY_DATABASEID[databaseId as ProfileDatabaseId];
 
       if (!profileType) {
         apiLogger.error({ databaseId: databaseId }, "Database not mapped");

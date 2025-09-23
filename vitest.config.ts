@@ -1,13 +1,19 @@
 /// <reference types="vitest/config" />
 import path from "node:path";
 import { defineConfig, configDefaults } from "vitest/config";
+import react from "@vitejs/plugin-react";
+import { config } from "dotenv";
 
 export default defineConfig({
+  plugins: [react()],
   test: {
     name: "Unit-test",
     globals: true,
     environment: "jsdom",
     setupFiles: "./vitest.setup.ts",
+    env: {
+      ...config({ path: ".env.test" }).parsed,
+    },
     include: ["**/*.{test,spec}.?(c|m)[jt]s?(x)"],
     exclude: [
       ...configDefaults.exclude,
@@ -23,6 +29,7 @@ export default defineConfig({
       "**/generated/**",
       "**/i18n/**",
       "**/*.e2e.{test,spec}.?(c|m)[jt]s?(x)",
+      "**/*.int.{test,spec}.?(c|m)[jt]s?(x)",
     ],
     coverage: {
       exclude: [

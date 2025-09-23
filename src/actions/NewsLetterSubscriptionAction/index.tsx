@@ -50,6 +50,14 @@ export async function sendNewsLetterSubscriptionConfirmation(
 
     let subscription: NewsLetterSubscriptions | null = null;
 
+    if (subscriptionExists && subscriptionExists.confirmedAt) {
+      return {
+        success: true,
+        message:
+          "Você já realizou sua inscrição. Caso queira cancelá-la, enviamos um email com orientações.",
+      };
+    }
+
     if (
       subscriptionExists &&
       currentDay.isAfter(subscriptionExists.confirmationExpiresAt)

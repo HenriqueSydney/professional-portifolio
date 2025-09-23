@@ -2,9 +2,12 @@ import { Prisma, ProfileInformationType } from "@/generated/prisma";
 import { makeProfileInformationRepository } from "@/repositories/factories/makeProfileInformationRepository";
 import { checkDeeplUsage } from "@/services/internacionalization/checkDeeplUsage";
 import { translateTextWithDeepl } from "@/services/internacionalization/translateTextWithDeepl";
+import { getBasicInfoFromNotion } from "@/services/notion/getBasicInfoFromNotion";
 import { getCertificationsFromNotion } from "@/services/notion/getCertificationsFromNotion";
 import { getExperienceFromNotion } from "@/services/notion/getExperienceFromNotion";
+import { getGraduationFromNotion } from "@/services/notion/getGraduationFromNotion";
 import { getProfileStatsFromNotion } from "@/services/notion/getProfileStatsFromNotion";
+import { getProjectsFromNotion } from "@/services/notion/getProjectsFromNotion";
 import { getSkillsFromNotion } from "@/services/notion/getSkillsFromNotion";
 import { deeplXmlToProfileJson } from "@/util/deeplXmlToProfileJson";
 import {
@@ -42,6 +45,15 @@ export class CreateAndUpdateProfileInfoUseCase {
         break;
       case "EXPERIENCE":
         data = await getExperienceFromNotion(["experience"]);
+        break;
+      case "GRADUATION":
+        data = await getGraduationFromNotion(["graduations"]);
+        break;
+      case "PROJECTS":
+        data = await getProjectsFromNotion(["projects"]);
+        break;
+      case "BASIC_INFO":
+        data = await getBasicInfoFromNotion(["basic-info"]);
         break;
     }
 

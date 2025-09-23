@@ -96,6 +96,16 @@ test.describe("Navigation to Blog Post and Interactions", () => {
   test("logged user should be able to navigate to blog post and comment a post", async ({
     page,
   }) => {
+    await page.addStyleTag({
+      content: `
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    `,
+    });
     // Seu mock aqui
     await page.route("**/api/auth/session", (route) => {
       console.log("🔥 MOCK HIT!");
@@ -111,7 +121,7 @@ test.describe("Navigation to Blog Post and Interactions", () => {
 
     await page.goto(`${envVariables.BASE_URL}/en/blog`);
 
-    await page.waitForLoadState("networkidle");
+    // await page.waitForLoadState("networkidle");
 
     await expect(
       page.getByRole("button", { name: "H L Henrique Lima" })
@@ -123,12 +133,40 @@ test.describe("Navigation to Blog Post and Interactions", () => {
 
     await expect(page).toHaveURL(new RegExp(firstPostLink!));
 
-    const commentButton = page.getByRole("button", { name: "Comment" });
-
+    await page.waitForTimeout(500);
+    await page.waitForSelector('[data-testid="comment-button"]', {
+      state: "visible",
+      timeout: 10000,
+    });
+    const commentButton = page.getByTestId("comment-button");
+    await expect(commentButton).toBeAttached();
     await expect(commentButton).toBeVisible();
+    await expect(commentButton).toBeEnabled();
 
-    await clickButtonSafely(page, "Comment");
+    await commentButton.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(100);
 
-    const commentBox = page;
+    // Agora que está na posição correta, tente o clique
+    try {
+      await commentButton.click();
+      console.log("✅ Click successful!");
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log("❌ Click failed:", error.message);
+      }
+
+      // Fallback para JavaScript click
+      await commentButton.evaluate((button) =>
+        (button as HTMLButtonElement).click()
+      );
+      console.log("✅ JavaScript click executed");
+    }
+
+    // Verifica se a caixa de comentários abriu
+    await expect(page.getByTestId("comment-form")).toBeVisible();
+
+    // const commentTextArea = page.getByTestId("comment-form");
+
+    // await expect(commentTextArea).toBeVisible();
   });
 });

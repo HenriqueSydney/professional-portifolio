@@ -1,12 +1,17 @@
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 export interface SendEmailOptions {
-    to: string;
-    subject: string;
-    html: string;
-    text?: string; // opcional, pois pode ser gerado automaticamente
+  to: string;
+  subject: string;
+  html: string;
+  text?: string;
+  attachments: {
+    filename: string;
+    path: string;
+    cid: string;
+  }[];
 }
 
 export interface IMailer {
-    sendMail(options: SendEmailOptions): Promise<SMTPTransport.SentMessageInfo>;
+  sendMail(options: SendEmailOptions): Promise<SMTPTransport.SentMessageInfo>;
 }

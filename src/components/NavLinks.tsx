@@ -30,7 +30,7 @@ export function NavLinks({
   // Hook para detectar qual âncora está visível
   const anchorVisible = useVisibleAnchor(anchorIds, {
     threshold: 0.1, // Reduza o threshold
-    rootMargin: "-100px 0px -40% 0px", // Menos agressivo no bottom
+    rootMargin: "-40px 0px -40% 0px", // Menos agressivo no bottom
   });
 
   const scrollToSection = (href: string) => {

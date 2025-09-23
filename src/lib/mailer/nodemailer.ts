@@ -57,15 +57,26 @@ export class NodemailerMailer implements IMailer {
     return NodemailerMailer.instance;
   }
 
-  public async sendMail({ to, subject, html, text }: SendEmailOptions): Promise<SMTPTransport.SentMessageInfo> {
-    const plainText = text ?? htmlToText(html, {
-      wordwrap: 130,
-      selectors: [{ selector: "a", options: { hideLinkHrefIfSameAsText: true } }],
-    });
+  public async sendMail({
+    to,
+    subject,
+    html,
+    text,
+    attachments,
+  }: SendEmailOptions): Promise<SMTPTransport.SentMessageInfo> {
+    const plainText =
+      text ??
+      htmlToText(html, {
+        wordwrap: 130,
+        selectors: [
+          { selector: "a", options: { hideLinkHrefIfSameAsText: true } },
+        ],
+      });
 
-    const fromEmail = envVariables.NODE_ENV === "production"
-      ? envVariables.SMTP_USER
-      : envVariables.GOOGLE_EMAIL;
+    const fromEmail =
+      envVariables.NODE_ENV === "production"
+        ? envVariables.SMTP_USER
+        : envVariables.GOOGLE_EMAIL;
 
     const info = await this.transporter.sendMail({
       from: `Henrique Lima <${fromEmail}>`,
@@ -73,10 +84,10 @@ export class NodemailerMailer implements IMailer {
       subject,
       html,
       text: plainText,
+      attachments,
     });
 
     apiLogger.info({ to, subject }, `Message sent: ${info.messageId}`);
-    return info
-
+    return info;
   }
 }

@@ -45,6 +45,7 @@ type NotionDatabaseInfoOfSkills = {
 };
 
 const CATEGORY_ORDER = [
+  "Soft Skills",
   "Linguagens & Frameworks",
   "DevOps & Cloud",
   "Bancos de Dados",
@@ -58,7 +59,7 @@ export async function getSkillsFromNotion(
   cacheTag: string[]
 ): Promise<GetProfileSkillsResponse> {
   return await notionClient(
-    "getSkills",
+    "getSkillsFromNotion",
     async () => {
       const response = await notion.databases.query({
         database_id: "26076eb72c6380729e1ac813aeac905e",
@@ -114,6 +115,7 @@ export async function getSkillsFromNotion(
       return groupedStacks;
     },
     {
+      cache: "no-cache",
       tags: cacheTag,
     }
   );

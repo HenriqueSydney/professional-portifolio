@@ -13,7 +13,7 @@ export async function Skills() {
   if (skillCategoriesError) return null;
 
   return (
-    <section id="skills" className="py-15">
+    <section id="skills">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -31,8 +31,8 @@ export async function Skills() {
         </div>
 
         <div className="space-y-6 mb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {skillCategories.slice(0, 2).map((category, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {skillCategories.slice(0, 3).map((category, index) => (
               <SkillContainer
                 key={category.id}
                 category={category}
@@ -41,7 +41,7 @@ export async function Skills() {
             ))}
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {skillCategories.slice(2, 5).map((category, index) => (
+            {skillCategories.slice(3, 6).map((category, index) => (
               <SkillContainer
                 key={category.id}
                 category={category}
