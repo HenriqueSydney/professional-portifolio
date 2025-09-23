@@ -59,8 +59,8 @@ export function Hero() {
         {/* Overlay invisível para capturar hover em toda a área */}
         <div className="absolute inset-0 bg-transparent cursor-pointer z-30"></div>
 
-        <div className="absolute inset-0 bg-[url('/hl-image.png')] bg-no-repeat bg-center bg-contain z-10 pointer-events-none" />
-        <div className="absolute right-0 top-18 w-200 h-full bg-[url('/eu.jpeg')] bg-no-repeat bg-center bg-cover z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="absolute inset-0 bg-[url('/hl-image.png')] bg-no-repeat bg-center bg-contain z-10 opacity-100 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none" />
+        <div className="absolute right-0 w-200 h-full bg-[url('/eu.png')] bg-no-repeat bg-center bg-contain z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
       </div>
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="relative flex flex-col lg:flex-row items-center justify-between">

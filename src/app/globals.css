@@ -190,6 +190,14 @@
     background-color: hsl(var(--primary));
   }
 
+  .bg-muted-foreground-text {
+    background-color: hsl(var(--muted-foreground));
+  }
+
+  .bg-accent {
+    background-color: hsl(var(--accent));
+  }
+
   .bg-destructive {
     background-color: hsl(var(--destructive));
   }
@@ -228,6 +236,10 @@
 
   .text-primary {
     color: hsl(var(--primary));
+  }
+
+  .text-accent {
+    color: hsl(var(--accent));
   }
 
   .text-destructive-foreground {

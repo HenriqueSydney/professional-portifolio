@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skills } from "@/services/notion/getSkillsFromNotion";
 
 import { IconMap } from "@/mappers/IconMapper";
+import { skillLevelsMapper } from "@/mappers/skillsMapper";
 
 interface ISkillContainer {
   category: Skills;
@@ -31,22 +32,43 @@ export function SkillContainer({ category, index }: ISkillContainer) {
         </div>
 
         <div className="space-y-4">
-          {category.stack.map((skill) => (
-            <div key={skill.id} className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="font-medium">{skill.label}</span>
-              </div>
-              <div className="w-full bg-muted rounded-full h-2 flex justify-between items-center">
+          {category.stack
+            .sort((a, b) => {
+              return b.level - a.level;
+            })
+            .map((skill) => {
+              const levelInfo = skillLevelsMapper(skill.level);
+              return (
                 <div
-                  className="bg-primary h-2 rounded-full transition-all duration-1000 ease-out"
-                  style={{ width: `${skill.level}%` }}
-                ></div>
-                <span className="text-sm text-muted-foreground">
-                  {skill.level}%
-                </span>
-              </div>
-            </div>
-          ))}
+                  key={skill.label}
+                  className="flex items-center justify-between"
+                >
+                  <span className="font-medium">{skill.label}</span>
+                  <div className="flex items-center gap-3">
+                    <span className={`text-sm font-medium ${levelInfo.color}`}>
+                      {levelInfo.label}
+                    </span>
+                    <div className="flex gap-1">
+                      {Array.from({ length: 4 }, (_, i) => (
+                        <div
+                          key={i}
+                          className={`w-2 h-2 rounded-full transition-all duration-500 ${
+                            i < levelInfo.dots
+                              ? levelInfo.color === "text-primary"
+                                ? "bg-primary"
+                                : levelInfo.color === "text-accent"
+                                  ? "bg-accent"
+                                  : "bg-muted-foreground-text"
+                              : "bg-muted"
+                          }`}
+                          style={{ animationDelay: `${i * 0.1}s` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
         </div>
       </CardContent>
     </Card>
