@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { apiLogger } from "@/lib/logger";
 import { makeRateLimiter } from "@/lib/rateLimiter/makeRateLimiter";
+import { handleErrors } from "@/errors/handleErrors";
 
 const tracer = trace.getTracer("rate-limiter");
 
@@ -61,7 +62,7 @@ export async function GET(request: NextRequest) {
     );
   } catch (error) {
     span.setStatus({ code: SpanStatusCode.ERROR, message: String(error) });
-    apiLogger.error({ stackTrace: error }, "Rate limit check error:");
+    handleErrors(error, null, { messsage: "Rate limit check error" });
     return NextResponse.json(
       { success: true, limit: 100, remaining: 99, reset: Date.now() + 60000 },
       { status: 200 }

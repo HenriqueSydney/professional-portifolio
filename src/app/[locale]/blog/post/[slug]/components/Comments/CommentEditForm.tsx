@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
 import { Textarea } from "@/components/Textarea";
-import { Button } from "@/components/ui/button";
 
 import { editCommentAction } from "@/actions/comments/editCommentAction";
 import {
@@ -15,6 +14,7 @@ import {
 } from "@/actions/comments/editCommentAction/editCommentFormSchema";
 import { useToast } from "@/hooks/use-toast";
 import { date } from "@/lib/dayjs";
+import { Button } from "@/components/Button";
 
 interface ICommentEditForm {
   commentId: number;
@@ -98,14 +98,16 @@ export function CommentEditForm({
       <div className="w-full flex items-center justify-end gap-4 mt-4">
         <Button
           size="sm"
+          isLoading={isSubmitting}
+          label={t("submit")}
           className="hover:shadow-glow transition-all duration-300"
-          disabled={isSubmitting}
-        >
-          {t("submit")}
-        </Button>
-        <Button variant="outline" onClick={handleToggleCommentEditForm}>
-          {t("cancel")}
-        </Button>
+        />
+
+        <Button
+          label={t("cancel")}
+          variant="outline"
+          onClick={handleToggleCommentEditForm}
+        />
       </div>
     </form>
   );

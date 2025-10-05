@@ -1,4 +1,4 @@
-const skillLevels = {
+export const skillLevels = {
   expert: { label: "Expert", dots: 4, color: "text-primary" },
   advanced: { label: "Avançado", dots: 3, color: "text-accent" },
   intermediate: {

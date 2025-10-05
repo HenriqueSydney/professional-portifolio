@@ -1,0 +1,19 @@
+name: "Setup SSH"
+description: "Configure SSH for droplet connection"
+inputs:
+  ssh-private-key:
+    description: "SSH private key"
+    required: true
+  droplet-ip:
+    description: "Droplet IP address"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+        echo "${{ inputs.ssh-private-key }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ inputs.droplet-ip }} >> ~/.ssh/known_hosts 2>/dev/null || true
+      shell: bash

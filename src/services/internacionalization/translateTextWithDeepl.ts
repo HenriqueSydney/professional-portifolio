@@ -1,4 +1,5 @@
 import { envVariables } from "@/env";
+import { handleErrors } from "@/errors/handleErrors";
 import { httpClient } from "@/lib/httpClient";
 import { apiLogger } from "@/lib/logger";
 
@@ -46,8 +47,10 @@ export async function translateTextWithDeepl({
 
     return responseSuccess.translations[0].text;
   } catch (error) {
-    console.log(error);
-    apiLogger.error({ stack: error }, "Translation DEEPL error");
+    handleErrors(error, null, {
+      message: "Translation DEEPL error",
+    });
+
     return null;
   }
 }

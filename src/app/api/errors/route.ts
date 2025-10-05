@@ -1,20 +1,20 @@
 // app/api/log-error/route.ts
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from "next/server";
 
-import { apiLogger } from '@/lib/logger'
+import { apiLogger } from "@/lib/logger";
 
-import { ErrorLogData, errorLoggerSchema } from './errorLoggerSchema'
-
+import { ErrorLogData, errorLoggerSchema } from "./errorLoggerSchema";
+import { handleErrors } from "@/errors/handleErrors";
 
 export async function POST(request: NextRequest) {
   try {
-    const errorBody: ErrorLogData = await request.json()
+    const errorBody: ErrorLogData = await request.json();
 
-    const errorData = await errorLoggerSchema.parseAsync(errorBody)
+    const errorData = await errorLoggerSchema.parseAsync(errorBody);
 
     // Log estruturado para Loki
     const logEntry = {
-      level: 'error',
+      level: "error",
       timestamp: new Date().toISOString(),
       message: errorData.message,
       stack: errorData.stack,
@@ -24,17 +24,23 @@ export async function POST(request: NextRequest) {
       userId: errorData.userId,
       sessionId: errorData.sessionId,
       metadata: errorData.metadata,
-      source: 'client-side-error'
-    }
+      source: "client-side-error",
+    };
 
-    apiLogger.error({ errorLog: logEntry }, 'An error has occur in a Client or a Server Component');
+    apiLogger.error(
+      { errorLog: logEntry },
+      "An error has occur in a Client or a Server Component"
+    );
 
-    return NextResponse.json({ success: true }, { status: 200 })
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error('Error logging client error:', error)
+    handleErrors(error, null, {
+      message: "Error logging client error",
+    });
+
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }

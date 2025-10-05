@@ -9,6 +9,7 @@ import { getCertifications } from "@/services/profileInformation/getCertificatio
 import { getGraduations } from "@/services/profileInformation/getGraduations";
 import { getBasicInfo } from "@/services/profileInformation/getBasicInfo";
 import { getProjects } from "@/services/profileInformation/getProjects";
+import { handleErrors } from "@/errors/handleErrors";
 
 export async function GET(request: NextRequest) {
   try {
@@ -68,8 +69,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.log(error);
-    apiLogger.error({ stackTrace: error }, "Resume download - Error");
+    handleErrors(error, null, { message: "Resume download - Error" });
     return Response.json({ error: "Failed to generate PDF" }, { status: 500 });
   }
 }

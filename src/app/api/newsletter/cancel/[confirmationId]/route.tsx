@@ -3,12 +3,12 @@ import z from "zod";
 
 import NewsletterSubscriptionCancelEmail from "@/email/NewsletterSubscriptionCancelEmail";
 import { SubscriptionNotFoundError } from "@/errors/SubscriptionNotFoundError";
-import { sendEmail } from "@/lib/mailer/sendEmail";
 import { makeNewsletterSubscriptionsRepository } from "@/repositories/factories/makeNewsletterSubscriptionsRepository";
 import { repositoryClient } from "@/lib/repositoryClient";
 import { NewsLetterSubscriptions } from "@/generated/prisma";
-import { apiLogger } from "@/lib/logger";
 import { envVariables } from "@/env";
+import { handleErrors } from "@/errors/handleErrors";
+import { addSendEmailJob } from "@/queues/jobs/sendEmail";
 
 const cancelSubscriptionNewsletterApiSchema = z.object({
   confirmationId: z.uuid({ version: "v4" }),
@@ -66,22 +66,22 @@ export async function GET(
       subscription.id
     );
 
-    await sendEmail({
-      to: subscription.email,
+    await addSendEmailJob({
+      email: subscription.email,
       html,
       subject:
         "[HenriqueLima.Dev] Que pena! Mas não se preocupe! Sempre estarei te esperando de volta!",
+      logMessage: "Canceled subscription confirmation message sent",
     });
 
     return Response.redirect(`${envVariables.BASE_URL}/newsletter/unsubscribe`);
   } catch (error) {
-    console.log(error);
-    apiLogger.error(
-      { stackTrace: error },
-      "Newsletter cancel Subscription error"
-    );
+    const errorMessage = handleErrors(error, null, {
+      message: "Newsletter cancel Subscription error",
+    });
+
     return Response.redirect(
-      `${envVariables.BASE_URL}/newsletter/error?error=${error}`
+      `${envVariables.BASE_URL}/newsletter/error?error=${errorMessage}`
     );
   }
 }

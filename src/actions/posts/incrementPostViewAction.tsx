@@ -7,6 +7,7 @@ import { apiLogger } from "@/lib/logger";
 import { makePostMetricsRepository } from "@/repositories/factories/makePostMetricsRepository";
 import { repositoryClient } from "@/lib/repositoryClient";
 import { PostMetrics } from "@/generated/prisma";
+import { handleErrors } from "@/errors/handleErrors";
 
 const postMetricsViewSchema = z.object({
   postId: z.number(),
@@ -34,14 +35,13 @@ export async function incrementPostViewAction(data: PostMetricsViewData) {
       success: true,
     };
   } catch (error) {
-    let errorMessage = "Erro inexperado";
-    if (error instanceof AppError) {
-      errorMessage = error.message;
-    }
-    apiLogger.error({ stackTrace: error }, "Erro ao tentar incrementar view");
+    const errorMessage = handleErrors(error, null, {
+      message: "Erro ao tentar incrementar view",
+    });
 
     return {
       success: false,
+      message: errorMessage,
     };
   }
 }

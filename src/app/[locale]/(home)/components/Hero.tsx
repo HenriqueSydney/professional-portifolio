@@ -25,7 +25,7 @@ export function Hero() {
 
   async function handleDownloadResume() {
     const [error, blob] = await httpClient<Blob>(
-      `${baseUrl}/api/resume`,
+      `/api/resume`,
       {
         cache: "no-cache",
       },

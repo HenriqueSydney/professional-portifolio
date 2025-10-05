@@ -16,6 +16,7 @@ import { Logger } from "pino";
 import { apiLogger } from "../logger";
 
 import { CacheStats, IRedisClient } from "./IRedisClient";
+import { handleErrors } from "@/errors/handleErrors";
 
 export class RedisClient implements IRedisClient {
   private redis: Redis;
@@ -190,10 +191,10 @@ export class RedisClient implements IRedisClient {
 
           return result;
         } catch (error) {
-          this.logger.error(
-            { stackTrace: error },
-            `Erro ao buscar cache ${key}`
-          );
+          handleErrors(error, null, {
+            message: `Erro ao buscar cache ${key}`,
+          });
+
           return null;
         }
       },
@@ -219,10 +220,9 @@ export class RedisClient implements IRedisClient {
             await this.redis.set(key, serializedData);
           }
         } catch (error) {
-          this.logger.error(
-            { stackTrace: error },
-            `Erro ao armazenar cache ${key}`
-          );
+          handleErrors(error, null, {
+            message: `Erro ao armazenar cache ${key}`,
+          });
         }
       },
       {
@@ -253,7 +253,9 @@ export class RedisClient implements IRedisClient {
           }
           await pipeline.exec();
         } catch (error) {
-          this.logger.error({ stackTrace: error }, "Erro ao adicionar tags");
+          handleErrors(error, null, {
+            message: "Erro ao adicionar tags",
+          });
         }
       },
       {
@@ -303,10 +305,9 @@ export class RedisClient implements IRedisClient {
             );
           }
         } catch (error) {
-          this.logger.error(
-            { stackTrace: error },
-            `Erro ao invalidar cache das tags ${tags.join("; ")}`
-          );
+          handleErrors(error, null, {
+            message: `Erro ao invalidar cache das tags ${tags.join("; ")}`,
+          });
         }
       },
       {
@@ -333,10 +334,10 @@ export class RedisClient implements IRedisClient {
             return false;
           }
         } catch (error) {
-          this.logger.error(
-            { stackTrace: error },
-            `Erro ao invalidar cache ${cacheKey}`
-          );
+          handleErrors(error, null, {
+            message: `Erro ao invalidar cache ${cacheKey}`,
+          });
+
           return false;
         }
       },
@@ -368,10 +369,10 @@ export class RedisClient implements IRedisClient {
 
           return stats;
         } catch (error) {
-          this.logger.error(
-            { stackTrace: error },
-            "Erro ao obter stats do cache"
-          );
+          handleErrors(error, null, {
+            message: "Erro ao obter stats do cache",
+          });
+
           return {
             totalKeys: 0,
             notionKeys: 0,
@@ -404,10 +405,9 @@ export class RedisClient implements IRedisClient {
             );
           }
         } catch (error) {
-          this.logger.error(
-            { stackTrace: error },
-            `Erro ao limpar cache do prefixo ${prefix}`
-          );
+          handleErrors(error, null, {
+            message: `Erro ao limpar cache do prefixo ${prefix}`,
+          });
         }
       },
       {
@@ -443,7 +443,9 @@ export class RedisClient implements IRedisClient {
       try {
         await this.redis.quit();
       } catch (error) {
-        this.logger.error({ stackTrace: error }, "Erro ao desconectar Redis");
+        handleErrors(error, null, {
+          message: "Erro ao desconectar Redis",
+        });
       }
     });
   }

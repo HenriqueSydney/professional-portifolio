@@ -9,6 +9,7 @@ import { makeCreateAndUpdatePostUseCase } from "@/use-cases/factories/makeCreate
 import { envVariables } from "@/env";
 import { makeCreateAndUpdateProfileInfoUseCase } from "@/use-cases/factories/makeCreateAndUpdateProfileInfoUseCase";
 import { PROFILE_TYPE_BY_DATABASEID } from "@/mappers/ProfileDatabaseMapper";
+import { handleErrors } from "@/errors/handleErrors";
 
 type ProfileDatabaseId = keyof typeof PROFILE_TYPE_BY_DATABASEID;
 
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Not allowed" }, { status: 403 });
     }
   } catch (error) {
-    console.error(error);
+    handleErrors(error, null);
   }
 
   try {
@@ -79,8 +80,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (error) {
-    console.log("Error", error);
-    apiLogger.error({ stackTrace: error }, "Erro no webhook do Notion");
+    handleErrors(error, null, { messsage: "Erro no webhook do Notion" });
     return NextResponse.json(
       { error: "Erro interno no webhook" },
       { status: 500 }

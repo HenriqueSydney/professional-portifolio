@@ -1,4 +1,5 @@
 "use server";
+import { handleErrors } from "@/errors/handleErrors";
 import { httpClient } from "@/lib/httpClient";
 import { apiLogger } from "@/lib/logger";
 
@@ -41,10 +42,10 @@ export async function getRepositoryReadme({
 
     return readmeContent;
   } catch (error) {
-    apiLogger.error(
-      { stackTrace: error },
-      `Error to get Readme of ${full_name}`
-    );
+    handleErrors(error, null, {
+      message: `Error to get Readme of ${full_name}`,
+    });
+
     return null;
   }
 }

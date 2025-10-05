@@ -7,7 +7,6 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
 import { Textarea } from "@/components/Textarea";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { saveCommentAction } from "@/actions/comments/saveCommentAction";
@@ -16,6 +15,7 @@ import {
   commentFormSchema,
 } from "@/actions/comments/saveCommentAction/commentFormSchema";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/Button";
 
 interface ICommentForm {
   postId: number;
@@ -79,12 +79,10 @@ export function CommentForm({ postId, handleToggleCommentForm }: ICommentForm) {
               />
 
               <Button
+                isLoading={isSubmitting}
+                label={t("submit")}
                 className="hover:shadow-glow transition-all duration-300"
-                disabled={isSubmitting}
-              >
-                {isSubmitting && <Loader2Icon className="animate-spin" />}
-                {t("submit")}
-              </Button>
+              />
             </div>
           </CardContent>
         </Card>

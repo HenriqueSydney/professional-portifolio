@@ -87,6 +87,16 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
+model Newsletters {
+  id                 Int      @id @default(autoincrement()) ///Entity ID
+  title              String   @unique @db.VarChar(300) ///Title of the newsletter subscription
+  numberOfEmailsSent Int      @map("number_email_sent") @db.SmallInt ///Number of Email sent
+  createdAt          DateTime @default(now()) @map("created_at") ///Entity creation date 
+
+  @@index([createdAt])
+  @@map("newsletters")
+}
+
 model NewsLetterSubscriptions {
   id                    Int       @id @default(autoincrement()) ///Entity ID
   email                 String    @unique @db.VarChar(256) ///Email used for subscription

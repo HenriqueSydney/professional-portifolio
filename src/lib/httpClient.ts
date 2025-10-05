@@ -5,6 +5,9 @@ import { SpanKind, SpanStatusCode, trace } from "@opentelemetry/api";
 
 import { makeRedisClient } from "./redis/makeRedisClient";
 import { apiLogger } from "./logger";
+import { handleErrors } from "@/errors/handleErrors";
+import { envVariables } from "@/env";
+import { revalidatePath } from "next/cache";
 
 type IHttpClientResponse<T> = [Error, null] | [null, T];
 
@@ -12,11 +15,15 @@ type HttpResponseType = "json" | "blob" | "text" | "arrayBuffer" | "formData";
 
 export async function httpClient<T>(
   url: string,
-  options?: RequestInit,
+  options?: RequestInit & { revalidatePath?: string[] },
   responseType: HttpResponseType = "json"
 ): Promise<IHttpClientResponse<T>> {
   if (!url) {
     return Promise.resolve([new Error("URL is required"), null]);
+  }
+
+  if (url.startsWith("/api/")) {
+    url = `${envVariables.BASE_URL}${url}`;
   }
 
   const redisClient = makeRedisClient();
@@ -29,6 +36,7 @@ export async function httpClient<T>(
     options?.cache === "default" || options?.cache === "force-cache";
   const revalidate = options?.next?.revalidate;
   const tags = options?.next?.tags ?? [];
+  const revalidatePaths = options?.revalidatePath ?? [];
 
   const otelOptions = {
     kind: SpanKind.CLIENT, // Indica chamada externa
@@ -119,18 +127,26 @@ export async function httpClient<T>(
                 redisClient.addToTags(cacheKey, "http:tag", tags),
               ]);
             } catch (error) {
-              apiLogger.warn(
-                { stackTrace: error },
-                "HTTP background cache failed"
-              );
+              handleErrors(error, null, {
+                message: "HTTP background cache failed",
+              });
             }
           });
         }
 
+        if (method !== "GET" && tags.length > 0) {
+          redisClient.invalidateCacheByTags("http:tag", tags);
+        }
+
+        if (method !== "GET" && revalidatePaths.length > 0) {
+          revalidatePaths.forEach((path) => revalidatePath(path));
+        }
+
         return [null, data as T] satisfies IHttpClientResponse<T>;
       } catch (error: any) {
-        console.log(error);
-        apiLogger.error({ stackTrace: error }, "HTTP request error");
+        handleErrors(error, null, {
+          message: "HTTP request error",
+        });
         span.setAttribute("cache.hit", false);
         span.recordException(error);
         span.setStatus({ code: SpanStatusCode.ERROR, message: error.message }); // ERROR

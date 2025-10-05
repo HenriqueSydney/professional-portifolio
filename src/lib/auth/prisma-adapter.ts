@@ -1,11 +1,9 @@
-import { Adapter } from 'next-auth/adapters'
+import { Adapter } from "next-auth/adapters";
 
-import { PrismaClient,Role } from '@/generated/prisma'
-
-
+import { PrismaClient, Role } from "@/generated/prisma";
+import { envVariables } from "@/env";
 
 export function PrismaAdapter(prisma: PrismaClient): Adapter {
-  const envVariables = process.env
   return {
     async createSession({ expires, sessionToken, userId }) {
       const session = await prisma.session.create({
@@ -14,26 +12,26 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
           sessionToken,
           userId,
         },
-      })
+      });
 
       return {
         expires: session.expires,
         sessionToken: session.sessionToken,
         userId: session.userId,
-      }
+      };
     },
 
-    async createUser({ email, name }) {
+    async createUser({ email, name, image }) {
       const userExists = await prisma.user.findUnique({
         where: {
           email,
         },
-      })
+      });
 
-      let role: Role = Role.USER
+      let role: Role = Role.USER;
 
-      if (email === envVariables.SMTP_HOST) {
-        role = Role.ADMIN
+      if (email === envVariables.GOOGLE_EMAIL) {
+        role = Role.ADMIN;
       }
 
       if (userExists) {
@@ -42,17 +40,19 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
             email,
             name,
             role,
+            image,
           },
           where: { id: userExists.id },
-        })
+        });
 
         return {
           email: updatedUser.email!,
           emailVerified: null,
           id: updatedUser.id,
           name: updatedUser.name,
-          role,
-        }
+          role: updatedUser.role,
+          image: updatedUser.image,
+        };
       }
 
       const newUser = await prisma.user.create({
@@ -60,16 +60,18 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
           name,
           email,
           role,
+          image,
         },
-      })
+      });
 
       return {
         email: newUser.email,
         emailVerified: null,
         id: newUser.id,
         name: newUser.name,
-        role,
-      }
+        image: newUser.image,
+        role: newUser.role,
+      };
     },
 
     async deleteSession(sessionToken) {
@@ -77,7 +79,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
         where: {
           sessionToken,
         },
-      })
+      });
     },
 
     async getSessionAndUser(session_token) {
@@ -88,13 +90,13 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
         where: {
           sessionToken: session_token,
         },
-      })
+      });
 
       if (!session) {
-        return null
+        return null;
       }
 
-      const { expires, sessionToken, user, userId } = session
+      const { expires, sessionToken, user, userId } = session;
 
       return {
         session: {
@@ -108,8 +110,9 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
           id: user.id,
           name: user.name,
           role: user.role,
+          image: user.image,
         },
-      }
+      };
     },
 
     async getUser(id) {
@@ -117,10 +120,10 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
         where: {
           id,
         },
-      })
+      });
 
       if (!user) {
-        return null
+        return null;
       }
 
       return {
@@ -129,7 +132,8 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
         id: user.id,
         name: user.name,
         role: user.role,
-      }
+        image: user.image,
+      };
     },
 
     async getUserByAccount({ provider, providerAccountId }) {
@@ -143,21 +147,21 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
             providerAccountId,
           },
         },
-      })
+      });
 
       if (!account) {
-        return null
+        return null;
       }
 
-      const { user } = account
-
+      const { user } = account;
       return {
         email: user.email!,
         emailVerified: null,
         id: user.id,
         name: user.name,
         role: user.role,
-      }
+        image: user.image,
+      };
     },
 
     async getUserByEmail(email) {
@@ -165,10 +169,10 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
         where: {
           email,
         },
-      })
+      });
 
       if (!user) {
-        return null
+        return null;
       }
 
       return {
@@ -177,7 +181,8 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
         id: user.id,
         name: user.name,
         role: user.role,
-      }
+        image: user.image,
+      };
     },
 
     async linkAccount(account) {
@@ -197,7 +202,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
           type: account.type,
           userId: account.userId,
         },
-      })
+      });
     },
 
     async updateSession({ expires, sessionToken, userId }) {
@@ -209,29 +214,30 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
         where: {
           sessionToken,
         },
-      })
+      });
 
       return {
         expires: session.expires,
         sessionToken: session.sessionToken,
         userId: session.userId,
-      }
+      };
     },
 
     async updateUser(user) {
-      let role: Role = Role.USER
+      let role: Role = Role.USER;
 
-      if (user.email === envVariables.SMTP_HOST) {
-        role = Role.ADMIN
+      if (user.email === envVariables.GOOGLE_EMAIL) {
+        role = Role.ADMIN;
       }
       const updatedUser = await prisma.user.update({
         data: {
           email: user.email,
           name: user.name,
           role,
+          image: user.image,
         },
         where: { id: user.id },
-      })
+      });
 
       return {
         email: updatedUser.email!,
@@ -239,7 +245,8 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
         id: updatedUser.id,
         name: updatedUser.name,
         role: updatedUser.role,
-      }
+        image: updatedUser.image,
+      };
     },
-  }
+  };
 }

@@ -1,4 +1,4 @@
-'use server'
+"use server";
 
 import { randomUUID } from "node:crypto";
 
@@ -9,16 +9,21 @@ import { apiLogger } from "@/lib/logger";
 import { sendEmail } from "@/lib/mailer/sendEmail";
 
 import { ContactMessageData, contactMessageSchema } from "./contactFormSchema";
+import { handleErrors } from "@/errors/handleErrors";
+import { addSendEmailJob } from "@/queues/jobs/sendEmail";
 
 export async function sendContactMessageAction(params: ContactMessageData) {
-  const traceId = randomUUID()
+  const traceId = randomUUID();
   try {
-    const { name, email, subject, message } = contactMessageSchema.parse(params);
+    const { name, email, subject, message } =
+      contactMessageSchema.parse(params);
 
-    apiLogger.debug({ name, email, subject, message }, 'Mensagem recebida',);
+    apiLogger.debug({ name, email, subject, message }, "Mensagem recebida");
 
-
-    apiLogger.info({ name, email, subject, message, traceId }, 'Contact message received')
+    apiLogger.info(
+      { name, email, subject, message, traceId },
+      "Contact message received"
+    );
 
     const html = await render(
       <ContactEmail
@@ -29,34 +34,26 @@ export async function sendContactMessageAction(params: ContactMessageData) {
       />
     );
 
-    await sendEmail({
-      to: email,
+    await addSendEmailJob({
+      email,
       html,
-      subject
-    })
-
-
-    apiLogger.info({ email, subject, traceId }, 'Contact message sent')
+      subject,
+      logMessage: "Contact message sent",
+      traceId,
+    });
 
     return {
       success: true,
-      message: 'Mensagem enviada com sucesso!'
+      message: "Mensagem enviada com sucesso!",
     };
-
   } catch (error) {
-    if (error instanceof Error) {
-      apiLogger.warn({ stackTrace: error, traceId }, 'Error sending Contact message ')
-      return {
-        success: false,
-        message: error.message
-      };
-    }
+    const errorMessage = handleErrors(error, null, {
+      message: "Error sending Contact message ",
+    });
 
-    apiLogger.error({ stackTrace: error, traceId }, 'Error sending Contact message ')
     return {
       success: false,
-      message: 'Ocorreu um erro desconhecido.'
+      message: errorMessage,
     };
   }
 }
-

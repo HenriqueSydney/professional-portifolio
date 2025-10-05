@@ -59,7 +59,6 @@ export default async function middleware(request: NextRequest) {
 
     return intlMiddleware(request);
   } catch (error) {
-    console.error("Middleware rate limit error:", error);
     return NextResponse.next();
   }
 }

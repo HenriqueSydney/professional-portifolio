@@ -7,6 +7,7 @@ import { apiLogger } from "@/lib/logger";
 import { makePostCommentsRepository } from "@/repositories/factories/makePostCommentsRepository";
 import { repositoryClient } from "@/lib/repositoryClient";
 import { makeRedisClient } from "@/lib/redis/makeRedisClient";
+import { handleErrors } from "@/errors/handleErrors";
 
 export async function removeCommentAction(commentId: number) {
   const session = await auth();
@@ -45,10 +46,11 @@ export async function removeCommentAction(commentId: number) {
             `post-${postCommentRemove.postId}-comments`,
           ]);
         } catch (error) {
-          apiLogger.warn(
-            { error, commentId, postId: postCommentRemove.postId },
-            "Falha ao invalidar cache de post comments após deleção"
-          );
+          handleErrors(error, traceId, {
+            commentId,
+            postId: postCommentRemove.postId,
+            message: "Falha ao invalidar cache de post comments após deleção",
+          });
         }
       });
     }
@@ -63,18 +65,13 @@ export async function removeCommentAction(commentId: number) {
       message: "Comentário removido com sucesso!",
     };
   } catch (error) {
-    if (error instanceof Error) {
-      apiLogger.warn({ stackTrace: error, traceId }, "Error deleting comment ");
-      return {
-        success: false,
-        message: error.message,
-      };
-    }
+    const errorMessage = handleErrors(error, traceId, {
+      message: "Error deleting comment",
+    });
 
-    apiLogger.error({ stackTrace: error, traceId }, "Error deleting comment");
     return {
       success: false,
-      message: "Ocorreu um erro desconhecido.",
+      message: errorMessage,
     };
   }
 }

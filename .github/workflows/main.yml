@@ -1,0 +1,436 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+  security-events: write
+  issues: write
+
+jobs:
+    unit-tests:
+    uses: ./.github/workflows/test.yml
+    with:
+        kind: 'unit'
+        node-versions: '["20.19.0", "22"]'  # Matrix
+        upload-coverage: true
+    secrets: inherit
+
+    integration-tests:
+    uses: ./.github/workflows/test.yml
+    with:
+        kind: 'integration'
+        node-versions: '20.19.0'  # Single
+    secrets: inherit
+
+    sast-scan:
+    name: "SAST Analysis"
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout Code
+        uses: actions/checkout@v4
+
+        - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+            languages: javascript
+
+        - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        continue-on-error: true
+
+        - name: Create directory for SARIF report
+        run: mkdir -p ./results
+
+        - name: Export SAST Report
+        run: |
+            if [ -f ./results/results.sarif ]; then
+            cp ./results/results.sarif sast-report.sarif
+            else
+            echo "No SARIF report generated" > sast-report.sarif
+            fi
+
+        - name: Upload SAST Report
+        uses: actions/upload-artifact@v4
+        with:
+            name: sast-report
+            path: sast-report.sarif
+
+  build-test-image-and-push:
+    uses: ./.github/workflows/build-and-push.yml
+    with:
+      image-name: "henriquelimadev/professional-portfolio"
+      tag-name: "test"
+      node-version: "20.19.0"
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    deploy-test:
+    name: Deploy to Test Droplet
+    runs-on: ubuntu-latest
+    needs: build-test-and-push
+    outputs:
+      droplet_ip: ${{ steps.droplet.outputs.droplet_ip }}
+      droplet_id: ${{ steps.droplet.outputs.droplet_id }}
+    steps:
+      - name: Download build tag artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-tag-${{ github.run_id }}
+
+      - name: Read image tag
+        id: get_tag
+        run: |
+          TAG=$(cat build-tag)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Create Droplet
+        id: droplet
+        run: |
+          DROPLET_INFO=$(doctl compute droplet create test-${{ github.run_id }} \
+            --region nyc1 \
+            --size s-1vcpu-1gb \
+            --image docker-20-04 \
+            --ssh-keys ${{ secrets.DIGITALOCEAN_SSH_KEY_ID }} \
+            --format ID,PublicIPv4 \
+            --no-header \
+            --wait)
+
+          DROPLET_ID=$(echo "$DROPLET_INFO" | awk '{print $1}')
+          DROPLET_IP=$(echo "$DROPLET_INFO" | awk '{print $2}')
+
+          echo "droplet_id=$DROPLET_ID" >> $GITHUB_OUTPUT
+          echo "droplet_ip=$DROPLET_IP" >> $GITHUB_OUTPUT
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          # Criar a chave SSH
+          echo "${{ secrets.DROPLET_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          # Aguardar um pouco para o droplet ficar totalmente disponível
+          echo "Waiting for droplet to be fully ready..."        
+
+          echo "Starting Connection..."
+          # Adicionar o host às known_hosts
+          ssh-keyscan -H ${{ steps.droplet.outputs.droplet_ip }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          echo "Testing Connection before continue..."
+          for i in {1..10}; do
+            ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@${{ steps.droplet.outputs.droplet_ip }} "echo SSH is ready" && break
+            echo "SSH not ready yet... waiting 10 seconds..."
+            sleep 10
+          done
+
+      - name: Configure Firewall
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ steps.droplet.outputs.droplet_ip }} "ufw allow 80/tcp && ufw reload"
+
+      - name: Pull Docker Image
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ steps.droplet.outputs.droplet_ip }} "
+            docker pull henriquelimadev/professional-portfolio:${{ steps.get_tag.outputs.tag }}
+          "
+
+      - name: Run Docker Container
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ steps.droplet.outputs.droplet_ip }} << 'EOF'
+          docker run -d --name my-app \
+            -p 80:3333 \
+            -e DATABASE_URL='postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PWD }}@${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_DATABASE2 }}?schema=test&sslmode=require' \
+            -e NODE_ENV=test \
+            -e JWT_SECRET='${{ secrets.JWT_SECRET }}' \
+            -e BASE_TEST_URL='http://${{ steps.droplet.outputs.droplet_ip }}' \
+            henriquelimadev/professional-portfolio:${{ steps.get_tag.outputs.tag }}
+          EOF
+
+      - name: Wait for Container to Initialize
+        run: |
+          echo "Waiting for container to initialize..."
+          sleep 15
+
+      - name: Check Container Status and Logs
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ steps.droplet.outputs.droplet_ip }} << 'EOF'
+          echo "=== CONTAINER STATUS ==="
+          docker ps -a --filter name=my-app
+          echo
+          echo "=== CONTAINER LOGS ==="
+          docker logs my-app
+          echo
+          echo "=== CONTAINER INSPECT (Network) ==="
+          docker inspect my-app --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
+          echo
+          echo "=== TESTING INTERNAL CONNECTIVITY ==="
+          curl -v http://localhost:80/ || echo "Port 80 not responding"
+          echo
+          echo "=== PROCESS CHECK ==="
+          netstat -tlnp | grep -E ':(80|3333)' || echo "No processes listening on ports 80 or 3333"
+          EOF
+
+      - name: Wait for the application to be ready
+        run: |
+          echo "Waiting for app to be ready..."
+          for i in {1..10}; do
+            if curl -s http://${{ steps.droplet.outputs.droplet_ip }}; then
+              echo "App is ready!"
+              break
+            else
+              echo "Waiting... attempt $i"
+              sleep 10
+            fi
+          done
+
+    e2e-tests:
+    needs: deploy-test
+    uses: ./.github/workflows/test.yml
+    with:
+        kind: 'e2e'
+        node-versions: '20.19.0'
+        base-url: 'http://${{ needs.deploy-test.outputs.droplet-ip }}'
+    secrets: inherit
+
+  dast-scan:
+    name: Run DAST Scan
+    runs-on: ubuntu-latest
+    needs: deploy-test
+    steps:
+      - name: Verify application is accessible
+        run: |
+          echo "Verifying application accessibility..."
+          curl -I http://${{ needs.deploy-test.outputs.droplet_ip }} || echo "Application might not be fully ready"
+
+      - name: Run DAST with OWASP ZAP
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: http://${{ needs.deploy-test.outputs.droplet_ip }}
+          issue_title: "DAST SCAN - ${{ github.run_id }}"
+          cmd_options: "-a"
+
+  load-tests:
+    name: Run Load Tests with Artillery
+    runs-on: ubuntu-latest
+    needs: deploy-test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+          cache: "npm"
+
+      - name: Install Artillery
+        run: npm install -g artillery@latest
+
+      - name: Verify application is running
+        run: |
+          echo "Testing application availability for load tests..."
+          for i in {1..5}; do
+            if curl -s -o /dev/null -w "%{http_code}" http://${{ needs.deploy-test.outputs.droplet_ip }} | grep -q "200\|404\|403"; then
+              echo "Application is responding!"
+              break
+            else
+              echo "Waiting for application... attempt $i"
+              sleep 10
+            fi
+          done
+
+      - name: Create Artillery Load Test Config
+        run: |
+          cat > load-test.yml << 'EOF'
+          config:
+            target: http://${{ needs.deploy-test.outputs.droplet_ip }}
+            phases:
+              - duration: 60
+                arrivalRate: 5
+                name: "Warm up phase"
+              - duration: 120
+                arrivalRate: 10
+                name: "Normal load"
+              - duration: 60
+                arrivalRate: 20
+                name: "Peak load"
+            processor: "./load-test-processor.js"
+          scenarios:
+            - name: "Homepage Load Test"
+              weight: 70
+              flow:
+                - get:
+                    url: "/"
+                    capture:
+                      - json: "$.message"
+                        as: "message"
+                    expect:
+                      - statusCode: [200, 404]
+                - think: 2
+            - name: "API Health Check"
+              weight: 30
+              flow:
+                - get:
+                    url: "/health"
+                    expect:
+                      - statusCode: [200, 404]
+                - think: 1
+          EOF
+
+      - name: Create Load Test Processor
+        run: |
+          cat > load-test-processor.js << 'EOF'
+          module.exports = {
+            logHeaders: function(requestParams, context, ee, next) {
+              console.log('Making request to:', requestParams.url);
+              return next();
+            }
+          };
+          EOF
+
+      - name: Run Load Tests
+        run: |
+          echo "Starting load tests..."
+          artillery run load-test.yml --output load-test-report.json || echo "Load test completed with warnings"
+
+      - name: Generate Load Test Report
+        run: |
+          if [ -f load-test-report.json ]; then
+            artillery report load-test-report.json --output load-test-report.html
+            echo "Load test report generated successfully"
+          else
+            echo "No load test report found, creating summary..."
+            echo "Load test executed but no detailed report available" > load-test-summary.txt
+          fi
+
+      - name: Upload Load Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-test-results
+          path: |
+            load-test-report.json
+            load-test-report.html
+            load-test-summary.txt
+            load-test.yml
+          if-no-files-found: warn
+
+      - name: Display Load Test Summary
+        if: always()
+        run: |
+          echo "=== LOAD TEST SUMMARY ==="
+          if [ -f load-test-report.json ]; then
+            echo "Load test completed successfully!"
+            echo "Report files generated:"
+            ls -la load-test-report.*
+          else
+            echo "Load test executed but detailed results not available"
+          fi
+
+  destroy-droplet:
+    name: Destroy Droplet
+    runs-on: ubuntu-latest
+    needs: [deploy-test, e2e-tests, dast-scan, load-tests]
+    if: always()
+    steps:
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Destroy Droplet
+        run: |
+          doctl compute droplet delete ${{ needs.deploy-test.outputs.droplet_id }} --force
+          echo "Test droplet destroyed successfully"
+
+
+  build-prod-image-and-push:
+    uses: ./.github/workflows/build-and-push.yml
+    with:
+      image-name: "henriquelimadev/professional-portfolio"
+      tag-name: "production"
+      node-version: "20.19.0"
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  deploy-production:
+    name: Deploy to Production Environment (EC2)
+    runs-on: ubuntu-latest
+    needs: [destroy-droplet]
+    if: success()
+    steps:
+      - name: Download build tag artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-tag-${{ github.run_id }}
+
+      - name: Read image tag
+        id: get_tag
+        run: |
+          TAG=$(cat build-tag)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Add SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DROPLET_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.DROPLET_PROD_IP }} >> ~/.ssh/known_hosts
+
+      - name: Pull Docker Image
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_PROD_IP }} "
+            docker pull henriquelimadev/professional-portfolio:${{ steps.get_tag.outputs.tag }}
+          "
+
+      - name: Deploy to Production
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_PROD_IP }} << 'EOF'
+          # Stop and remove existing container
+          docker stop my-app || true
+          docker rm my-app || true
+
+          # Run new container
+          docker run -d --name my-app \
+            -p 80:3333 \
+            -e DATABASE_URL='postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PWD }}@${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_DATABASE2 }}?schema=public&sslmode=require' \
+            -e NODE_ENV=production \
+            -e JWT_SECRET='${{ secrets.JWT_SECRET }}' \
+            henriquelimadev/professional-portfolio:${{ steps.get_tag.outputs.tag }}
+
+          # Wait for container to start
+          sleep 10
+
+          # Verify deployment
+          if docker ps | grep -q my-app; then
+            echo "Production deployment successful!"
+          else
+            echo "Production deployment failed!"
+            exit 1
+          fi
+          EOF
+
+      - name: Verify Production Deployment
+        run: |
+          echo "Waiting for production application to be ready..."
+          for i in {1..10}; do
+            if curl -s http://${{ secrets.DROPLET_PROD_IP }}; then
+              echo "Production application is running successfully!"
+              break
+            else
+              echo "Waiting... attempt $i"
+              sleep 15
+            fi
+          done

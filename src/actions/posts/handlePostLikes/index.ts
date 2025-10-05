@@ -17,6 +17,7 @@ import {
 } from "./handlePostLikesSchema";
 import { repositoryClient } from "@/lib/repositoryClient";
 import { PostLikes } from "@/generated/prisma";
+import { handleErrors } from "@/errors/handleErrors";
 
 export async function handlePostLikesAction(data: AddLikesToPostData) {
   const headersList = await headers();
@@ -187,18 +188,13 @@ export async function handlePostLikesAction(data: AddLikesToPostData) {
       message: "Uhull! 😊 Fico muito feliz que você gostou!!!",
     };
   } catch (error) {
-    if (error instanceof Error) {
-      apiLogger.warn({ stackTrace: error, traceId }, "Error handling like");
-      return {
-        success: false,
-        message: error.message,
-      };
-    }
+    const errorMessage = handleErrors(error, null, {
+      message: "Error handling like",
+    });
 
-    apiLogger.error({ stackTrace: error, traceId }, "Error handling like");
     return {
       success: false,
-      message: "Ocorreu um erro desconhecido.",
+      message: errorMessage,
     };
   }
 }

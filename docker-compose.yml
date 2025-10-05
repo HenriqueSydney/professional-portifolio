@@ -21,6 +21,7 @@ services:
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     command: redis-server --requirepass ${REDIS_PASSWORD}
+
   jaeger-all-in-one:
     image: jaegertracing/all-in-one:latest
     restart: always

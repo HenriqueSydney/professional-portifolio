@@ -139,7 +139,7 @@ export class PrismaPostsRepository implements IPostsRespository {
     filters: Filters,
     pagination: Pagination
   ): Promise<FetchPostsResponse> {
-    const { category, query, firstPageOnly, locale } = filters;
+    const { category, query, firstPageOnly, locale, fromDate } = filters;
 
     const where: Prisma.PostsWhereInput = {
       status: "PUBLISHED",
@@ -153,6 +153,13 @@ export class PrismaPostsRepository implements IPostsRespository {
               { excerpt_en: { contains: query, mode: "insensitive" } },
               { tags: { has: query } },
             ],
+          }
+        : {}),
+      ...(fromDate
+        ? {
+            createdAt: {
+              gte: new Date(fromDate),
+            },
           }
         : {}),
     };

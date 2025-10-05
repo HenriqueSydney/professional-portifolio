@@ -13,6 +13,7 @@ import { makePostCommentsRepository } from "@/repositories/factories/makePostCom
 
 import { AddLikesData, addLikesSchema } from "./handleCommentLikesSchema";
 import { repositoryClient } from "@/lib/repositoryClient";
+import { handleErrors } from "@/errors/handleErrors";
 
 export async function handleCommentLikesAction(data: AddLikesData) {
   const headersList = await headers();
@@ -193,18 +194,10 @@ export async function handleCommentLikesAction(data: AddLikesData) {
       message: "Uhull! Quem fez esse comentário vai ficar muito feliz!!",
     };
   } catch (error) {
-    if (error instanceof Error) {
-      apiLogger.warn({ stackTrace: error, traceId }, "Error handling like");
-      return {
-        success: false,
-        message: error.message,
-      };
-    }
-
-    apiLogger.error({ stackTrace: error, traceId }, "Error handling like");
+    const errorMessage = handleErrors(error, traceId);
     return {
       success: false,
-      message: "Ocorreu um erro desconhecido.",
+      message: errorMessage,
     };
   }
 }

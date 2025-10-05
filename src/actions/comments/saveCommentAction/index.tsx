@@ -10,6 +10,8 @@ import { CommentData, commentFormSchema } from "./commentFormSchema";
 import { repositoryClient } from "@/lib/repositoryClient";
 import { PostComments, Posts } from "@/generated/prisma";
 import { makePostsRepository } from "@/repositories/factories/makePostsRepository";
+import { handleErrors } from "@/errors/handleErrors";
+import { revalidatePath } from "next/cache";
 
 export async function saveCommentAction(params: CommentData) {
   const session = await auth();
@@ -71,24 +73,24 @@ export async function saveCommentAction(params: CommentData) {
       "User sent comment"
     );
 
+    revalidatePath(`/blog/post/${post.slug}`);
+    if (post.slug_en) {
+      revalidatePath(`/blog/post/${post.slug_en}`);
+    }
+
     return {
       success: true,
       newComment: postComment,
       message: "Comentário registrado com sucesso!",
     };
   } catch (error) {
-    if (error instanceof Error) {
-      apiLogger.warn({ stackTrace: error, traceId }, "Error saving message ");
-      return {
-        success: false,
-        message: error.message,
-      };
-    }
+    const errorMessage = handleErrors(error, traceId, {
+      message: "Error saving message ",
+    });
 
-    apiLogger.error({ stackTrace: error, traceId }, "Error saving message ");
     return {
       success: false,
-      message: "Ocorreu um erro desconhecido.",
+      message: errorMessage,
     };
   }
 }

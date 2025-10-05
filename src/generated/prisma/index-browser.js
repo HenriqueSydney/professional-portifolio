@@ -172,6 +172,13 @@ exports.Prisma.AuthenticatorScalarFieldEnum = {
   transports: 'transports'
 };
 
+exports.Prisma.NewslettersScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  numberOfEmailsSent: 'numberOfEmailsSent',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.NewsLetterSubscriptionsScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -301,6 +308,7 @@ exports.Prisma.ModelName = {
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   Authenticator: 'Authenticator',
+  Newsletters: 'Newsletters',
   NewsLetterSubscriptions: 'NewsLetterSubscriptions',
   Posts: 'Posts',
   PostMetrics: 'PostMetrics',

@@ -22,7 +22,7 @@ export async function CommentsContainer({ postId }: ICommentsContainer) {
           numberPerPage: 4,
         }),
       {
-        tags: [`post-${postId}`],
+        tags: [`post-${postId}-comments`],
         params: `postId=${postId}&page=1&limit=4`,
       }
     ),

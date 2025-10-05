@@ -16,6 +16,7 @@ export type Filters = {
     | "Infrastructure"
     | "Frontend";
   query?: string;
+  fromDate?: Date;
 };
 
 type PostWithExcerpt = {

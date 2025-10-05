@@ -47,8 +47,9 @@ export default defineConfig({
         "**/i18n/**",
       ],
       provider: "istanbul",
-      reporter: ["text", "lcov"],
+      reporter: ["json", "html", "text"],
       reportsDirectory: "./coverage",
+      all: true,
     },
   },
   resolve: {

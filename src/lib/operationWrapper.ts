@@ -7,6 +7,7 @@ import type {
   OperationWrapperOptions,
   OperationWrapperResponse,
 } from "@/@types/OperationWrapperTypes";
+import { handleErrors } from "@/errors/handleErrors";
 
 export async function operationWrapper<T>(
   operationType: "repository" | "notion",
@@ -55,18 +56,12 @@ export async function operationWrapper<T>(
                 `Successfully invalidated cache for tags: ${tags.join(", ")}`
               );
             } catch (error) {
-              const errorInstance =
-                error instanceof Error ? error : new Error(String(error));
-              apiLogger.warn(
-                {
-                  error: errorInstance.message,
-                  stackTrace: errorInstance.stack,
-                  operationType,
-                  operationName,
-                  tags,
-                },
-                `Failed to invalidate cache for tags: ${tags.join(", ")}`
-              );
+              handleErrors(error, null, {
+                operationType,
+                operationName,
+                tags,
+                message: `Failed to invalidate cache for tags: ${tags.join(", ")}`,
+              });
             }
           });
         }
@@ -110,19 +105,12 @@ export async function operationWrapper<T>(
                 redisClient.addToTags(cacheKey, `${operationType}:tag`, tags),
               ]);
             } catch (error) {
-              const errorInstance =
-                error instanceof Error ? error : new Error(String(error));
-
-              apiLogger.warn(
-                {
-                  error: errorInstance.message,
-                  stackTrace: errorInstance.stack,
-                  operationType,
-                  operationName,
-                  cacheKey,
-                },
-                `${operationType} background cache failed`
-              );
+              handleErrors(error, null, {
+                operationType,
+                operationName,
+                tags,
+                message: `${operationType} background cache failed`,
+              });
             }
           });
         }

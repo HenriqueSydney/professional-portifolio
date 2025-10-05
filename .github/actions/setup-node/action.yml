@@ -1,0 +1,16 @@
+name: "Setup Node.js"
+description: "Setup Node.js with cache"
+inputs:
+  node-version:
+    description: "Node.js version. To use matrix, pass node versions separated by comma"
+    required: false
+    default: "20.19.0"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: "npm"
+    - run: npm ci
+      shell: bash

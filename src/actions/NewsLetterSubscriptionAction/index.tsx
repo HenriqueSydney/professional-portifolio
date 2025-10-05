@@ -8,7 +8,6 @@ import NewsletterSubscriptionEmail from "@/email/NewsletterSubscriptionEmail";
 import { NewsLetterSubscriptions } from "@/generated/prisma";
 import { date } from "@/lib/dayjs";
 import { apiLogger } from "@/lib/logger";
-import { sendEmail } from "@/lib/mailer/sendEmail";
 import { makeNewsletterSubscriptionsRepository } from "@/repositories/factories/makeNewsletterSubscriptionsRepository";
 
 import {
@@ -16,6 +15,9 @@ import {
   newsLetterSubscriptionFormSchema,
 } from "./newsLetterSubscriptionFormSchema";
 import { repositoryClient } from "@/lib/repositoryClient";
+import { handleErrors } from "@/errors/handleErrors";
+import { addSendEmailJob } from "@/queues/jobs/sendEmail";
+import { AppError } from "@/errors/AppError";
 
 export async function sendNewsLetterSubscriptionConfirmation(
   params: NewsLetterSubscriptionFormData
@@ -51,11 +53,9 @@ export async function sendNewsLetterSubscriptionConfirmation(
     let subscription: NewsLetterSubscriptions | null = null;
 
     if (subscriptionExists && subscriptionExists.confirmedAt) {
-      return {
-        success: true,
-        message:
-          "Você já realizou sua inscrição. Caso queira cancelá-la, enviamos um email com orientações.",
-      };
+      throw new AppError(
+        "Você já realizou sua inscrição. Caso queira cancelá-la, enviamos um email com orientações."
+      );
     }
 
     if (
@@ -105,17 +105,16 @@ export async function sendNewsLetterSubscriptionConfirmation(
       />
     );
 
-    await sendEmail({
-      to: email,
+    apiLogger.info({ email, traceId }, "Trying to send email");
+
+    await addSendEmailJob({
+      email,
       html,
       subject:
         "[HenriqueLima.Dev] Seja bem vindo! Confirme sua inscrição e começe a diversos conteúdos do mundo de Desenvolvimento e DevOps",
+      logMessage: "Message sent for Newsletter subscription",
+      traceId,
     });
-
-    apiLogger.info(
-      { email, traceId },
-      "Message sent for Newsletter subscription"
-    );
 
     return {
       success: true,
@@ -124,23 +123,18 @@ export async function sendNewsLetterSubscriptionConfirmation(
     };
   } catch (error) {
     if (error instanceof Error) {
-      apiLogger.warn(
-        { stackTrace: error, traceId },
-        "Error sending Newsletter subscription"
-      );
+      const errorMessage = handleErrors(error, traceId, {
+        message: "Error sending Newsletter subscription",
+      });
+
       return {
         success: false,
-        message: error.message,
+        message: errorMessage,
       };
     }
-
-    apiLogger.error(
-      { stackTrace: error, traceId },
-      "Error sending Newsletter subscription"
-    );
     return {
       success: false,
-      message: "Ocorreu um erro desconhecido.",
+      message: "Erro inexperado",
     };
   }
 }

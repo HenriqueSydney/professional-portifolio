@@ -2,6 +2,7 @@ import { PostLikes } from "@/generated/prisma";
 import { prisma } from "@/lib/prisma";
 
 import { IPostLikesRepository } from "../IPostLikesRepository";
+import { handleErrors } from "@/errors/handleErrors";
 
 export class PrismaPostLikesRepository implements IPostLikesRepository {
   async findPostLikeByUserIdAndPostId(
@@ -27,7 +28,7 @@ export class PrismaPostLikesRepository implements IPostLikesRepository {
       });
       return postCommentsLike;
     } catch (error) {
-      console.log(error);
+      handleErrors(error);
     }
 
     return null;

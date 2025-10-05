@@ -1,17 +1,17 @@
-import Redis from 'ioredis'
-import { NextRequest } from 'next/server'
+import Redis from "ioredis";
+import { NextRequest } from "next/server";
 
-import { makeRedisClient } from '../redis/makeRedisClient'
+import { makeRedisClient } from "../redis/makeRedisClient";
 
-import { IRateLimiter } from './IRateLimiter'
+import { IRateLimiter } from "./IRateLimiter";
+import { handleErrors } from "@/errors/handleErrors";
 
 const RATE_LIMITS = {
   global: { requests: 10000, window: 60 },
   api: { requests: 10000, window: 60 },
   auth: { requests: 10000, window: 300, blockDuration: 900 },
-  public: { requests: 10000, window: 60 }
-} as const
-
+  public: { requests: 10000, window: 60 },
+} as const;
 
 // const RATE_LIMITS = {
 //     global: { requests: 100, window: 60 },
@@ -21,34 +21,34 @@ const RATE_LIMITS = {
 // } as const
 
 interface RateLimitConfig {
-    requests: number
-    window: number // em segundos
-    blockDuration?: number // em segundos, opcional
+  requests: number;
+  window: number; // em segundos
+  blockDuration?: number; // em segundos, opcional
 }
 
 interface RateLimitResult {
-    success: boolean
-    limit: number
-    remaining: number
-    reset: number
-    retryAfter?: number
+  success: boolean;
+  limit: number;
+  remaining: number;
+  reset: number;
+  retryAfter?: number;
 }
 
 interface CacheEntry {
-    result: RateLimitResult
-    expires: number
-    lastUsed: number
+  result: RateLimitResult;
+  expires: number;
+  lastUsed: number;
 }
 
 export class RateLimiter implements IRateLimiter {
-  private redis: Redis
-  private cache = new Map<string, CacheEntry>()
-  private blockCache = new Map<string, number>() // identifier -> expiresAt
-  private luaScript: string
+  private redis: Redis;
+  private cache = new Map<string, CacheEntry>();
+  private blockCache = new Map<string, number>(); // identifier -> expiresAt
+  private luaScript: string;
 
   constructor() {
-    const redisClient = makeRedisClient()
-    this.redis = redisClient.getInstance()
+    const redisClient = makeRedisClient();
+    this.redis = redisClient.getInstance();
 
     // Lua script para operações atômicas (muito mais rápido)
     this.luaScript = `
@@ -84,26 +84,27 @@ export class RateLimiter implements IRateLimiter {
                 local remaining = max_requests - current_count - 1
                 return {1, max_requests, remaining, math.floor((now + window_seconds * 1000) / 1000), 0}
             end
-        `
+        `;
 
     // Limpa cache periodicamente
-    setInterval(() => this.cleanupCache(), 30000)
+    setInterval(() => this.cleanupCache(), 30000);
   }
 
   private cleanupCache(): void {
-    const now = Date.now()
+    const now = Date.now();
 
     // Limpa cache de rate limit
     for (const [key, entry] of this.cache.entries()) {
-      if (now > entry.expires || now - entry.lastUsed > 120000) { // 2 min sem uso
-        this.cache.delete(key)
+      if (now > entry.expires || now - entry.lastUsed > 120000) {
+        // 2 min sem uso
+        this.cache.delete(key);
       }
     }
 
     // Limpa cache de bloqueios
     for (const [identifier, expiresAt] of this.blockCache.entries()) {
       if (now >= expiresAt) {
-        this.blockCache.delete(identifier)
+        this.blockCache.delete(identifier);
       }
     }
   }
@@ -112,32 +113,32 @@ export class RateLimiter implements IRateLimiter {
     identifier: string,
     config: RateLimitConfig
   ): Promise<RateLimitResult> {
-    const cacheKey = `${identifier}:${config.requests}:${config.window}`
-    const now = Date.now()
+    const cacheKey = `${identifier}:${config.requests}:${config.window}`;
+    const now = Date.now();
 
     // Verifica cache local primeiro (válido por 5 segundos para requests normais)
-    const cached = this.cache.get(cacheKey)
+    const cached = this.cache.get(cacheKey);
     if (cached && now < cached.expires) {
-      cached.lastUsed = now
+      cached.lastUsed = now;
 
       // Se ainda tem remaining, decrementa localmente
       if (cached.result.remaining > 0) {
-        cached.result.remaining--
-        return { ...cached.result }
+        cached.result.remaining--;
+        return { ...cached.result };
       }
 
       // Se não tem remaining mas ainda está no cache, retorna rate limited
       if (cached.result.remaining === 0) {
-        return { ...cached.result, success: false }
+        return { ...cached.result, success: false };
       }
     }
 
-    const window = config.window * 1000
-    const windowStart = now - window
+    const window = config.window * 1000;
+    const windowStart = now - window;
 
     try {
       // Executa Lua script (1 round trip vs múltiplas operações)
-      const result = await this.redis.eval(
+      const result = (await this.redis.eval(
         this.luaScript,
         2, // número de keys
         `rate_limit:${identifier}`,
@@ -148,72 +149,75 @@ export class RateLimiter implements IRateLimiter {
         config.window.toString(),
         (config.blockDuration || 0).toString(),
         `${now}-${Math.random()}`
-      ) as number[]
+      )) as number[];
 
-      const [success, limit, remaining, reset, retryAfter] = result
+      const [success, limit, remaining, reset, retryAfter] = result;
       const rateLimitResult: RateLimitResult = {
         success: success === 1,
         limit,
         remaining,
         reset,
-        retryAfter: retryAfter > 0 ? retryAfter : undefined
-      }
+        retryAfter: retryAfter > 0 ? retryAfter : undefined,
+      };
 
       // Cache o resultado por 5-10 segundos dependendo do remaining
-      const cacheTime = remaining > 10 ? 10000 : remaining > 0 ? 5000 : 2000
+      const cacheTime = remaining > 10 ? 10000 : remaining > 0 ? 5000 : 2000;
       this.cache.set(cacheKey, {
         result: { ...rateLimitResult },
         expires: now + cacheTime,
-        lastUsed: now
-      })
+        lastUsed: now,
+      });
 
       // Se foi bloqueado, adiciona ao cache de bloqueios
       if (!rateLimitResult.success && retryAfter > 0) {
-        this.blockCache.set(identifier, now + (retryAfter * 1000))
+        this.blockCache.set(identifier, now + retryAfter * 1000);
       }
 
-      return rateLimitResult
-
+      return rateLimitResult;
     } catch (error) {
-      console.error('Rate limiter error:', error)
+      handleErrors(error, null, {
+        message: "Rate limiter error",
+      });
       // Em caso de erro, permite a request (fail-open)
       return {
         success: true,
         limit: config.requests,
         remaining: config.requests - 1,
-        reset: Math.ceil((now + window) / 1000)
-      }
+        reset: Math.ceil((now + window) / 1000),
+      };
     }
   }
 
   async isBlocked(identifier: string): Promise<boolean> {
     // Cache em memória primeiro (muito mais rápido)
-    const cached = this.blockCache.get(identifier)
+    const cached = this.blockCache.get(identifier);
     if (cached) {
       if (Date.now() < cached) {
-        return true
+        return true;
       } else {
-        this.blockCache.delete(identifier)
-        return false
+        this.blockCache.delete(identifier);
+        return false;
       }
     }
 
     try {
-      const blockKey = `block:${identifier}`
+      const blockKey = `block:${identifier}`;
 
       // Usa TTL em vez de GET (mais rápido)
-      const ttl = await this.redis.ttl(blockKey)
+      const ttl = await this.redis.ttl(blockKey);
 
       if (ttl > 0) {
         // Adiciona ao cache local
-        this.blockCache.set(identifier, Date.now() + (ttl * 1000))
-        return true
+        this.blockCache.set(identifier, Date.now() + ttl * 1000);
+        return true;
       }
 
-      return false
+      return false;
     } catch (error) {
-      console.error('Block check error:', error)
-      return false // fail-open
+      handleErrors(error, null, {
+        message: "Block check error",
+      });
+      return false; // fail-open
     }
   }
 
@@ -222,61 +226,65 @@ export class RateLimiter implements IRateLimiter {
       // Remove do cache local
       for (const key of this.cache.keys()) {
         if (key.startsWith(`${identifier}:`)) {
-          this.cache.delete(key)
+          this.cache.delete(key);
         }
       }
-      this.blockCache.delete(identifier)
+      this.blockCache.delete(identifier);
 
       // Remove do Redis
-      const key = `rate_limit:${identifier}`
-      const blockKey = `block:${identifier}`
-      await this.redis.del(key, blockKey)
+      const key = `rate_limit:${identifier}`;
+      const blockKey = `block:${identifier}`;
+      await this.redis.del(key, blockKey);
     } catch (error) {
-      console.error('Clear limit error:', error)
+      handleErrors(error, null, {
+        message: "Clear limit error",
+      });
     }
   }
 
   getIdentifier(request: NextRequest): string {
-    const forwarded = request.headers.get('x-forwarded-for')
-    const realIp = request.headers.get('x-real-ip')
-    const ip = forwarded?.split(',')[0]?.trim() || realIp || 'unknown'
-    return ip
+    const forwarded = request.headers.get("x-forwarded-for");
+    const realIp = request.headers.get("x-real-ip");
+    const ip = forwarded?.split(",")[0]?.trim() || realIp || "unknown";
+    return ip;
   }
 
   getRateLimitConfig(pathname: string): RateLimitConfig {
     // Cache estático - evita re-parsing de strings
-    if (pathname.startsWith('/api/auth/')) return RATE_LIMITS.auth
-    if (pathname.startsWith('/api/')) return RATE_LIMITS.api
-    return RATE_LIMITS.public
+    if (pathname.startsWith("/api/auth/")) return RATE_LIMITS.auth;
+    if (pathname.startsWith("/api/")) return RATE_LIMITS.api;
+    return RATE_LIMITS.public;
   }
 
   // Método para pré-aquecer o cache para IPs frequentes
   async warmupCache(identifiers: string[]): Promise<void> {
     const promises = identifiers.map(async (identifier) => {
       try {
-        const config = RATE_LIMITS.public // Usa config padrão para warmup
-        await this.checkLimit(identifier, config)
+        const config = RATE_LIMITS.public; // Usa config padrão para warmup
+        await this.checkLimit(identifier, config);
       } catch (error) {
-        console.error(`Warmup failed for ${identifier}:`, error)
+        handleErrors(error, null, {
+          message: `Warmup failed for ${identifier}`,
+        });
       }
-    })
+    });
 
-    await Promise.allSettled(promises)
+    await Promise.allSettled(promises);
   }
 
   // Estatísticas do cache para monitoramento
   getCacheStats(): {
-        rateLimitCache: number
-        blockCache: number
-        hitRate?: number
-        } {
+    rateLimitCache: number;
+    blockCache: number;
+    hitRate?: number;
+  } {
     return {
       rateLimitCache: this.cache.size,
-      blockCache: this.blockCache.size
-    }
+      blockCache: this.blockCache.size,
+    };
   }
 
   disconnect() {
-    this.redis.disconnect()
+    this.redis.disconnect();
   }
 }

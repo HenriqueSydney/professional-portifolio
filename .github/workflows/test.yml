@@ -1,0 +1,129 @@
+name: Test Application
+
+on:
+  workflow_call:
+    inputs:
+      kind:
+        description: "Kind of testing (unit, integration, e2e)"
+        required: false
+        type: string
+        default: "unit"
+      node-versions:
+        description: "Node.js versions (JSON array: ['20.19.0', '22'] or single: '20.19.0')"
+        required: false
+        type: string
+        default: '["20.19.0"]'
+      base-url:
+        description: "Base URL for E2E tests"
+        required: false
+        type: string
+        default: ""
+      upload-coverage:
+        description: "Upload coverage report"
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      JWT_SECRET:
+        required: false
+      DATABASE_URL:
+        required: false
+
+jobs:
+  prepare-matrix:
+    name: "Prepare Test Matrix"
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Set matrix
+        id: set-matrix
+        run: |
+          # Check if input is JSON array or single value
+          if [[ "${{ inputs.node-versions }}" =~ ^\[.*\]$ ]]; then
+            echo "matrix=${{ inputs.node-versions }}" >> $GITHUB_OUTPUT
+          else
+            echo 'matrix=["${{ inputs.node-versions }}"]' >> $GITHUB_OUTPUT
+          fi
+
+  test:
+    name: "Test (${{ inputs.kind }}) - Node ${{ matrix.node-version }}"
+    runs-on: ubuntu-latest
+    needs: prepare-matrix
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
+
+    services:
+      postgres:
+        image: ${{ inputs.kind == 'integration' && 'bitnami/postgresql' || '' }}
+        ports:
+          - 5432:5432
+        env:
+          POSTGRESQL_USERNAME: docker
+          POSTGRESQL_PASSWORD: docker
+          POSTGRESQL_DATABASE: blog
+        options: ${{ inputs.kind == 'integration' && '--health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5' || '' }}
+
+      redis:
+        image: ${{ inputs.kind == 'integration' && 'bitnami/redis' || '' }}
+        ports:
+          - 6379:6379
+        env:
+          REDIS_PASSWORD: teste
+        options: ${{ inputs.kind == 'integration' && '--health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5' || '' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: ./.github/actions/setup-node
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Prisma Generate
+        if: inputs.kind == 'integration'
+        run: npx prisma generate
+
+      - name: Install Playwright Browsers
+        if: inputs.kind == 'e2e'
+        run: npx playwright install --with-deps
+
+      - name: Run Unit Tests
+        if: inputs.kind == 'unit'
+        run: npm run test:coverage
+
+      - name: Run Integration Tests
+        if: inputs.kind == 'integration'
+        run: npm run test:integration
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'testing' }}
+          BASE_TEST_URL: ""
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://docker:docker@localhost:5432/blog?schema=public' }}
+
+      - name: Run E2E Tests
+        if: inputs.kind == 'e2e'
+        run: npm run test:e2e:coverage
+        env:
+          BASE_TEST_URL: ${{ inputs.base-url }}
+          CI: true
+
+      - name: Upload Test Coverage
+        if: inputs.upload-coverage && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-${{ inputs.kind }}-node-${{ matrix.node-version }}
+          path: ./coverage/
+          if-no-files-found: warn
+
+      - name: Upload E2E Test Results
+        if: inputs.kind == 'e2e' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results-node-${{ matrix.node-version }}
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: warn

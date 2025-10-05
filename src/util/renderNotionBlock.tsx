@@ -11,143 +11,13 @@ import { apiLogger } from "@/lib/logger";
 
 import { normalizeId } from "./normalizeId";
 import dynamic from "next/dynamic";
+import { Code } from "@/components/Code";
+import { loadLanguage } from "./loadCodeLanguageLib";
 
 type Block = {
   id: string;
   type: string;
   [key: string]: any;
-};
-
-const loadedLanguages = new Set();
-
-const loadLanguage = async (language: string) => {
-  try {
-    switch (language) {
-      case "javascript":
-      case "js":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/javascript")
-        );
-        break;
-      case "typescript":
-      case "ts":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/typescript")
-        );
-        break;
-      case "python":
-      case "py":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/python")
-        );
-        break;
-      case "java":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/java")
-        );
-        break;
-      case "css":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/css")
-        );
-        break;
-      case "html":
-      case "xml":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/xml")
-        );
-        break;
-      case "json":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/json")
-        );
-        break;
-      case "yaml":
-      case "yml":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/yaml")
-        );
-        break;
-      case "bash":
-      case "shell":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/bash")
-        );
-        break;
-      case "sql":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/sql")
-        );
-        break;
-      case "php":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/php")
-        );
-        break;
-      case "c":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/c")
-        );
-        break;
-      case "cpp":
-      case "c++":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/cpp")
-        );
-        break;
-      case "csharp":
-      case "c#":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/csharp")
-        );
-        break;
-      case "go":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/go")
-        );
-        break;
-      case "rust":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/rust")
-        );
-        break;
-      case "dockerfile":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/dockerfile")
-        );
-        break;
-      case "markdown":
-      case "md":
-        hljs.registerLanguage(
-          language,
-          require("highlight.js/lib/languages/markdown")
-        );
-        break;
-      default:
-        // Linguagem não suportada - usa auto-detect
-        break;
-    }
-    return true;
-  } catch {
-    return false;
-  }
 };
 
 const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
@@ -275,38 +145,9 @@ const blockRenderers: Record<string, (block: Block) => JSX.Element> = {
       renderRichText(text, i, true)
     )[0];
     const language = block.code.language;
+    loadLanguage(language);
 
-    if (!loadedLanguages.has(language)) {
-      loadLanguage(language);
-      loadedLanguages.add(language);
-    }
-
-    const highlightedCode = hljs.highlight(codeContent, { language }).value;
-
-    return (
-      <pre
-        key={block.id}
-        className="relative rounded-xl bg-zinc-900 p-4 pt-10 overflow-x-auto text-sm leading-relaxed shadow-l"
-      >
-        <div className="absolute left-5 top-5 flex gap-2">
-          <strong>{language}</strong>
-        </div>
-        <div className="absolute right-5 top-5 flex gap-2">
-          <CopyToClipboard
-            content={codeContent}
-            description="Copiar código"
-            showDescription={true}
-            id={block.id}
-          />
-        </div>
-
-        <div className="mt-8">
-          <code key={block.id} className="mt-4 text-gray-100 font-mono">
-            <div dangerouslySetInnerHTML={{ __html: highlightedCode }} />
-          </code>
-        </div>
-      </pre>
-    );
+    return <Code id={block.id} code={codeContent} language={language} />;
   },
   divider: (block) => <hr key={block.id} className="my-0!" />,
   bookmark: (_) => <></>,

@@ -4,11 +4,12 @@ import z from "zod";
 import NewsletterConfirmationEmail from "@/email/NewsletterConfirmationEmail";
 import { AppError } from "@/errors/AppError";
 import { SubscriptionNotFoundError } from "@/errors/SubscriptionNotFoundError";
-import { sendEmail } from "@/lib/mailer/sendEmail";
 import { makeNewsletterSubscriptionsRepository } from "@/repositories/factories/makeNewsletterSubscriptionsRepository";
 import { NewsLetterSubscriptions } from "@/generated/prisma";
 import { repositoryClient } from "@/lib/repositoryClient";
 import { envVariables } from "@/env";
+import { handleErrors } from "@/errors/handleErrors";
+import { addSendEmailJob } from "@/queues/jobs/sendEmail";
 
 const confirmationEmailApiSchema = z.object({
   confirmationId: z.uuid({ version: "v4" }),
@@ -60,11 +61,12 @@ export async function GET(
       <NewsletterConfirmationEmail confirmationId={confirmationId} />
     );
 
-    await sendEmail({
-      to: subscription.email,
+    await addSendEmailJob({
+      email: subscription.email,
       html,
       subject:
         "[HenriqueLima.Dev] Seja bem vindo! Sua inscrição foi confirmada!",
+      logMessage: "Confirm subscription email message sent",
     });
 
     return Response.redirect(`${envVariables.BASE_URL}/newsletter/confirmed`);
@@ -73,9 +75,9 @@ export async function GET(
     if (error instanceof AppError) {
       errorMessage = error.message;
     }
-
+    handleErrors(error, null, { messsage: errorMessage });
     return Response.redirect(
-      `${envVariables.BASE_URL}/newsletter/error?error=${error}`
+      `${envVariables.BASE_URL}/newsletter/error?error=${errorMessage}`
     );
   }
 }

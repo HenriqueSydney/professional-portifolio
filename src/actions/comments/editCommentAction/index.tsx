@@ -12,6 +12,7 @@ import {
 } from "./editCommentFormSchema";
 import { repositoryClient } from "@/lib/repositoryClient";
 import { PostComments } from "@/generated/prisma";
+import { handleErrors } from "@/errors/handleErrors";
 
 export async function editCommentAction(params: EditCommentData) {
   const session = await auth();
@@ -81,18 +82,10 @@ export async function editCommentAction(params: EditCommentData) {
       message: "Comentário atualizado com sucesso!",
     };
   } catch (error) {
-    if (error instanceof Error) {
-      apiLogger.warn({ stackTrace: error, traceId }, "Error updating message");
-      return {
-        success: false,
-        message: error.message,
-      };
-    }
-
-    apiLogger.error({ stackTrace: error, traceId }, "Error updating message ");
+    const errorMessage = handleErrors(error, traceId);
     return {
       success: false,
-      message: "Ocorreu um erro desconhecido.",
+      message: errorMessage,
     };
   }
 }

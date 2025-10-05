@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 
 import { AnimatedCollapseDiv } from "@/components/AnimatedCollapseDiv";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/Button";
 
 import { handleCommentLikesAction } from "@/actions/comments/handleCommentLikes";
 import { removeCommentAction } from "@/actions/comments/removeCommentAction";
@@ -40,6 +40,7 @@ export function Comment({ comment }: IComment) {
   const [likeCounter, setLikeCounter] = useState<number>(comment.numberOfLikes);
   const [alreadyLiked, setAlreadyLiked] = useState<Date | null>(null);
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [isDeleting, setisDeleting] = useState(false);
   const [currentComment, setCurrentComment] = useState(comment.comment);
   const [lastEditedTimeOfComment, setLastEditedTimeOfComment] =
     useState<Date | null>(null);
@@ -105,13 +106,16 @@ export function Comment({ comment }: IComment) {
   }
 
   async function handleRemoveComment() {
+    setisDeleting(true);
     const result = await removeCommentAction(comment.id);
+    setisDeleting(false);
     if (result.success) {
       router.replace(`?commentRemove=success`, { scroll: false });
       toast({
         title: result.message,
         action: <CheckCircle className="h-7 w-7 text-green-500" />,
       });
+
       return;
     }
     toast({
@@ -189,23 +193,24 @@ export function Comment({ comment }: IComment) {
             </button>
             {canEdit && (
               <Button
-                variant="outline"
                 size="sm"
+                variant="outline"
                 onClick={handleToggleCommentEditForm}
-              >
-                <Edit2 className="h-4 w-4" />
-                {t("editButton")}
-              </Button>
+                iconLeft={<Edit2 className="h-4 w-4" />}
+                className="hover:destructive-glow transition-all duration-300"
+                label={t("editButton")}
+              />
             )}
             {sessionData?.user.role === "ADMIN" && (
               <Button
-                variant="outline"
                 size="sm"
-                className="hover:destructive-glow transition-all duration-300"
+                variant="outline"
+                isLoading={isDeleting}
                 onClick={handleRemoveComment}
-              >
-                <Trash className="h-4 w-4" />
-              </Button>
+                label={<Trash className="h-4 w-4" />}
+                className="hover:destructive-glow transition-all duration-300"
+                centralizeLoadingIcon={true}
+              />
             )}
           </div>
         </div>
