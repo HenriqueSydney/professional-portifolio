@@ -8,7 +8,7 @@ export async function Footer() {
   const t = await getTranslations("footer");
 
   return (
-    <footer className="mt-16 py-12 bg-card/50 border-t border-border/50">
+    <footer className="mt-16 py-12 bg-card border-t border-border/50 z-50 relative">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-16 mb-8">
           {/* Brand */}

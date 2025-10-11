@@ -11,3 +11,5 @@
 [X] Fila para mensagens.
 [X] Button with loading status.
 [X] Refatorar Tailwind v4
+[ ] Criação de Dashboard de Admin para acompanhamento de Posts, Comments, Likes...
+[ ] Criação de Página de Admin para controle de Cache
