@@ -32,7 +32,7 @@ Este projeto começou como um simples portfólio pessoal, mas evoluiu para um **
 ## ✨ Features Principais
 
 ### 🎨 Interface & UX
-- ✅ **Internacionalização completa** (PT-BR, EN, ES) com next-intl
+- ✅ **Internacionalização completa** (PT-BR, EN) com next-intl
 - ✅ **Tema dark/light** com next-themes
 - ✅ **UI Components** baseados em Radix UI e shadcn/ui
 - ✅ **Animações fluidas** com Framer Motion
