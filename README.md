@@ -208,7 +208,7 @@ services:
 
 ---
 
-## 🚦 Getting Started
+## Getting Started
 
 ### Pré-requisitos
 - Node.js 20+
