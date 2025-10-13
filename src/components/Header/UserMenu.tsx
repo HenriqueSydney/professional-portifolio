@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown, LogOut, ShieldUser, User } from "lucide-react";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
@@ -64,10 +64,16 @@ export function UserMenu({ session }: IUserMenu) {
           </DropdownMenuLabel>
         </div>
         <DropdownMenuSeparator />
-        {/* <DropdownMenuItem>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Meu Perfil</span>
-                </DropdownMenuItem> */}
+        <DropdownMenuItem>
+          <User className="mr-2 h-4 w-4" />
+          <span>Meu Perfil</span>
+        </DropdownMenuItem>
+        {session.user.role === "ADMIN" && (
+          <DropdownMenuItem>
+            <ShieldUser className="mr-2 h-4 w-4" />
+            <span>Admin Dashboard</span>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem className="cursor-pointer" onClick={handleSignOut}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>{t("logoutButton")}</span>

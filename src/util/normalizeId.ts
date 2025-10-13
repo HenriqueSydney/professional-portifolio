@@ -1,6 +1,8 @@
+import { normalizeString } from "./normalizeString";
+
 export function normalizeId(text: string) {
-  return text
+  return normalizeString(text)
     .toLowerCase()
-    .replace(/\s+/g, "_") // espaços viram underline
-    .replace(/[^\w_]/g, ""); // remove caracteres não alfanuméricos
+    .replace(/\s+/g, "_")
+    .replace(/[^\w_]/g, "");
 }

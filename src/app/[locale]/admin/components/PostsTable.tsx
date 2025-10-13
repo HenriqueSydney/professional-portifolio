@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -16,14 +16,7 @@ import {
   TrendingUp,
   ExternalLink,
 } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table } from "@/components/Table";
 
 interface Post {
   id: number;
@@ -37,9 +30,6 @@ interface Post {
 }
 
 export function PostsTable() {
-  const [sortColumn, setSortColumn] = useState<keyof Post>("date");
-  const [sortDirection, setSortDirection] = useState("desc");
-
   const postsData: Post[] = [
     {
       id: 1,
@@ -143,30 +133,6 @@ export function PostsTable() {
     },
   ];
 
-  const handleSort = (column: keyof Post) => {
-    if (sortColumn === column) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      setSortColumn(column);
-      setSortDirection("desc");
-    }
-  };
-
-  const sortedPosts = [...postsData].sort((a, b) => {
-    let aVal = a[sortColumn as keyof typeof a];
-    let bVal = b[sortColumn as keyof typeof b];
-    if (sortColumn === "date") {
-      aVal = new Date(aVal).getTime();
-      bVal = new Date(bVal).getTime();
-    }
-
-    if (sortDirection === "asc") {
-      return aVal > bVal ? 1 : -1;
-    } else {
-      return aVal < bVal ? 1 : -1;
-    }
-  });
-
   const getStatusColor = (status: "Publicado" | "Rascunho" | "Agendado") => {
     switch (status) {
       case "Publicado":
@@ -184,6 +150,77 @@ export function PostsTable() {
     return likes + comments;
   };
 
+  const tableColumns = [
+    { key: "key", label: "Id", sortable: true },
+    { key: "title", label: "Título", sortable: true },
+    {
+      key: "views",
+      label: "Views",
+      sortable: true,
+      icon: <Eye className="w-4 h-4" />,
+    },
+    {
+      key: "likes",
+      label: "Likes",
+      sortable: true,
+      icon: <Heart className="w-4 h-4" />,
+    },
+    {
+      key: "comments",
+      label: "Coment.",
+      sortable: true,
+      icon: <MessageCircle className="w-4 h-4" />,
+    },
+    { key: "engajamento", label: "Engajamento", sortable: true },
+    {
+      key: "readTime",
+      label: "Leitura",
+      sortable: true,
+      icon: <Clock className="w-4 h-4" />,
+    },
+    { key: "date", label: "Data", sortable: true },
+    { key: "status", label: "Status", sortable: true },
+  ];
+
+  const tableData = postsData.map((post) => ({
+    id: {
+      value: Number(post.id),
+    },
+    title: {
+      value: post.title,
+      className: "text-slate-200 font-medium max-w-xs truncate",
+    },
+    views: {
+      value: post.views.toLocaleString(),
+      className: "text-blue-400 font-semibold text-right",
+    },
+    likes: {
+      value: post.likes,
+      className: "text-red-400 font-semibold text-right",
+    },
+    comments: {
+      value: post.comments,
+      className: "text-green-400 font-semibold text-right",
+    },
+    engajamento: {
+      value: calculateEngagement(post.likes, post.comments),
+      className: "text-purple-400 font-semibold text-right",
+    },
+    readTime: {
+      value: post.readTime,
+      className: "font-semibold text-right",
+    },
+    date: {
+      value: new Date(post.date).toLocaleDateString("pt-BR"),
+      sortValue: post.date,
+      className: "text-right",
+    },
+    status: {
+      value: post.status,
+      itemClassName: `flex items-center justify-center px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(post.status)}`,
+    },
+  }));
+
   return (
     <Card className="bg-card shadow-xl">
       <CardHeader>
@@ -197,7 +234,13 @@ export function PostsTable() {
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
-          <Table className="w-full">
+          <Table
+            tableId="postTable"
+            tableColumns={tableColumns}
+            data={tableData}
+            showSearchBar={true}
+          />
+          {/* <Table className="w-full">
             <TableHeader>
               <TableRow>
                 <TableHead
@@ -269,19 +312,13 @@ export function PostsTable() {
                   className=" hover:bg-slate-800/30 transition-colors"
                 >
                   <TableCell className="py-4 px-4">
-                    <div className="text-slate-200 font-medium max-w-xs truncate">
-                      {post.title}
-                    </div>
+                    
                   </TableCell>
                   <TableCell className="py-4 px-4 text-center">
-                    <span className="text-blue-400 font-semibold">
-                      {post.views.toLocaleString()}
-                    </span>
+                   
                   </TableCell>
                   <TableCell className="py-4 px-4 text-center">
-                    <span className="text-red-400 font-semibold">
-                      {post.likes}
-                    </span>
+                   
                   </TableCell>
                   <TableCell className="py-4 px-4 text-center">
                     <span className="text-green-400 font-semibold">
@@ -289,22 +326,16 @@ export function PostsTable() {
                     </span>
                   </TableCell>
                   <TableCell className="py-4 px-4 text-center">
-                    <span className="text-purple-400 font-semibold">
-                      {calculateEngagement(post.likes, post.comments)}
-                    </span>
+                  
                   </TableCell>
                   <TableCell className="py-4 px-4 text-center text-slate-400 text-sm">
                     {post.readTime}
                   </TableCell>
                   <TableCell className="py-4 px-4 text-center text-slate-400 text-sm">
-                    {new Date(post.date).toLocaleDateString("pt-BR")}
+                   
                   </TableCell>
                   <TableCell className="py-4 px-4 text-center">
-                    <span
-                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(post.status)}`}
-                    >
-                      {post.status}
-                    </span>
+                   
                   </TableCell>
                   <TableCell className="py-4 px-4 text-center">
                     <button
@@ -317,7 +348,7 @@ export function PostsTable() {
                 </TableRow>
               ))}
             </TableBody>
-          </Table>
+          </Table> */}
         </div>
       </CardContent>
     </Card>

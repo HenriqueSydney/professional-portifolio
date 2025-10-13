@@ -29,7 +29,7 @@ export function QueuesList({ queues, selectedQueue }: IJobList) {
   return (
     <div className="lg:col-span-1">
       <Card
-        className="flex flex-col  animate-slide-up post-card"
+        className="flex flex-col  animate-slide-up "
         style={{ animationDelay: `${0.5}s` }}
       >
         <CardHeader>

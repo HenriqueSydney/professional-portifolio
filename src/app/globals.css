@@ -262,6 +262,14 @@
     color: hsl(var(--foreground));
   }
 
+  .hover\:text-muted-foreground:hover {
+    color: hsl(var(--muted-foreground));
+  }
+
+  .hover\:text-foreground:hover {
+    color: hsl(var(--foreground));
+  }
+
   .shadow-glow {
     --tw-shadow: 0 0 20px hsl(var(--glow-color) / 0.3);
     --tw-shadow-colored: 0 0 20px var(--tw-shadow-color);
@@ -301,6 +309,10 @@
 
   .hover\:bg-primary:hover {
     background-color: hsl(var(--primary));
+  }
+
+  .hover\:bg-destructive:hover {
+    background-color: hsl(var(--destructive));
   }
 
   .hover\:shadow-glow-lg:hover {

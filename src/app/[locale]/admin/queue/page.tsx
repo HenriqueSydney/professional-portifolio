@@ -3,7 +3,8 @@ import { httpClient } from "@/lib/httpClient";
 import { QueuesList } from "./components/QueuesList";
 import { QueueStats } from "./components/QueueStats";
 import { QueueJobsList } from "./components/QueueJobsList";
-import { Card } from "@/components/ui/card";
+import { EmptyState } from "@/components/EmptyState";
+import { Clipboard } from "lucide-react";
 
 interface IQueues {
   searchParams: Promise<{
@@ -50,12 +51,10 @@ export default async function Queues({ searchParams }: IQueues) {
         </section>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar - Lista de Filas */}
           <QueuesList queues={queues} selectedQueue={queue} />
 
-          {/* Main Content */}
           <div className="lg:col-span-3">
-            {selectedQueue ? (
+            {selectedQueue && (
               <>
                 <QueueStats queues={queues} selectedQueue={queue} />
                 <QueueJobsList
@@ -63,12 +62,14 @@ export default async function Queues({ searchParams }: IQueues) {
                   selectedStats={selectedStats}
                 />
               </>
-            ) : (
-              <div className="bg-white rounded-lg shadow p-12 text-center">
-                <p className="text-gray-500">
-                  Selecione uma fila para ver os detalhes
-                </p>
-              </div>
+            )}
+
+            {!selectedQueue && (
+              <EmptyState
+                title="Nenhuma fila selecionada. "
+                description="Selecione uma para verificar os detalhes"
+                Icon={<Clipboard size={64} />}
+              />
             )}
           </div>
         </div>
