@@ -5,13 +5,29 @@ import { cn } from "@/lib/tailwindClassMerge";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import React from "react";
 
+const STATS_CLASS_MAPPER = {
+  alert: "border-red-500/20 bg-red-500/5",
+  warnning: "border-orange-500/20 bg-orange-500/5",
+  info: "border-blue-500/20 bg-blue-500/5",
+  success: "border-green-500/20 bg-green-500/5",
+} as const;
+
+const STATS_TEXT_CLASS_MAPPER = {
+  alert: "text-red-500",
+  warnning: "text-orange-500",
+  attention: "text-yellow-500",
+  info: "text-blue-500",
+  success: "text-green-500",
+  discrite: "text-opacity-70",
+} as const;
+
 interface IQueueStatsCard {
-  color: "green-500" | "blue-500" | "red-500";
+  color: keyof typeof STATS_CLASS_MAPPER;
   title: string;
   stats: {
     lable: string;
     count: number;
-    color?: string;
+    color?: keyof typeof STATS_TEXT_CLASS_MAPPER;
   }[];
   icon: React.ReactNode;
 }
@@ -32,7 +48,7 @@ export function QueueStatsCard({ color, title, stats, icon }: IQueueStatsCard) {
     <Card
       className={cn(
         "hover:shadow-glow transition-smooth duration-300",
-        `border-${color}/20 bg-${color}/5`
+        STATS_CLASS_MAPPER[color]
       )}
     >
       <CardContent className="p-4">
@@ -58,7 +74,9 @@ export function QueueStatsCard({ color, title, stats, icon }: IQueueStatsCard) {
                 <div
                   className={cn(
                     "text-2xl font-bold",
-                    `text-${stat.color ?? color}`
+                    stat.color
+                      ? STATS_TEXT_CLASS_MAPPER[stat.color]
+                      : STATS_TEXT_CLASS_MAPPER[color]
                   )}
                 >
                   {stat.count || 0}

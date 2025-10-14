@@ -30,7 +30,7 @@ export async function QueueStats({ selectedQueue, queues }: IJobStats) {
 
   return (
     <Card
-      className="flex flex-col  animate-slide-up post-card mb-4"
+      className="flex flex-col animate-slide-up post-card mb-4"
       style={{ animationDelay: `${0.5}s` }}
     >
       <CardHeader>
@@ -45,7 +45,7 @@ export async function QueueStats({ selectedQueue, queues }: IJobStats) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <QueueStatsCard
             title="Atenção Necessária"
-            color="red-500"
+            color="alert"
             icon={<AlertTriangle size={16} className="text-red-500" />}
             stats={[
               {
@@ -55,14 +55,14 @@ export async function QueueStats({ selectedQueue, queues }: IJobStats) {
               {
                 lable: "Delayed",
                 count: stats.delayed,
-                color: "orange-500",
+                color: "warnning",
               },
             ]}
           />
 
           <QueueStatsCard
             title="Em Processamento"
-            color="blue-500"
+            color="info"
             icon={<Check size={16} className="text-blue-500" />}
             stats={[
               {
@@ -72,14 +72,14 @@ export async function QueueStats({ selectedQueue, queues }: IJobStats) {
               {
                 lable: "Waiting",
                 count: stats.waiting,
-                color: "yellow-500",
+                color: "attention",
               },
             ]}
           />
 
           <QueueStatsCard
             title="Histórico"
-            color="green-500"
+            color="success"
             icon={<Check size={16} className="text-green-500" />}
             stats={[
               {
@@ -89,7 +89,7 @@ export async function QueueStats({ selectedQueue, queues }: IJobStats) {
               {
                 lable: "Paused",
                 count: stats.paused,
-                color: "opacity-70",
+                color: "discrite",
               },
             ]}
           />

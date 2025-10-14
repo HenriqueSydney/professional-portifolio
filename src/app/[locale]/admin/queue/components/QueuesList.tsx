@@ -1,5 +1,7 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RefreshCw } from "lucide-react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
@@ -15,7 +17,7 @@ interface IJobList {
 export function QueuesList({ queues, selectedQueue }: IJobList) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { replace } = useRouter();
+  const { replace, refresh } = useRouter();
 
   function handleSelectJob(jobName: string) {
     const params = new URLSearchParams(searchParams);
@@ -29,7 +31,7 @@ export function QueuesList({ queues, selectedQueue }: IJobList) {
   return (
     <div className="lg:col-span-1">
       <Card
-        className="flex flex-col  animate-slide-up "
+        className="bg-card animate-slide-up "
         style={{ animationDelay: `${0.5}s` }}
       >
         <CardHeader>
@@ -37,36 +39,45 @@ export function QueuesList({ queues, selectedQueue }: IJobList) {
             <CardTitle className="flex flex-col text-xl group-hover:text-primary transition-colors duration-300 leading-tight gap-2">
               Filas
             </CardTitle>
-            <button
-              onClick={() => {}}
-              className="p-2 hover:shadow-glow rounded-lg transition"
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              title="Atualizar"
+              onClick={() => refresh()}
             >
-              <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
-            </button>
+              <RefreshCw className="h-4 w-4" />
+            </Button>
           </div>
         </CardHeader>
 
-        <CardContent className="h-full flex flex-col space-y-4">
+        <CardContent className="space-y-2">
           {queues.map((queue) => (
             <div
               key={queue.name}
               onClick={() => handleSelectJob(queue.name)}
               className={`p-3 rounded-lg cursor-pointer hover:shadow-glow transition-all duration-300 ${
                 selectedQueue === queue.name
-                  ? "bg-primary border-2 border-primary"
-                  : "bg-background border border-input"
+                  ? "bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/50"
+                  : "bg-background border-slate-700 hover:border-slate-600"
               }`}
             >
               <div className="flex items-center justify-between">
                 <span className="font-medium text-sm">{queue.name}</span>
                 {queue.isPaused ? (
-                  <span className="text-xs bg-destructive font-bold px-2 py-1 rounded">
+                  <Badge
+                    variant="outline"
+                    className="bg-green-500/10 text-red-400 border-red-500/30 text-xs"
+                  >
                     Pausada
-                  </span>
+                  </Badge>
                 ) : (
-                  <span className="text-xs bg-green-400 text-gray-800 font-bold px-2 py-1 rounded">
+                  <Badge
+                    variant="outline"
+                    className="bg-green-500/10 text-green-400 border-green-500/30 text-xs"
+                  >
                     Ativa
-                  </span>
+                  </Badge>
                 )}
               </div>
             </div>

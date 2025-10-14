@@ -33,7 +33,7 @@ export default async function Queues({ searchParams }: IQueues) {
   const queue = selectedQueue ?? queues[0];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background w-full">
       <div className="container mx-auto px-4">
         <section className="mt-8 pb-4 bg-gradient-to-br from-primary/10 via-background to-accent/10">
           <div className="text-center max-w-4xl mx-auto animate-fade-in">
