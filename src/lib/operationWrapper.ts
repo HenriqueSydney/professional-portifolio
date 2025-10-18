@@ -8,6 +8,7 @@ import type {
   OperationWrapperResponse,
 } from "@/@types/OperationWrapperTypes";
 import { handleErrors } from "@/errors/handleErrors";
+import { revalidatePath } from "next/cache";
 
 export async function operationWrapper<T>(
   operationType: "repository" | "notion",
@@ -20,6 +21,7 @@ export async function operationWrapper<T>(
     revalidate = 0,
     tags = [],
     params = "",
+    revalidatePaths = [],
   } = options;
   const redisClient = makeRedisClient();
   const attributeKey = `${operationType}.operation`;
@@ -64,6 +66,12 @@ export async function operationWrapper<T>(
               });
             }
           });
+        }
+
+        if (revalidatePaths.length > 0) {
+          for (const path of revalidatePaths) {
+            revalidatePath(path);
+          }
         }
 
         if (!effectiveCache) {

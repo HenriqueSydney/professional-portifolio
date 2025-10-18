@@ -2375,6 +2375,7 @@ export namespace Prisma {
     PostComments?: boolean | User$PostCommentsArgs<ExtArgs>
     PostCommentsLikes?: boolean | User$PostCommentsLikesArgs<ExtArgs>
     PostLikes?: boolean | User$PostLikesArgs<ExtArgs>
+    newsLetterSubscription?: boolean | User$newsLetterSubscriptionArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2419,6 +2420,7 @@ export namespace Prisma {
     PostComments?: boolean | User$PostCommentsArgs<ExtArgs>
     PostCommentsLikes?: boolean | User$PostCommentsLikesArgs<ExtArgs>
     PostLikes?: boolean | User$PostLikesArgs<ExtArgs>
+    newsLetterSubscription?: boolean | User$newsLetterSubscriptionArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2433,6 +2435,7 @@ export namespace Prisma {
       PostComments: Prisma.$PostCommentsPayload<ExtArgs>[]
       PostCommentsLikes: Prisma.$PostCommentsLikesPayload<ExtArgs>[]
       PostLikes: Prisma.$PostLikesPayload<ExtArgs>[]
+      newsLetterSubscription: Prisma.$NewsLetterSubscriptionsPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2843,6 +2846,7 @@ export namespace Prisma {
     PostComments<T extends User$PostCommentsArgs<ExtArgs> = {}>(args?: Subset<T, User$PostCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostCommentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     PostCommentsLikes<T extends User$PostCommentsLikesArgs<ExtArgs> = {}>(args?: Subset<T, User$PostCommentsLikesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostCommentsLikesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     PostLikes<T extends User$PostLikesArgs<ExtArgs> = {}>(args?: Subset<T, User$PostLikesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostLikesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    newsLetterSubscription<T extends User$newsLetterSubscriptionArgs<ExtArgs> = {}>(args?: Subset<T, User$newsLetterSubscriptionArgs<ExtArgs>>): Prisma__NewsLetterSubscriptionsClient<$Result.GetResult<Prisma.$NewsLetterSubscriptionsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3409,6 +3413,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PostLikesScalarFieldEnum | PostLikesScalarFieldEnum[]
+  }
+
+  /**
+   * User.newsLetterSubscription
+   */
+  export type User$newsLetterSubscriptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NewsLetterSubscriptions
+     */
+    select?: NewsLetterSubscriptionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NewsLetterSubscriptions
+     */
+    omit?: NewsLetterSubscriptionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsInclude<ExtArgs> | null
+    where?: NewsLetterSubscriptionsWhereInput
   }
 
   /**
@@ -9030,6 +9053,7 @@ export namespace Prisma {
     createdAt?: boolean
     confirmedAt?: boolean
     canceledAt?: boolean
+    user?: boolean | NewsLetterSubscriptions$userArgs<ExtArgs>
   }, ExtArgs["result"]["newsLetterSubscriptions"]>
 
   export type NewsLetterSubscriptionsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9040,6 +9064,7 @@ export namespace Prisma {
     createdAt?: boolean
     confirmedAt?: boolean
     canceledAt?: boolean
+    user?: boolean | NewsLetterSubscriptions$userArgs<ExtArgs>
   }, ExtArgs["result"]["newsLetterSubscriptions"]>
 
   export type NewsLetterSubscriptionsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9050,6 +9075,7 @@ export namespace Prisma {
     createdAt?: boolean
     confirmedAt?: boolean
     canceledAt?: boolean
+    user?: boolean | NewsLetterSubscriptions$userArgs<ExtArgs>
   }, ExtArgs["result"]["newsLetterSubscriptions"]>
 
   export type NewsLetterSubscriptionsSelectScalar = {
@@ -9063,10 +9089,21 @@ export namespace Prisma {
   }
 
   export type NewsLetterSubscriptionsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "confirmationId" | "confirmationExpiresAt" | "createdAt" | "confirmedAt" | "canceledAt", ExtArgs["result"]["newsLetterSubscriptions"]>
+  export type NewsLetterSubscriptionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | NewsLetterSubscriptions$userArgs<ExtArgs>
+  }
+  export type NewsLetterSubscriptionsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | NewsLetterSubscriptions$userArgs<ExtArgs>
+  }
+  export type NewsLetterSubscriptionsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | NewsLetterSubscriptions$userArgs<ExtArgs>
+  }
 
   export type $NewsLetterSubscriptionsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "NewsLetterSubscriptions"
-    objects: {}
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       /**
        * Entity ID
@@ -9490,6 +9527,7 @@ export namespace Prisma {
    */
   export interface Prisma__NewsLetterSubscriptionsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends NewsLetterSubscriptions$userArgs<ExtArgs> = {}>(args?: Subset<T, NewsLetterSubscriptions$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9543,6 +9581,10 @@ export namespace Prisma {
      */
     omit?: NewsLetterSubscriptionsOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsInclude<ExtArgs> | null
+    /**
      * Filter, which NewsLetterSubscriptions to fetch.
      */
     where: NewsLetterSubscriptionsWhereUniqueInput
@@ -9561,6 +9603,10 @@ export namespace Prisma {
      */
     omit?: NewsLetterSubscriptionsOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsInclude<ExtArgs> | null
+    /**
      * Filter, which NewsLetterSubscriptions to fetch.
      */
     where: NewsLetterSubscriptionsWhereUniqueInput
@@ -9578,6 +9624,10 @@ export namespace Prisma {
      * Omit specific fields from the NewsLetterSubscriptions
      */
     omit?: NewsLetterSubscriptionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsInclude<ExtArgs> | null
     /**
      * Filter, which NewsLetterSubscriptions to fetch.
      */
@@ -9627,6 +9677,10 @@ export namespace Prisma {
      */
     omit?: NewsLetterSubscriptionsOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsInclude<ExtArgs> | null
+    /**
      * Filter, which NewsLetterSubscriptions to fetch.
      */
     where?: NewsLetterSubscriptionsWhereInput
@@ -9675,6 +9729,10 @@ export namespace Prisma {
      */
     omit?: NewsLetterSubscriptionsOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsInclude<ExtArgs> | null
+    /**
      * Filter, which NewsLetterSubscriptions to fetch.
      */
     where?: NewsLetterSubscriptionsWhereInput
@@ -9718,6 +9776,10 @@ export namespace Prisma {
      */
     omit?: NewsLetterSubscriptionsOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsInclude<ExtArgs> | null
+    /**
      * The data needed to create a NewsLetterSubscriptions.
      */
     data: XOR<NewsLetterSubscriptionsCreateInput, NewsLetterSubscriptionsUncheckedCreateInput>
@@ -9751,6 +9813,10 @@ export namespace Prisma {
      */
     data: NewsLetterSubscriptionsCreateManyInput | NewsLetterSubscriptionsCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -9765,6 +9831,10 @@ export namespace Prisma {
      * Omit specific fields from the NewsLetterSubscriptions
      */
     omit?: NewsLetterSubscriptionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsInclude<ExtArgs> | null
     /**
      * The data needed to update a NewsLetterSubscriptions.
      */
@@ -9817,6 +9887,10 @@ export namespace Prisma {
      * Limit how many NewsLetterSubscriptions to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -9831,6 +9905,10 @@ export namespace Prisma {
      * Omit specific fields from the NewsLetterSubscriptions
      */
     omit?: NewsLetterSubscriptionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsInclude<ExtArgs> | null
     /**
      * The filter to search for the NewsLetterSubscriptions to update in case it exists.
      */
@@ -9858,6 +9936,10 @@ export namespace Prisma {
      */
     omit?: NewsLetterSubscriptionsOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsInclude<ExtArgs> | null
+    /**
      * Filter which NewsLetterSubscriptions to delete.
      */
     where: NewsLetterSubscriptionsWhereUniqueInput
@@ -9878,6 +9960,25 @@ export namespace Prisma {
   }
 
   /**
+   * NewsLetterSubscriptions.user
+   */
+  export type NewsLetterSubscriptions$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
    * NewsLetterSubscriptions without action
    */
   export type NewsLetterSubscriptionsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9889,6 +9990,10 @@ export namespace Prisma {
      * Omit specific fields from the NewsLetterSubscriptions
      */
     omit?: NewsLetterSubscriptionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NewsLetterSubscriptionsInclude<ExtArgs> | null
   }
 
 
@@ -17192,6 +17297,7 @@ export namespace Prisma {
     PostComments?: PostCommentsListRelationFilter
     PostCommentsLikes?: PostCommentsLikesListRelationFilter
     PostLikes?: PostLikesListRelationFilter
+    newsLetterSubscription?: XOR<NewsLetterSubscriptionsNullableScalarRelationFilter, NewsLetterSubscriptionsWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -17209,6 +17315,7 @@ export namespace Prisma {
     PostComments?: PostCommentsOrderByRelationAggregateInput
     PostCommentsLikes?: PostCommentsLikesOrderByRelationAggregateInput
     PostLikes?: PostLikesOrderByRelationAggregateInput
+    newsLetterSubscription?: NewsLetterSubscriptionsOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -17229,6 +17336,7 @@ export namespace Prisma {
     PostComments?: PostCommentsListRelationFilter
     PostCommentsLikes?: PostCommentsLikesListRelationFilter
     PostLikes?: PostLikesListRelationFilter
+    newsLetterSubscription?: XOR<NewsLetterSubscriptionsNullableScalarRelationFilter, NewsLetterSubscriptionsWhereInput> | null
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -17588,6 +17696,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"NewsLetterSubscriptions"> | Date | string
     confirmedAt?: DateTimeNullableFilter<"NewsLetterSubscriptions"> | Date | string | null
     canceledAt?: DateTimeNullableFilter<"NewsLetterSubscriptions"> | Date | string | null
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type NewsLetterSubscriptionsOrderByWithRelationInput = {
@@ -17598,6 +17707,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     confirmedAt?: SortOrderInput | SortOrder
     canceledAt?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
   }
 
   export type NewsLetterSubscriptionsWhereUniqueInput = Prisma.AtLeast<{
@@ -17611,6 +17721,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"NewsLetterSubscriptions"> | Date | string
     confirmedAt?: DateTimeNullableFilter<"NewsLetterSubscriptions"> | Date | string | null
     canceledAt?: DateTimeNullableFilter<"NewsLetterSubscriptions"> | Date | string | null
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id" | "email" | "confirmationId">
 
   export type NewsLetterSubscriptionsOrderByWithAggregationInput = {
@@ -18080,6 +18191,7 @@ export namespace Prisma {
     PostComments?: PostCommentsCreateNestedManyWithoutUserInput
     PostCommentsLikes?: PostCommentsLikesCreateNestedManyWithoutUserInput
     PostLikes?: PostLikesCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -18097,6 +18209,7 @@ export namespace Prisma {
     PostComments?: PostCommentsUncheckedCreateNestedManyWithoutUserInput
     PostCommentsLikes?: PostCommentsLikesUncheckedCreateNestedManyWithoutUserInput
     PostLikes?: PostLikesUncheckedCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -18114,6 +18227,7 @@ export namespace Prisma {
     PostComments?: PostCommentsUpdateManyWithoutUserNestedInput
     PostCommentsLikes?: PostCommentsLikesUpdateManyWithoutUserNestedInput
     PostLikes?: PostLikesUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -18131,6 +18245,7 @@ export namespace Prisma {
     PostComments?: PostCommentsUncheckedUpdateManyWithoutUserNestedInput
     PostCommentsLikes?: PostCommentsLikesUncheckedUpdateManyWithoutUserNestedInput
     PostLikes?: PostLikesUncheckedUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -18497,12 +18612,12 @@ export namespace Prisma {
   }
 
   export type NewsLetterSubscriptionsCreateInput = {
-    email: string
     confirmationId?: string
     confirmationExpiresAt: Date | string
     createdAt?: Date | string
     confirmedAt?: Date | string | null
     canceledAt?: Date | string | null
+    user?: UserCreateNestedOneWithoutNewsLetterSubscriptionInput
   }
 
   export type NewsLetterSubscriptionsUncheckedCreateInput = {
@@ -18516,12 +18631,12 @@ export namespace Prisma {
   }
 
   export type NewsLetterSubscriptionsUpdateInput = {
-    email?: StringFieldUpdateOperationsInput | string
     confirmationId?: StringFieldUpdateOperationsInput | string
     confirmationExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     canceledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneWithoutNewsLetterSubscriptionNestedInput
   }
 
   export type NewsLetterSubscriptionsUncheckedUpdateInput = {
@@ -18545,7 +18660,6 @@ export namespace Prisma {
   }
 
   export type NewsLetterSubscriptionsUpdateManyMutationInput = {
-    email?: StringFieldUpdateOperationsInput | string
     confirmationId?: StringFieldUpdateOperationsInput | string
     confirmationExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19082,6 +19196,11 @@ export namespace Prisma {
     none?: PostLikesWhereInput
   }
 
+  export type NewsLetterSubscriptionsNullableScalarRelationFilter = {
+    is?: NewsLetterSubscriptionsWhereInput | null
+    isNot?: NewsLetterSubscriptionsWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -19473,6 +19592,11 @@ export namespace Prisma {
   export type NewslettersSumOrderByAggregateInput = {
     id?: SortOrder
     numberOfEmailsSent?: SortOrder
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
   }
 
   export type NewsLetterSubscriptionsCountOrderByAggregateInput = {
@@ -19930,6 +20054,12 @@ export namespace Prisma {
     connect?: PostLikesWhereUniqueInput | PostLikesWhereUniqueInput[]
   }
 
+  export type NewsLetterSubscriptionsCreateNestedOneWithoutUserInput = {
+    create?: XOR<NewsLetterSubscriptionsCreateWithoutUserInput, NewsLetterSubscriptionsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: NewsLetterSubscriptionsCreateOrConnectWithoutUserInput
+    connect?: NewsLetterSubscriptionsWhereUniqueInput
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -19970,6 +20100,12 @@ export namespace Prisma {
     connectOrCreate?: PostLikesCreateOrConnectWithoutUserInput | PostLikesCreateOrConnectWithoutUserInput[]
     createMany?: PostLikesCreateManyUserInputEnvelope
     connect?: PostLikesWhereUniqueInput | PostLikesWhereUniqueInput[]
+  }
+
+  export type NewsLetterSubscriptionsUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<NewsLetterSubscriptionsCreateWithoutUserInput, NewsLetterSubscriptionsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: NewsLetterSubscriptionsCreateOrConnectWithoutUserInput
+    connect?: NewsLetterSubscriptionsWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -20076,6 +20212,16 @@ export namespace Prisma {
     deleteMany?: PostLikesScalarWhereInput | PostLikesScalarWhereInput[]
   }
 
+  export type NewsLetterSubscriptionsUpdateOneWithoutUserNestedInput = {
+    create?: XOR<NewsLetterSubscriptionsCreateWithoutUserInput, NewsLetterSubscriptionsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: NewsLetterSubscriptionsCreateOrConnectWithoutUserInput
+    upsert?: NewsLetterSubscriptionsUpsertWithoutUserInput
+    disconnect?: NewsLetterSubscriptionsWhereInput | boolean
+    delete?: NewsLetterSubscriptionsWhereInput | boolean
+    connect?: NewsLetterSubscriptionsWhereUniqueInput
+    update?: XOR<XOR<NewsLetterSubscriptionsUpdateToOneWithWhereWithoutUserInput, NewsLetterSubscriptionsUpdateWithoutUserInput>, NewsLetterSubscriptionsUncheckedUpdateWithoutUserInput>
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -20160,6 +20306,16 @@ export namespace Prisma {
     deleteMany?: PostLikesScalarWhereInput | PostLikesScalarWhereInput[]
   }
 
+  export type NewsLetterSubscriptionsUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<NewsLetterSubscriptionsCreateWithoutUserInput, NewsLetterSubscriptionsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: NewsLetterSubscriptionsCreateOrConnectWithoutUserInput
+    upsert?: NewsLetterSubscriptionsUpsertWithoutUserInput
+    disconnect?: NewsLetterSubscriptionsWhereInput | boolean
+    delete?: NewsLetterSubscriptionsWhereInput | boolean
+    connect?: NewsLetterSubscriptionsWhereUniqueInput
+    update?: XOR<XOR<NewsLetterSubscriptionsUpdateToOneWithWhereWithoutUserInput, NewsLetterSubscriptionsUpdateWithoutUserInput>, NewsLetterSubscriptionsUncheckedUpdateWithoutUserInput>
+  }
+
   export type UserCreateNestedOneWithoutAccountsInput = {
     create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
@@ -20220,6 +20376,22 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutAuthenticatorInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAuthenticatorInput, UserUpdateWithoutAuthenticatorInput>, UserUncheckedUpdateWithoutAuthenticatorInput>
+  }
+
+  export type UserCreateNestedOneWithoutNewsLetterSubscriptionInput = {
+    create?: XOR<UserCreateWithoutNewsLetterSubscriptionInput, UserUncheckedCreateWithoutNewsLetterSubscriptionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNewsLetterSubscriptionInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutNewsLetterSubscriptionNestedInput = {
+    create?: XOR<UserCreateWithoutNewsLetterSubscriptionInput, UserUncheckedCreateWithoutNewsLetterSubscriptionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNewsLetterSubscriptionInput
+    upsert?: UserUpsertWithoutNewsLetterSubscriptionInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNewsLetterSubscriptionInput, UserUpdateWithoutNewsLetterSubscriptionInput>, UserUncheckedUpdateWithoutNewsLetterSubscriptionInput>
   }
 
   export type PostsCreatetagsInput = {
@@ -20954,6 +21126,28 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type NewsLetterSubscriptionsCreateWithoutUserInput = {
+    confirmationId?: string
+    confirmationExpiresAt: Date | string
+    createdAt?: Date | string
+    confirmedAt?: Date | string | null
+    canceledAt?: Date | string | null
+  }
+
+  export type NewsLetterSubscriptionsUncheckedCreateWithoutUserInput = {
+    id?: number
+    confirmationId?: string
+    confirmationExpiresAt: Date | string
+    createdAt?: Date | string
+    confirmedAt?: Date | string | null
+    canceledAt?: Date | string | null
+  }
+
+  export type NewsLetterSubscriptionsCreateOrConnectWithoutUserInput = {
+    where: NewsLetterSubscriptionsWhereUniqueInput
+    create: XOR<NewsLetterSubscriptionsCreateWithoutUserInput, NewsLetterSubscriptionsUncheckedCreateWithoutUserInput>
+  }
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput
     update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
@@ -21125,6 +21319,34 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"PostLikes"> | Date | string
   }
 
+  export type NewsLetterSubscriptionsUpsertWithoutUserInput = {
+    update: XOR<NewsLetterSubscriptionsUpdateWithoutUserInput, NewsLetterSubscriptionsUncheckedUpdateWithoutUserInput>
+    create: XOR<NewsLetterSubscriptionsCreateWithoutUserInput, NewsLetterSubscriptionsUncheckedCreateWithoutUserInput>
+    where?: NewsLetterSubscriptionsWhereInput
+  }
+
+  export type NewsLetterSubscriptionsUpdateToOneWithWhereWithoutUserInput = {
+    where?: NewsLetterSubscriptionsWhereInput
+    data: XOR<NewsLetterSubscriptionsUpdateWithoutUserInput, NewsLetterSubscriptionsUncheckedUpdateWithoutUserInput>
+  }
+
+  export type NewsLetterSubscriptionsUpdateWithoutUserInput = {
+    confirmationId?: StringFieldUpdateOperationsInput | string
+    confirmationExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canceledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type NewsLetterSubscriptionsUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    confirmationId?: StringFieldUpdateOperationsInput | string
+    confirmationExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canceledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type UserCreateWithoutAccountsInput = {
     id?: string
     name?: string | null
@@ -21139,6 +21361,7 @@ export namespace Prisma {
     PostComments?: PostCommentsCreateNestedManyWithoutUserInput
     PostCommentsLikes?: PostCommentsLikesCreateNestedManyWithoutUserInput
     PostLikes?: PostLikesCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -21155,6 +21378,7 @@ export namespace Prisma {
     PostComments?: PostCommentsUncheckedCreateNestedManyWithoutUserInput
     PostCommentsLikes?: PostCommentsLikesUncheckedCreateNestedManyWithoutUserInput
     PostLikes?: PostLikesUncheckedCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -21187,6 +21411,7 @@ export namespace Prisma {
     PostComments?: PostCommentsUpdateManyWithoutUserNestedInput
     PostCommentsLikes?: PostCommentsLikesUpdateManyWithoutUserNestedInput
     PostLikes?: PostLikesUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -21203,6 +21428,7 @@ export namespace Prisma {
     PostComments?: PostCommentsUncheckedUpdateManyWithoutUserNestedInput
     PostCommentsLikes?: PostCommentsLikesUncheckedUpdateManyWithoutUserNestedInput
     PostLikes?: PostLikesUncheckedUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -21219,6 +21445,7 @@ export namespace Prisma {
     PostComments?: PostCommentsCreateNestedManyWithoutUserInput
     PostCommentsLikes?: PostCommentsLikesCreateNestedManyWithoutUserInput
     PostLikes?: PostLikesCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -21235,6 +21462,7 @@ export namespace Prisma {
     PostComments?: PostCommentsUncheckedCreateNestedManyWithoutUserInput
     PostCommentsLikes?: PostCommentsLikesUncheckedCreateNestedManyWithoutUserInput
     PostLikes?: PostLikesUncheckedCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -21267,6 +21495,7 @@ export namespace Prisma {
     PostComments?: PostCommentsUpdateManyWithoutUserNestedInput
     PostCommentsLikes?: PostCommentsLikesUpdateManyWithoutUserNestedInput
     PostLikes?: PostLikesUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -21283,6 +21512,7 @@ export namespace Prisma {
     PostComments?: PostCommentsUncheckedUpdateManyWithoutUserNestedInput
     PostCommentsLikes?: PostCommentsLikesUncheckedUpdateManyWithoutUserNestedInput
     PostLikes?: PostLikesUncheckedUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAuthenticatorInput = {
@@ -21299,6 +21529,7 @@ export namespace Prisma {
     PostComments?: PostCommentsCreateNestedManyWithoutUserInput
     PostCommentsLikes?: PostCommentsLikesCreateNestedManyWithoutUserInput
     PostLikes?: PostLikesCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAuthenticatorInput = {
@@ -21315,6 +21546,7 @@ export namespace Prisma {
     PostComments?: PostCommentsUncheckedCreateNestedManyWithoutUserInput
     PostCommentsLikes?: PostCommentsLikesUncheckedCreateNestedManyWithoutUserInput
     PostLikes?: PostLikesUncheckedCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAuthenticatorInput = {
@@ -21347,6 +21579,7 @@ export namespace Prisma {
     PostComments?: PostCommentsUpdateManyWithoutUserNestedInput
     PostCommentsLikes?: PostCommentsLikesUpdateManyWithoutUserNestedInput
     PostLikes?: PostLikesUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuthenticatorInput = {
@@ -21360,6 +21593,91 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    PostComments?: PostCommentsUncheckedUpdateManyWithoutUserNestedInput
+    PostCommentsLikes?: PostCommentsLikesUncheckedUpdateManyWithoutUserNestedInput
+    PostLikes?: PostLikesUncheckedUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutNewsLetterSubscriptionInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    Authenticator?: AuthenticatorCreateNestedManyWithoutUserInput
+    PostComments?: PostCommentsCreateNestedManyWithoutUserInput
+    PostCommentsLikes?: PostCommentsLikesCreateNestedManyWithoutUserInput
+    PostLikes?: PostLikesCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutNewsLetterSubscriptionInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    Authenticator?: AuthenticatorUncheckedCreateNestedManyWithoutUserInput
+    PostComments?: PostCommentsUncheckedCreateNestedManyWithoutUserInput
+    PostCommentsLikes?: PostCommentsLikesUncheckedCreateNestedManyWithoutUserInput
+    PostLikes?: PostLikesUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutNewsLetterSubscriptionInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutNewsLetterSubscriptionInput, UserUncheckedCreateWithoutNewsLetterSubscriptionInput>
+  }
+
+  export type UserUpsertWithoutNewsLetterSubscriptionInput = {
+    update: XOR<UserUpdateWithoutNewsLetterSubscriptionInput, UserUncheckedUpdateWithoutNewsLetterSubscriptionInput>
+    create: XOR<UserCreateWithoutNewsLetterSubscriptionInput, UserUncheckedCreateWithoutNewsLetterSubscriptionInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutNewsLetterSubscriptionInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutNewsLetterSubscriptionInput, UserUncheckedUpdateWithoutNewsLetterSubscriptionInput>
+  }
+
+  export type UserUpdateWithoutNewsLetterSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    Authenticator?: AuthenticatorUpdateManyWithoutUserNestedInput
+    PostComments?: PostCommentsUpdateManyWithoutUserNestedInput
+    PostCommentsLikes?: PostCommentsLikesUpdateManyWithoutUserNestedInput
+    PostLikes?: PostLikesUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutNewsLetterSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    Authenticator?: AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
     PostComments?: PostCommentsUncheckedUpdateManyWithoutUserNestedInput
     PostCommentsLikes?: PostCommentsLikesUncheckedUpdateManyWithoutUserNestedInput
     PostLikes?: PostLikesUncheckedUpdateManyWithoutUserNestedInput
@@ -21620,6 +21938,7 @@ export namespace Prisma {
     Authenticator?: AuthenticatorCreateNestedManyWithoutUserInput
     PostComments?: PostCommentsCreateNestedManyWithoutUserInput
     PostCommentsLikes?: PostCommentsLikesCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostLikesInput = {
@@ -21636,6 +21955,7 @@ export namespace Prisma {
     Authenticator?: AuthenticatorUncheckedCreateNestedManyWithoutUserInput
     PostComments?: PostCommentsUncheckedCreateNestedManyWithoutUserInput
     PostCommentsLikes?: PostCommentsLikesUncheckedCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostLikesInput = {
@@ -21688,6 +22008,7 @@ export namespace Prisma {
     Authenticator?: AuthenticatorUpdateManyWithoutUserNestedInput
     PostComments?: PostCommentsUpdateManyWithoutUserNestedInput
     PostCommentsLikes?: PostCommentsLikesUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostLikesInput = {
@@ -21704,6 +22025,7 @@ export namespace Prisma {
     Authenticator?: AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
     PostComments?: PostCommentsUncheckedUpdateManyWithoutUserNestedInput
     PostCommentsLikes?: PostCommentsLikesUncheckedUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PostMetricsUpsertWithoutPostLikesInput = {
@@ -21746,6 +22068,7 @@ export namespace Prisma {
     Authenticator?: AuthenticatorCreateNestedManyWithoutUserInput
     PostCommentsLikes?: PostCommentsLikesCreateNestedManyWithoutUserInput
     PostLikes?: PostLikesCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostCommentsInput = {
@@ -21762,6 +22085,7 @@ export namespace Prisma {
     Authenticator?: AuthenticatorUncheckedCreateNestedManyWithoutUserInput
     PostCommentsLikes?: PostCommentsLikesUncheckedCreateNestedManyWithoutUserInput
     PostLikes?: PostLikesUncheckedCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostCommentsInput = {
@@ -21868,6 +22192,7 @@ export namespace Prisma {
     Authenticator?: AuthenticatorUpdateManyWithoutUserNestedInput
     PostCommentsLikes?: PostCommentsLikesUpdateManyWithoutUserNestedInput
     PostLikes?: PostLikesUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostCommentsInput = {
@@ -21884,6 +22209,7 @@ export namespace Prisma {
     Authenticator?: AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
     PostCommentsLikes?: PostCommentsLikesUncheckedUpdateManyWithoutUserNestedInput
     PostLikes?: PostLikesUncheckedUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PostsUpsertWithoutPostCommentsInput = {
@@ -21976,6 +22302,7 @@ export namespace Prisma {
     Authenticator?: AuthenticatorCreateNestedManyWithoutUserInput
     PostComments?: PostCommentsCreateNestedManyWithoutUserInput
     PostLikes?: PostLikesCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostCommentsLikesInput = {
@@ -21992,6 +22319,7 @@ export namespace Prisma {
     Authenticator?: AuthenticatorUncheckedCreateNestedManyWithoutUserInput
     PostComments?: PostCommentsUncheckedCreateNestedManyWithoutUserInput
     PostLikes?: PostLikesUncheckedCreateNestedManyWithoutUserInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostCommentsLikesInput = {
@@ -22048,6 +22376,7 @@ export namespace Prisma {
     Authenticator?: AuthenticatorUpdateManyWithoutUserNestedInput
     PostComments?: PostCommentsUpdateManyWithoutUserNestedInput
     PostLikes?: PostLikesUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostCommentsLikesInput = {
@@ -22064,6 +22393,7 @@ export namespace Prisma {
     Authenticator?: AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
     PostComments?: PostCommentsUncheckedUpdateManyWithoutUserNestedInput
     PostLikes?: PostLikesUncheckedUpdateManyWithoutUserNestedInput
+    newsLetterSubscription?: NewsLetterSubscriptionsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PostCommentsUpsertWithoutPostCommentsLikesInput = {

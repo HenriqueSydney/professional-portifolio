@@ -2,6 +2,7 @@ import { Prisma, Posts, PostStatus } from "@/generated/prisma";
 import { BlockObjectResponse } from "@notionhq/client";
 import {
   FetchPostsResponse,
+  FetchPostsWithStatsResponse,
   Filters,
   FindPostBySlugResponse,
   IPostsRespository,
@@ -207,5 +208,91 @@ export class PrismaPostsRepository implements IPostsRespository {
     ]);
 
     return { totalOfRecords, posts };
+  }
+
+  async fetchPostsWithStats(
+    filters: Filters,
+    pagination: Pagination
+  ): Promise<FetchPostsWithStatsResponse> {
+    const { category, query, firstPageOnly, locale, fromDate } = filters;
+
+    const where: Prisma.PostsWhereInput = {
+      status: "PUBLISHED",
+      ...(category && category !== "All" ? { category } : {}),
+      ...(firstPageOnly ? { featured: true } : {}),
+      ...(query
+        ? {
+            OR: [
+              { title: { contains: query, mode: "insensitive" } },
+              { excerpt_pt: { contains: query, mode: "insensitive" } },
+              { excerpt_en: { contains: query, mode: "insensitive" } },
+              { tags: { has: query } },
+            ],
+          }
+        : {}),
+      ...(fromDate
+        ? {
+            createdAt: {
+              gte: new Date(fromDate),
+            },
+          }
+        : {}),
+    };
+
+    const orderBy: Prisma.PostsOrderByWithRelationInput = {
+      publishedAt: "desc",
+    };
+
+    let paginationDefinition = {};
+    if (pagination) {
+      if (pagination.page || pagination.numberPerPage) {
+        paginationDefinition = {
+          skip: ((pagination.page ?? 1) - 1) * (pagination.numberPerPage ?? 10),
+          take: pagination.numberPerPage,
+        };
+      }
+    }
+
+    const [totalOfRecords, posts] = await prisma.$transaction([
+      prisma.posts.count({ where }),
+      prisma.posts.findMany({
+        select: {
+          id: true,
+          notionId: true,
+          title: true,
+          title_en: true,
+          slug_en: true,
+          slug: true,
+          category: true,
+          tags: true,
+          coverUrl: true,
+          readTime: true,
+          featured: true,
+          priority: true,
+          createdAt: true,
+          publishedAt: true,
+          excerpt_pt: locale === "pt",
+          excerpt_en: locale === "en",
+          translatedModel: locale === "en",
+          PostMetrics: {
+            select: {
+              numberOfViews: true,
+              totalOfComments: true,
+              numberOfLikes: true,
+            },
+          },
+        },
+        where,
+        orderBy,
+        ...paginationDefinition,
+      }),
+    ]);
+
+    return { totalOfRecords, posts };
+  }
+
+  async countTotalPosts(): Promise<number> {
+    const totalOfPosts = await prisma.posts.count();
+    return totalOfPosts;
   }
 }

@@ -30,6 +30,8 @@ model User {
   PostComments      PostComments[]
   PostCommentsLikes PostCommentsLikes[]
   PostLikes         PostLikes[]
+
+  newsLetterSubscription NewsLetterSubscriptions?
 }
 
 model Account {
@@ -105,6 +107,8 @@ model NewsLetterSubscriptions {
   createdAt             DateTime  @default(now()) @map("created_at") ///Entity creation date
   confirmedAt           DateTime? @map("confirmed_at") ///Date of the confirmation of subscription
   canceledAt            DateTime? @map("canceled_at") ///Date of the cancelled subscription
+
+  user User? @relation(fields: [email], references: [email])
 
   @@index([confirmedAt, canceledAt])
   @@map("news_letter_subscription")

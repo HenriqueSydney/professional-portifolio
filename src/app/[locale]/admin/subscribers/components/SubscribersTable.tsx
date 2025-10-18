@@ -1,5 +1,8 @@
 import { Table } from "@/components/Table";
 import { CalendarDays, CheckCircle, Mail, User, XCircle } from "lucide-react";
+import { SubscriberDeleteButton } from "./SubscriberDeleteButton";
+import { SubscriberCancelButton } from "./SubscriberCancelButton";
+import Link from "next/link";
 
 interface Subscriber {
   id: number;
@@ -8,39 +11,16 @@ interface Subscriber {
     id: string;
     name: string;
   } | null;
-  createdAt: string;
-  confirmedAt?: string | null;
-  canceledAt?: string | null;
+  createdAt: Date;
+  confirmedAt?: Date | null;
+  canceledAt?: Date | null;
 }
 
-export function SubscribersTable() {
-  const subscribersMock: Subscriber[] = [
-    {
-      id: 1,
-      email: "ana.silva@example.com",
-      user: { id: "u1", name: "Ana Silva" },
-      createdAt: "2025-01-10T09:24:00Z",
-      confirmedAt: "2025-01-10T10:00:00Z",
-      canceledAt: null,
-    },
-    {
-      id: 2,
-      email: "carlos.oliveira@example.com",
-      user: null,
-      createdAt: "2025-02-20T08:00:00Z",
-      confirmedAt: null,
-      canceledAt: null,
-    },
-    {
-      id: 3,
-      email: "marina.santos@example.com",
-      user: { id: "u2", name: "Marina Santos" },
-      createdAt: "2025-03-15T13:30:00Z",
-      confirmedAt: "2025-03-15T13:45:00Z",
-      canceledAt: "2025-04-01T10:00:00Z",
-    },
-  ];
+interface ISubscribersTable {
+  subscriptions: Subscriber[];
+}
 
+export function SubscribersTable({ subscriptions }: ISubscribersTable) {
   const tableColumns = [
     { key: "id", label: "Id", sortable: true },
     {
@@ -94,7 +74,7 @@ export function SubscribersTable() {
     }
   };
 
-  const tableData = subscribersMock.map((sub) => {
+  const tableData = subscriptions.map((sub) => {
     const status = getStatus(sub);
     return {
       id: { value: sub.id },
@@ -103,7 +83,11 @@ export function SubscribersTable() {
         className: "font-medium text-slate-200 truncate",
       },
       user: {
-        value: sub.user?.name ?? "—",
+        value: sub.user ? (
+          <Link href={`/user/${sub.user.id}`}>{sub.user?.name}</Link>
+        ) : (
+          "—"
+        ),
         className: sub.user
           ? "text-blue-400 font-semibold"
           : "text-slate-500 italic",
@@ -111,28 +95,32 @@ export function SubscribersTable() {
       createdAt: {
         value: new Date(sub.createdAt).toLocaleDateString("pt-BR"),
         sortValue: sub.createdAt,
-        className: "text-right",
+        className: "text-center",
       },
       confirmedAt: {
         value: sub.confirmedAt
           ? new Date(sub.confirmedAt).toLocaleDateString("pt-BR")
           : "—",
         sortValue: sub.confirmedAt,
-        className: "text-right",
+        className: "text-center",
       },
       canceledAt: {
         value: sub.canceledAt
           ? new Date(sub.canceledAt).toLocaleDateString("pt-BR")
           : "—",
         sortValue: sub.canceledAt,
-        className: "text-right",
+        className: "text-center",
       },
       status: {
         value: status,
         itemClassName: `flex items-center justify-center px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(status)}`,
       },
       actions: {
-        value: sub.canceledAt ? "Deletar" : "Cancelar",
+        value: sub.canceledAt ? (
+          <SubscriberDeleteButton id={sub.id} />
+        ) : (
+          <SubscriberCancelButton id={sub.id} />
+        ),
         className:
           "text-center font-semibold text-blue-400 cursor-pointer hover:underline",
       },

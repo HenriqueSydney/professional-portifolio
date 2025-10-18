@@ -16,7 +16,15 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export function ViewChart() {
+interface IViewChart {
+  chartData: {
+    dia: string;
+    visualizacoes: number;
+    visitantes: number;
+  }[];
+}
+
+export function ViewChart({ chartData }: IViewChart) {
   const pageViewsData = [
     { dia: "Seg", visualizacoes: 1200, visitantes: 850 },
     { dia: "Ter", visualizacoes: 1450, visitantes: 980 },
@@ -38,7 +46,7 @@ export function ViewChart() {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={350}>
-          <LineChart data={pageViewsData}>
+          <LineChart data={chartData}>
             <XAxis
               dataKey="dia"
               stroke="#64748b"

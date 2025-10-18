@@ -1,42 +1,20 @@
-import { MetricsCards } from "./components/MetricsCards";
-import { LineChart } from "lucide-react";
 import { ViewChart } from "./components/ViewChart";
 import { PostChart } from "./components/PostChart";
 import { PostsTable } from "./components/PostsTable";
+import { MetricsCardContainer } from "./components/MetricsCardContainer";
+import { makePostMetricsRepository } from "@/repositories/factories/makePostMetricsRepository";
+import { repositoryClient } from "@/lib/repositoryClient";
 
 export default async function AdminDashboard() {
-  const stats = [
+  const postMetricsRepository = makePostMetricsRepository();
+
+  const [_, postChartData] = await await repositoryClient(
+    "postRepository.countTotalPosts()",
+    () => postMetricsRepository.getTopViewedPosts(),
     {
-      value: 10,
-      label: "Posts",
-      icon: LineChart,
-    },
-    {
-      value: 300,
-      label: "Views",
-      icon: LineChart,
-    },
-    {
-      value: 300,
-      label: "Likes",
-      icon: LineChart,
-    },
-    {
-      value: 20,
-      label: "Comments",
-      icon: LineChart,
-    },
-    {
-      value: 500,
-      label: "Users",
-      icon: LineChart,
-    },
-    {
-      value: 300,
-      label: "Subscribers",
-      icon: LineChart,
-    },
-  ];
+      cache: "no-cache",
+    }
+  );
 
   return (
     <div className="min-h-screen bg-background w-full">
@@ -56,20 +34,11 @@ export default async function AdminDashboard() {
           </div>
         </section>
         <section>
-          <div className="flex justify-between gap-2">
-            {stats.map((stat) => (
-              <MetricsCards
-                key={stat.label.toLocaleLowerCase()}
-                value={stat.value}
-                label={stat.label}
-                icon={<stat.icon size={16} />}
-              />
-            ))}
-          </div>
+          <MetricsCardContainer />
         </section>
         <section className="mt-5 w-full grid grid-cols-2 gap-2">
-          <ViewChart />
-          <PostChart />
+          {/* <ViewChart chartData={chartData}/> */}
+          <PostChart chartData={postChartData} />
         </section>
         <section className="mt-5 w-full">
           <PostsTable />

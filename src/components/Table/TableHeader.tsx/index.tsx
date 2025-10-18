@@ -60,7 +60,7 @@ export function TableHeader({
             />
           </div>
         )}
-        <TableHeaderActions headerActions={headerActions} tableId={tableId} />
+        {/* <TableHeaderActions headerActions={headerActions} tableId={tableId} /> */}
       </div>
 
       {checkBoxPerLine && handleAction && selectedItems && (

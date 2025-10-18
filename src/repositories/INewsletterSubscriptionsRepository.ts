@@ -1,4 +1,10 @@
+import { Pagination } from "@/@types/Pagination";
 import { NewsLetterSubscriptions } from "@/generated/prisma";
+
+export type SubscriptionsQuery = {
+  query?: string;
+  status?: "PENDING" | "CONFIRMED" | "CANCELED" | "ALL";
+};
 
 export interface INewsLetterSubscriptionsRepository {
   findSubscriptionById(id: number): Promise<NewsLetterSubscriptions | null>;
@@ -14,5 +20,14 @@ export interface INewsLetterSubscriptionsRepository {
   ): Promise<NewsLetterSubscriptions>;
   confirmSubscriptionById(id: number): Promise<NewsLetterSubscriptions>;
   cancelSubscriptionById(id: number): Promise<NewsLetterSubscriptions>;
+  deleteSubscriptionById(id: number): Promise<void>;
   getAllSubscriptions(): Promise<NewsLetterSubscriptions[]>;
+  fetchSubscription(
+    filter: SubscriptionsQuery,
+    pagination?: Pagination
+  ): Promise<{
+    totalOfRecords: number;
+    subscriptions: NewsLetterSubscriptions[];
+  }>;
+  countTotalSubscribers(): Promise<number>;
 }

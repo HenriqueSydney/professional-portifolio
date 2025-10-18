@@ -322,6 +322,9 @@ npm run test:e2e:ui      # Testes E2E com UI
 - [ ] **Dashboard de Admin**: Gerenciamento de Posts, Comments, Likes
 - [x] **Página de Admin para Cache**: Controle e observabilidade do Cache Redis
 - [x] **Página de Admin para Queues**: Controle e observabilidade da Fila
+- [x] **Página de Usuários**: Pagina do perfil de usuários
+- [x] **Página de Admin para Consultar Usuáiros**: Controle e observabilidade de usuários
+- [x] **Página de Admin para Consultar Subscritros**: Controle e observabilidade de subscrições
 
 ---
 

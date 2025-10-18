@@ -44,6 +44,19 @@ export type FetchPostsResponse = {
   totalOfRecords: number;
 };
 
+type PostWithExcerptAndStats = PostWithExcerpt & {
+  PostMetrics: {
+    numberOfViews: number;
+    totalOfComments: number;
+    numberOfLikes: number;
+  } | null;
+};
+
+export type FetchPostsWithStatsResponse = {
+  posts: PostWithExcerptAndStats[];
+  totalOfRecords: number;
+};
+
 export type FindPostBySlugResponse = {
   id: number;
   notionId: string;
@@ -103,4 +116,11 @@ export interface IPostsRespository {
     filters: Filters,
     pagination: Pagination
   ): Promise<FetchPostsResponse>;
+
+  fetchPostsWithStats(
+    filters: Filters,
+    pagination: Pagination
+  ): Promise<FetchPostsWithStatsResponse>;
+
+  countTotalPosts(): Promise<number>;
 }

@@ -7,6 +7,9 @@ import Google from "next-auth/providers/google";
 import { prisma } from "../prisma";
 
 export default {
+  session: {
+    strategy: "database",
+  },
   callbacks: {
     async signIn({ user, account, profile }) {
       console.log({ user, account, profile });
@@ -15,8 +18,12 @@ export default {
           let role: Role = Role.USER;
           const email = profile.email || user.email;
 
-          if (email === envVariables.GOOGLE_EMAIL) {
+          if (
+            email === envVariables.GOOGLE_EMAIL ||
+            email === "henriquesydney@hotmail.com"
+          ) {
             role = Role.ADMIN;
+            user.role = role;
           }
 
           // Atualiza os dados do usuário no banco com informações do provedor

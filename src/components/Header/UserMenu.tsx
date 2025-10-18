@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 interface IUserMenu {
   session: Session;
@@ -64,14 +65,18 @@ export function UserMenu({ session }: IUserMenu) {
           </DropdownMenuLabel>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
-          <span>Meu Perfil</span>
+        <DropdownMenuItem asChild>
+          <Link href={`/user/${session.user.id}`} className="cursor-pointer">
+            <User className="mr-2 h-4 w-4" />
+            <span>Meu Perfil</span>
+          </Link>
         </DropdownMenuItem>
         {session.user.role === "ADMIN" && (
-          <DropdownMenuItem>
-            <ShieldUser className="mr-2 h-4 w-4" />
-            <span>Admin Dashboard</span>
+          <DropdownMenuItem asChild>
+            <Link href={"/admin"} className="cursor-pointer">
+              <ShieldUser className="mr-2 h-4 w-4" />
+              <span>Admin Dashboard</span>
+            </Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuItem className="cursor-pointer" onClick={handleSignOut}>

@@ -4,6 +4,7 @@ export interface OperationWrapperOptions {
   tags?: string[];
   params?: string;
   revalidateCachedTags?: boolean;
+  revalidatePaths?: string[];
 }
 
 type OperationWrapperResponse<T> = [Error, null] | [null, T];
