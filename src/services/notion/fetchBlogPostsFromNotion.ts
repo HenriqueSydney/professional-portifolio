@@ -5,6 +5,8 @@ import { envVariables } from "@/env";
 import { notion } from "@/lib/notion/notion";
 import { notionClient } from "@/lib/notion/notionClient";
 import { BlogPost, postsMapper } from "../../mappers/postsMapper";
+import { makeCreateAndUpdatePostUseCase } from "@/use-cases/factories/makeCreateAndUpdatePostUseCase";
+import { apiLogger } from "@/lib/logger";
 
 type GetBlogPostsParams = {
   firstPageOnly?: boolean;
@@ -42,17 +44,19 @@ export async function fetchBlogPostsFromNotion(
     query,
   } = filters;
 
-  return await notionClient(
+  const [error, success] = await notionClient(
     "fetchBlogPostsFromNotion",
     async () => {
-      const filters: any[] = [
-        {
+      const filters: any[] = [];
+
+      if (envVariables.NODE_ENV === "production") {
+        filters.push({
           property: "Published",
           checkbox: {
             equals: true,
           },
-        },
-      ];
+        });
+      }
 
       const sorts: {
         property: string;
@@ -137,7 +141,27 @@ export async function fetchBlogPostsFromNotion(
       return data;
     },
     {
+      cache: "no-cache",
       tags: ["blog-posts", ...tags],
     }
   );
+
+  if (success) {
+    const createAndUpdatePost = makeCreateAndUpdatePostUseCase();
+
+    for (const blogPost of success.blogPosts) {
+      apiLogger.info(
+        { title: blogPost.title, pageId: blogPost.id },
+        `Page starting update`
+      );
+      const post = await createAndUpdatePost.execute({ pageId: blogPost.id });
+
+      apiLogger.info(
+        { title: post.title, pageId: blogPost.id },
+        `Page updated successfully`
+      );
+    }
+  }
+
+  return [error, success] as FetchBlogPostsResponse;
 }

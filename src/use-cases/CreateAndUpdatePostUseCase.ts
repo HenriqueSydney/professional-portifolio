@@ -1,6 +1,7 @@
 import { Posts, PostStatus, Prisma, TranslatedModel } from "@/generated/prisma";
 import { apiLogger } from "@/lib/logger";
 import { notion } from "@/lib/notion/notion";
+import { makeNotionImageProcessor } from "@/lib/notion/NotionImageProcessor/makeNotionImageProcessor";
 import { IRedisClient } from "@/lib/redis/IRedisClient";
 import { repositoryClient } from "@/lib/repositoryClient";
 import { IPostsRespository } from "@/repositories/IPostsRepository";
@@ -43,16 +44,16 @@ export class CreateAndUpdatePostUseCase {
       title,
       options: { lowercase: true, strict: true, separator: "-" },
     });
-    const category = (page as any).properties.Category.select.name ?? "";
-    const coverUrl = (page as any).properties.Cover.url ?? "";
-    const tags = (page as any).properties.Tags.multi_select.map(
+    const category = (page as any).properties?.Category?.select?.name ?? "";
+    const coverUrl = (page as any).properties?.Cover?.url ?? "";
+    const tags = (page as any).properties?.Tags?.multi_select?.map(
       (tag: any) => tag.name
     );
-    const featured = (page as any).properties.Homepage.checkbox;
-    const priority = (page as any).properties.Priority.number;
+    const featured = (page as any).properties?.Homepage?.checkbox;
+    const priority = (page as any).properties?.Priority?.number;
 
-    const isPublished = (page as any).properties.Published.checkbox;
-    const isArchived = (page as any).properties.Archived.checkbox;
+    const isPublished = (page as any).properties?.Published?.checkbox;
+    const isArchived = (page as any).properties?.Archived?.checkbox;
 
     const status =
       !isPublished && !isArchived
@@ -70,6 +71,17 @@ export class CreateAndUpdatePostUseCase {
 
     // 3. Gera excerpt automático (primeiras 30 palavras)
     const blocks = await notion.blocks.children.list({ block_id: pageId });
+
+    const imageProcessor = makeNotionImageProcessor();
+    const blocksWithR2Images = await imageProcessor.processImages({
+      blocks: blocks.results,
+      postSlug: slug,
+    });
+    let finalCoverUrl = coverUrl;
+    if (coverUrl) {
+      finalCoverUrl = await imageProcessor.processUrl(coverUrl, slug);
+    }
+
     const text = blocks.results
       .map(
         (block: any) =>
@@ -91,7 +103,7 @@ export class CreateAndUpdatePostUseCase {
     } = await this.translatePostData({
       title,
       excerpt: finalExcerpt,
-      blocksResult: blocks.results,
+      blocksResult: blocksWithR2Images,
     });
 
     const [postUpsertError, post] = await repositoryClient(
@@ -105,16 +117,16 @@ export class CreateAndUpdatePostUseCase {
           slug_en: translatedSlug,
           category,
           tags,
-          coverUrl,
+          coverUrl: finalCoverUrl,
           excerpt_pt: finalExcerpt,
           excerpt_en: finalTranslatedExcept,
           readTime,
           featured,
-          priority,
+          priority: priority ?? 10,
           translatedModel: blockTranslatedToEnglish
             ? TranslatedModel.DEEPL
             : null,
-          ptBr: blocks.results.filter(
+          ptBr: blocksWithR2Images.filter(
             (block): block is BlockObjectResponse => "type" in block
           ),
           en: blockTranslatedToEnglish
@@ -134,18 +146,21 @@ export class CreateAndUpdatePostUseCase {
       }
     );
 
+    //  revalidatePaths: [
+    //       `/blog`,
+    //       `/blog/post/${slug}`,
+    //       `/en/blog`,
+    //       `/en/blog/post/${slug}`,
+    //       `/blog/post/${translatedSlug}`,
+    //       `/en/blog/post/${translatedSlug}`,
+    //     ],
+
     if (postUpsertError) {
       throw postUpsertError;
     }
 
-    revalidatePath(`/blog`);
-    revalidatePath(`/blog/post/${slug}`);
-    revalidatePath(`/en/blog`);
-    revalidatePath(`/en/blog/post/${slug}`);
     let cacheTags = ["blog-posts", `blog-post-${slug}`];
     if (translatedSlug) {
-      revalidatePath(`/blog/post/${translatedSlug}`);
-      revalidatePath(`/en/blog/post/${translatedSlug}`);
       cacheTags = [`blog-post-${translatedSlug}`, ...cacheTags];
     }
 

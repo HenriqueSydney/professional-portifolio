@@ -154,6 +154,7 @@ model Posts {
 
   PostMetrics  PostMetrics?
   PostComments PostComments[]
+  PostViews    PostViews[]
 
   @@index([tags, category])
   @@index([featured])
@@ -175,6 +176,16 @@ model PostMetrics {
   PostLikes       PostLikes[]
 
   @@map("post_metrics")
+}
+
+model PostViews {
+  id        Int      @id @default(autoincrement()) ///Entity ID
+  postId    Int      @map("post_id") ///Post Id
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post Posts @relation(fields: [postId], references: [id])
+
+  @@map("post_views")
 }
 
 model PostLikes {

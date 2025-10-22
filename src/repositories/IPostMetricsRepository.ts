@@ -29,4 +29,7 @@ export interface IPostMetricsRepository {
   getTopViewedPosts(
     limit?: number
   ): Promise<{ title: string; views: number }[]>;
+  getTimelineViewedPostsStats(
+    timelineType: "week" | "month"
+  ): Promise<{ period: string; views: number; visitors: number }[]>;
 }

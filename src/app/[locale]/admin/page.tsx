@@ -5,12 +5,30 @@ import { MetricsCardContainer } from "./components/MetricsCardContainer";
 import { makePostMetricsRepository } from "@/repositories/factories/makePostMetricsRepository";
 import { repositoryClient } from "@/lib/repositoryClient";
 
-export default async function AdminDashboard() {
+interface IAdminDashboard {
+  searchParams: Promise<{ currentPeriod?: "week" | "month" }>;
+}
+
+export default async function AdminDashboard({
+  searchParams,
+}: IAdminDashboard) {
+  const { currentPeriod } = await searchParams;
   const postMetricsRepository = makePostMetricsRepository();
 
-  const [_, postChartData] = await await repositoryClient(
-    "postRepository.countTotalPosts()",
+  const [_, postChartData] = await repositoryClient(
+    "postRepository.getTopViewedPosts()",
     () => postMetricsRepository.getTopViewedPosts(),
+    {
+      cache: "no-cache",
+    }
+  );
+
+  const [__, viewChartData] = await repositoryClient(
+    "postRepository.getTimelineViewedPostsStats()",
+    () =>
+      postMetricsRepository.getTimelineViewedPostsStats(
+        currentPeriod ?? "week"
+      ),
     {
       cache: "no-cache",
     }
@@ -37,7 +55,7 @@ export default async function AdminDashboard() {
           <MetricsCardContainer />
         </section>
         <section className="mt-5 w-full grid grid-cols-2 gap-2">
-          {/* <ViewChart chartData={chartData}/> */}
+          <ViewChart chartData={viewChartData} />
           <PostChart chartData={postChartData} />
         </section>
         <section className="mt-5 w-full">

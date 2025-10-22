@@ -27,6 +27,7 @@ interface IPostChart {
 }
 
 export function PostChart({ chartData }: IPostChart) {
+  console.log(chartData);
   return (
     <Card className="bg-card shadow-lg w-full">
       <CardHeader>
@@ -38,12 +39,11 @@ export function PostChart({ chartData }: IPostChart) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {!chartData ||
-          (chartData.length === 0 && (
-            <div className="w-full h-[350px] flex items-center justify-center text-8xl font-semibold">
-              NO DATA
-            </div>
-          ))}
+        {(!chartData || chartData.length === 0) && (
+          <div className="w-full h-[350px] flex items-center justify-center text-8xl font-semibold">
+            NO DATA
+          </div>
+        )}
         {chartData && chartData.length > 0 && (
           <ResponsiveContainer width="100%" height={350}>
             <BarChart data={chartData} layout="vertical">
@@ -54,21 +54,21 @@ export function PostChart({ chartData }: IPostChart) {
               />
               <YAxis
                 type="category"
-                dataKey="titulo"
+                dataKey="title"
                 width={180}
                 stroke="#64748b"
                 style={{ fontSize: "13px" }}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "white",
+                  backgroundColor: "#131117",
                   border: "1px solid #e2e8f0",
                   borderRadius: "8px",
                   boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
                 }}
               />
               <Bar
-                dataKey="visualizacoes"
+                dataKey="views"
                 fill="#8b5cf6"
                 radius={[0, 8, 8, 0]}
                 name="Visualizações"

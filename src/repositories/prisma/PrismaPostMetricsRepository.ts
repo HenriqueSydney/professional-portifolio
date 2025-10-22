@@ -6,6 +6,7 @@ import {
   PostStats,
   PostStatsWithAverage,
 } from "../IPostMetricsRepository";
+import { date } from "@/lib/dayjs";
 
 export class PrismaPostMetricsRepository implements IPostMetricsRepository {
   async findPostMetricsByPostId(postId: number): Promise<PostMetrics | null> {
@@ -118,18 +119,26 @@ export class PrismaPostMetricsRepository implements IPostMetricsRepository {
   }
 
   async incrementViewsToPostByPostId(postId: number): Promise<PostMetrics> {
-    const postMetrics = await prisma.postMetrics.upsert({
-      where: { postId },
-      create: {
-        postId,
-        numberOfViews: 1, // se não existir, já começa com 1
-      },
-      update: {
-        numberOfViews: {
-          increment: 1, // se existir, incrementa
+    const [postMetrics] = await prisma.$transaction([
+      prisma.postMetrics.upsert({
+        where: { postId },
+        create: {
+          postId,
+          numberOfViews: 1, // se não existir, já começa com 1
         },
-      },
-    });
+        update: {
+          numberOfViews: {
+            increment: 1, // se existir, incrementa
+          },
+        },
+      }),
+      prisma.postViews.create({
+        data: {
+          postId,
+        },
+      }),
+    ]);
+
     return postMetrics;
   }
 
@@ -210,5 +219,102 @@ export class PrismaPostMetricsRepository implements IPostMetricsRepository {
       title: m.post.title,
       views: m.numberOfViews,
     }));
+  }
+
+  async getTimelineViewedPostsStats(
+    timelineType: "week" | "month"
+  ): Promise<{ period: string; views: number; visitors: number }[]> {
+    const now = date();
+    let startDate: Date;
+
+    if (timelineType === "week") {
+      startDate = now.subtract(7, "day").toDate();
+    } else {
+      startDate = now.subtract(6, "month").toDate();
+    }
+
+    const postViews = await prisma.postViews.findMany({
+      where: {
+        createdAt: {
+          gte: startDate,
+        },
+      },
+      select: {
+        createdAt: true,
+        postId: true,
+      },
+    });
+
+    // Agrupar por período
+    const grouped = postViews.reduce(
+      (acc, view) => {
+        const date = new Date(view.createdAt);
+        let period: string;
+
+        if (timelineType === "week") {
+          const days = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+          period = days[date.getDay()];
+        } else {
+          const months = [
+            "Jan",
+            "Fev",
+            "Mar",
+            "Abr",
+            "Mai",
+            "Jun",
+            "Jul",
+            "Ago",
+            "Set",
+            "Out",
+            "Nov",
+            "Dez",
+          ];
+          period = `${months[date.getMonth()]}/${date.getFullYear().toString().slice(-2)}`;
+        }
+
+        if (!acc[period]) {
+          acc[period] = {
+            period,
+            views: 0,
+            visitors: new Set<number>(),
+          };
+        }
+
+        acc[period].views += 1;
+        acc[period].visitors.add(view.postId);
+
+        return acc;
+      },
+      {} as Record<
+        string,
+        { period: string; views: number; visitors: Set<number> }
+      >
+    );
+
+    // Converter Set para número e ordenar
+    const result = Object.values(grouped).map((item) => ({
+      period: item.period,
+      views: item.views,
+      visitors: item.visitors.size,
+    }));
+
+    // Ordenar por período
+    if (timelineType === "week") {
+      const dayOrder = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
+      result.sort(
+        (a, b) => dayOrder.indexOf(a.period) - dayOrder.indexOf(b.period)
+      );
+    } else {
+      result.sort((a, b) => {
+        const [monthA, yearA] = a.period.split("/");
+        const [monthB, yearB] = b.period.split("/");
+        return (
+          new Date(`20${yearB}-${monthB}`).getTime() -
+          new Date(`20${yearA}-${monthA}`).getTime()
+        );
+      });
+    }
+
+    return result;
   }
 }

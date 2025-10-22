@@ -221,6 +221,12 @@ exports.Prisma.PostMetricsScalarFieldEnum = {
   numberOfLikes: 'numberOfLikes'
 };
 
+exports.Prisma.PostViewsScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.PostLikesScalarFieldEnum = {
   userId: 'userId',
   postMetricsId: 'postMetricsId',
@@ -312,6 +318,7 @@ exports.Prisma.ModelName = {
   NewsLetterSubscriptions: 'NewsLetterSubscriptions',
   Posts: 'Posts',
   PostMetrics: 'PostMetrics',
+  PostViews: 'PostViews',
   PostLikes: 'PostLikes',
   PostComments: 'PostComments',
   PostCommentsLikes: 'PostCommentsLikes',

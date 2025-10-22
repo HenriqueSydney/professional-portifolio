@@ -26,6 +26,11 @@ export const envSchema = z.object({
   CACHE_ENABLED: z.coerce.boolean().default(true),
   DEEPL_API_URL: z.url(),
   DEEPL_API_KEY: z.string(),
+  R2_ACCESS_KEY_ID: z.string(),
+  R2_SECRET_ACCESS_KEY: z.string(),
+  CLOUDFLARE_ACCOUNT_ID: z.string(),
+  R2_BUCKET_NAME: z.string(),
+  R2_PUBLIC_URL: z.string(),
 });
 
 const env = envSchema.safeParse(process.env);

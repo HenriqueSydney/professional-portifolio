@@ -313,13 +313,13 @@ npm run test:e2e:ui      # Testes E2E com UI
 - [x] Filas para mensagens assíncronas
 - [x] Botões com loading states
 - [x] Refatoração para Tailwind v4
-- [ ] **Internacionalização completa**: Skills, Actions e APIs
-- [ ] **Solução para imagens do Notion**: Migração para Cloudflare R2
-- [ ] **Testes E2E**: Criar comentários, curtir, editar
+- [/] **Internacionalização completa**: Skills, Actions e APIs
+- [/] **Solução para imagens do Notion**: Migração para Cloudflare R2
+- [/] **Testes E2E**: Criar comentários, curtir, editar
 - [ ] **Testes de integração**: Cobertura de APIs críticas
 - [x] **README.md completo** (este documento!)
-- [ ] **Pipeline CI/CD**: GitHub Actions com testes automáticos
-- [ ] **Dashboard de Admin**: Gerenciamento de Posts, Comments, Likes
+- [/] **Pipeline CI/CD**: GitHub Actions com testes automáticos
+- [x] **Dashboard de Admin**: Gerenciamento de Posts, Comments, Likes
 - [x] **Página de Admin para Cache**: Controle e observabilidade do Cache Redis
 - [x] **Página de Admin para Queues**: Controle e observabilidade da Fila
 - [x] **Página de Usuários**: Pagina do perfil de usuários

@@ -76,7 +76,6 @@ export async function operationWrapper<T>(
 
         if (!effectiveCache) {
           const result = await callback();
-
           span.setStatus({ code: SpanStatusCode.OK });
           return [null, result] satisfies OperationWrapperResponse<T>;
         }

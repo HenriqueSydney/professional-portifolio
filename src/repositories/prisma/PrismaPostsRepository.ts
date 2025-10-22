@@ -9,6 +9,7 @@ import {
 } from "../IPostsRepository";
 import { prisma } from "@/lib/prisma";
 import { Pagination } from "@/@types/Pagination";
+import { envVariables } from "@/env";
 
 export class PrismaPostsRepository implements IPostsRespository {
   async upsertByNotionId(
@@ -143,7 +144,9 @@ export class PrismaPostsRepository implements IPostsRespository {
     const { category, query, firstPageOnly, locale, fromDate } = filters;
 
     const where: Prisma.PostsWhereInput = {
-      status: "PUBLISHED",
+      ...(envVariables.NODE_ENV === "production"
+        ? { status: "PUBLISHED" }
+        : {}),
       ...(category && category !== "All" ? { category } : {}),
       ...(firstPageOnly ? { featured: true } : {}),
       ...(query
@@ -217,7 +220,9 @@ export class PrismaPostsRepository implements IPostsRespository {
     const { category, query, firstPageOnly, locale, fromDate } = filters;
 
     const where: Prisma.PostsWhereInput = {
-      status: "PUBLISHED",
+      ...(envVariables.NODE_ENV === "production"
+        ? { status: "PUBLISHED" }
+        : {}),
       ...(category && category !== "All" ? { category } : {}),
       ...(firstPageOnly ? { featured: true } : {}),
       ...(query
